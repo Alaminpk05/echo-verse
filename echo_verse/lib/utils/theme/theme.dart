@@ -9,21 +9,45 @@ class AppTheme {
       textTheme: _textTheme,
       brightness: Brightness.light,
       scaffoldBackgroundColor: white,
-      colorScheme: ColorScheme.fromSeed(seedColor: teal),
+      colorScheme: ColorScheme.fromSeed(seedColor: teal,
+      primary: teal),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(36.sp)),
+        backgroundColor: teal,
+        
+        
+      )
+    )
+    
+    
+    
+    
     );
+    
+
+
+
+
+
   }
 
   static final TextTheme _textTheme = TextTheme(
+    
+    
       headlineLarge: TextStyle(
-          
-          fontSize: 40.sp,
+          fontSize: 25.sp,
           fontWeight: FontWeight.w600,
-          color: authenticationHeaderlineColor),
+          color: authenticationHeaderColor,),
+      labelLarge: TextStyle(
+          fontSize: 18.sp,
+          fontWeight: FontWeight.w600,
+          color: authenticationHeaderColor),
       labelMedium: TextStyle(
           fontSize: 16.sp,
-          
           fontWeight: FontWeight.w600,
-          color: authenticationHeaderlineColor),
+          color: authenticationHeaderColor),
       labelSmall: TextStyle(
           fontSize: 15.sp, fontWeight: FontWeight.w400, color: lightGrey));
 }
