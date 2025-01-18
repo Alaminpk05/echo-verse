@@ -4,14 +4,14 @@ import 'package:echo_verse/utils/constant/icons.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-class RegistrationPage extends StatefulWidget {
-  const RegistrationPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<RegistrationPage> createState() => _RegistrationPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _RegistrationPageState extends State<RegistrationPage> {
+class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return AuthenticationPageWidget();
@@ -37,12 +37,12 @@ class AuthenticationPageWidget extends StatelessWidget {
             LogoWidget(),
             SizedBox(height: 3.h),
             HeaderTextWidget(
-              text: 'Create a new account',
+              text: 'Login to your account',
             ),
             SizedBox(height: 2.3.h),
             LoginOrSignUpPageNavigateButton(
-              text: 'Already have an account?',
-              title: 'Login', type: signUpPage,
+              text: 'Don’t have an account?',
+              title: 'Sign Up', type: loginPage,
             ),
             SizedBox(
               height: 4.5.h,
@@ -51,22 +51,13 @@ class AuthenticationPageWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
                 AuthTextField(
-                  hintText: 'Name',
-                  suffixIcon: null,
-                  showEyeIcon: false,
-                  prefixIcon: name,
-                ),
-                 SizedBox(
-                  height: 3.h,
-                ),
-                AuthTextField(
                   hintText: 'Email',
                   suffixIcon: email,
                   showEyeIcon: false,
                   prefixIcon: email,
                 ),
                 SizedBox(
-                  height: 3.h,
+                  height: 2.h,
                 ),
                 AuthTextField(
                   hintText: 'Password',
@@ -75,11 +66,20 @@ class AuthenticationPageWidget extends StatelessWidget {
                   onTap: () {},
                   prefixIcon: key,
                 ),
-                SizedBox(height: 10.h),
+                SizedBox(height: 1.5.h),
+                ForgetPasswordButton(),
+                SizedBox(height: 2.h),
                 LoginOrSignUpButton(
-                  title: 'Sign Up',
+                  title: 'Login',
                 ),
-                
+                SizedBox(
+                  height: 3.h,
+                ),
+                LoginWithText(),
+                SizedBox(
+                  height: 3.h,
+                ),
+                SignInWithButtons()
               ],
             ),
             SizedBox(
