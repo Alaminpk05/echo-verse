@@ -1,9 +1,9 @@
-import 'package:echo_verse/core/routes/route_names.dart';
+
 import 'package:echo_verse/core/constant/colors.dart';
-import 'package:echo_verse/core/constant/const_string.dart';
+
 import 'package:echo_verse/core/constant/icons.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class LoginOrSignUpPageNavigateButton extends StatelessWidget {
@@ -11,11 +11,11 @@ class LoginOrSignUpPageNavigateButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.title,
-    required this.type,
+    required this.onTap,
   });
   final String text;
   final String title;
-  final String type;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +33,7 @@ class LoginOrSignUpPageNavigateButton extends StatelessWidget {
           splashColor: white,
           highlightColor: white,
           borderRadius: BorderRadius.circular(16.sp),
-          onTap: () {
-            type == loginPage
-                ? context.go(RouteNames.signUp)
-                : context.go(RouteNames.login);
-          },
+          onTap: onTap,
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 0.1.h),
             child: Text(
@@ -107,8 +103,10 @@ class LoginOrSignUpButton extends StatelessWidget {
   const LoginOrSignUpButton({
     super.key,
     required this.title,
+    this.onTap,
   });
   final String title;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +114,7 @@ class LoginOrSignUpButton extends StatelessWidget {
       width: double.infinity,
       height: 6.5.h,
       child: ElevatedButton(
-          onPressed: () {},
+          onPressed: onTap,
           child: Text(
             title,
             style:
@@ -254,8 +252,8 @@ class AuthTextField extends StatelessWidget {
     required this.showEyeIcon,
     this.onTap,
     required this.prefixIcon,
-    required this.controller, 
-    // required this.validator,
+    required this.controller,
+    required this.validator,
   });
   final TextEditingController controller;
   final String hintText;
@@ -263,13 +261,13 @@ class AuthTextField extends StatelessWidget {
   final IconData prefixIcon;
   final bool showEyeIcon;
   final void Function()? onTap;
-  // final String? Function(String?)? validator;
+  final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      // validator: validator,
+      validator: validator,
       cursorWidth: 1.5,
       cursorHeight: 2.5.h,
       decoration: InputDecoration(
@@ -288,6 +286,16 @@ class AuthTextField extends StatelessWidget {
               color: lightGrey,
               fontWeight: FontWeight.normal,
               fontFamily: 'OpenSans'),
+          focusedErrorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: authTextFieldBorderColor,
+              ),
+              borderRadius: BorderRadius.circular(17.sp)),
+          errorBorder: OutlineInputBorder(
+              borderSide: BorderSide(
+                color: authTextFieldBorderColor,
+              ),
+              borderRadius: BorderRadius.circular(17.sp)),
           enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: authTextFieldBorderColor,

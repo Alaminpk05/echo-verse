@@ -1,7 +1,9 @@
+import 'package:echo_verse/core/routes/route_names.dart';
+import 'package:echo_verse/core/utils/validation/auth_validator.dart';
 import 'package:echo_verse/features/authentication/widget/auth_widget.dart';
-import 'package:echo_verse/core/constant/const_string.dart';
 import 'package:echo_verse/core/constant/icons.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class RegistrationPage extends StatefulWidget {
@@ -38,7 +40,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 LoginOrSignUpPageNavigateButton(
                   text: 'Already have an account?',
                   title: 'Login',
-                  type: signUpPage,
+                  onTap: () {
+                    context.go(RouteNames.login);
+                  },
                 ),
                 SizedBox(
                   height: 4.5.h,
@@ -52,7 +56,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         hintText: 'Name',
                         suffixIcon: null,
                         showEyeIcon: false,
-                        prefixIcon: name, controller: nameController,
+                        prefixIcon: name,
+                        controller: nameController,
+                        validator: (String? value) {
+                          return AuthValidator.validateName(value ?? "");
+                        },
                       ),
                       SizedBox(
                         height: 3.h,
@@ -61,7 +69,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         hintText: 'Email',
                         suffixIcon: email,
                         showEyeIcon: false,
-                        prefixIcon: email, controller: emailController,
+                        prefixIcon: email,
+                        controller: emailController,
+                        validator: (String? value) {
+                          return AuthValidator.validateEmail(value ?? "");
+                        },
                       ),
                       SizedBox(
                         height: 3.h,
@@ -71,10 +83,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         suffixIcon: visibilityOn,
                         showEyeIcon: true,
                         onTap: () {},
-                        prefixIcon: key, controller: passwordController,
+                        prefixIcon: key,
+                        controller: passwordController,
+                        validator: (String? value) {
+                          return AuthValidator.validatePassword(value ?? "");
+                        },
                       ),
                       SizedBox(height: 10.h),
                       LoginOrSignUpButton(
+                        onTap: () {
+                          if (_formKey.currentState!.validate()) {
+                            debugPrint('Clicked');
+                          }
+                        },
                         title: 'Sign Up',
                       ),
                     ],

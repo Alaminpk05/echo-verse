@@ -19,4 +19,11 @@ class AuthValidator {
     }
     return null;
   }
+  static String? validateName(String value) {
+    if (value.isEmpty) {
+      return 'Name cannot be empty';
+    }
+    
+    return null;
+  }
 }

@@ -15,7 +15,7 @@ class AppRouter {
       } else if (authState is UnAuthenticatedState) {
         return RouteNames.login;
       }
-      return RouteNames.signUp;
+      return RouteNames.home;
     },
     routes: [
       GoRoute(path: RouteNames.login, builder: (context, state) => LoginPage()),

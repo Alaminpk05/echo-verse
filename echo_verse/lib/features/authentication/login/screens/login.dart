@@ -1,7 +1,9 @@
+import 'package:echo_verse/core/routes/route_names.dart';
+import 'package:echo_verse/core/utils/validation/auth_validator.dart';
 import 'package:echo_verse/features/authentication/widget/auth_widget.dart';
-import 'package:echo_verse/core/constant/const_string.dart';
 import 'package:echo_verse/core/constant/icons.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class LoginPage extends StatefulWidget {
@@ -53,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
                 LoginOrSignUpPageNavigateButton(
                   text: 'Don’t have an account?',
                   title: 'Sign Up',
-                  type: loginPage,
+                  onTap: (){context.go(RouteNames.signUp);}
                 ),
                 SizedBox(
                   height: 4.5.h,
@@ -69,6 +71,9 @@ class _LoginPageState extends State<LoginPage> {
                         showEyeIcon: false,
                         prefixIcon: email,
                         controller: emailController,
+                        validator: (value) {
+                          return AuthValidator.validateEmail(value ?? "")!;
+                        },
                       ),
                       SizedBox(
                         height: 2.h,
@@ -80,12 +85,20 @@ class _LoginPageState extends State<LoginPage> {
                         onTap: () {},
                         prefixIcon: key,
                         controller: passwordController,
+                        validator: (value) {
+                          return AuthValidator.validatePassword(value ?? "")!;
+                        },
                       ),
                       SizedBox(height: 1.5.h),
                       ForgetPasswordButton(),
                       SizedBox(height: 2.h),
                       LoginOrSignUpButton(
                         title: 'Login',
+                        onTap: () {
+                          if (_formKey.currentState!.validate()) {
+                            debugPrint('CLICKED ON LOGIN BUTTON');
+                          }
+                        },
                       ),
                       SizedBox(
                         height: 3.h,
