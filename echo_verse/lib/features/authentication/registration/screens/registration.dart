@@ -1,6 +1,6 @@
 import 'package:echo_verse/features/authentication/widget/auth_widget.dart';
-import 'package:echo_verse/utils/constant/const_string.dart';
-import 'package:echo_verse/utils/constant/icons.dart';
+import 'package:echo_verse/core/constant/const_string.dart';
+import 'package:echo_verse/core/constant/icons.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -12,74 +12,81 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: true,
+        resizeToAvoidBottomInset: true,
         body: SingleChildScrollView(
           child: Padding(
-                padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 2.h),
-                child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            LogoWidget(),
-            SizedBox(height: 3.h),
-            HeaderTextWidget(
-              text: 'Create a new account',
-            ),
-            SizedBox(height: 2.3.h),
-            LoginOrSignUpPageNavigateButton(
-              text: 'Already have an account?',
-              title: 'Login', type: signUpPage,
-            ),
-            SizedBox(
-              height: 4.5.h,
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
+            padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 2.h),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AuthTextField(
-                  hintText: 'Name',
-                  suffixIcon: null,
-                  showEyeIcon: false,
-                  prefixIcon: name,
+                LogoWidget(),
+                SizedBox(height: 3.h),
+                HeaderTextWidget(
+                  text: 'Create a new account',
                 ),
-                 SizedBox(
-                  height: 3.h,
-                ),
-                AuthTextField(
-                  hintText: 'Email',
-                  suffixIcon: email,
-                  showEyeIcon: false,
-                  prefixIcon: email,
+                SizedBox(height: 2.3.h),
+                LoginOrSignUpPageNavigateButton(
+                  text: 'Already have an account?',
+                  title: 'Login',
+                  type: signUpPage,
                 ),
                 SizedBox(
-                  height: 3.h,
+                  height: 4.5.h,
                 ),
-                AuthTextField(
-                  hintText: 'Password',
-                  suffixIcon: visibilityOn,
-                  showEyeIcon: true,
-                  onTap: () {},
-                  prefixIcon: key,
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      AuthTextField(
+                        hintText: 'Name',
+                        suffixIcon: null,
+                        showEyeIcon: false,
+                        prefixIcon: name, controller: nameController,
+                      ),
+                      SizedBox(
+                        height: 3.h,
+                      ),
+                      AuthTextField(
+                        hintText: 'Email',
+                        suffixIcon: email,
+                        showEyeIcon: false,
+                        prefixIcon: email, controller: emailController,
+                      ),
+                      SizedBox(
+                        height: 3.h,
+                      ),
+                      AuthTextField(
+                        hintText: 'Password',
+                        suffixIcon: visibilityOn,
+                        showEyeIcon: true,
+                        onTap: () {},
+                        prefixIcon: key, controller: passwordController,
+                      ),
+                      SizedBox(height: 10.h),
+                      LoginOrSignUpButton(
+                        title: 'Sign Up',
+                      ),
+                    ],
+                  ),
                 ),
-                SizedBox(height: 10.h),
-                LoginOrSignUpButton(
-                  title: 'Sign Up',
+                SizedBox(
+                  height: 5.h,
                 ),
-                
+                TermsAndPrivacyButtons()
               ],
             ),
-            SizedBox(
-              height: 5.h,
-            ),
-            TermsAndPrivacyButtons()
-          ],
-                ),
-              ),
+          ),
         ));
   }
 }
-
-

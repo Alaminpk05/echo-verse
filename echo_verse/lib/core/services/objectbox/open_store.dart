@@ -1,4 +1,4 @@
-import 'package:echo_verse/objectbox.g.dart';
+import 'package:echo_verse/core/services/objectbox/objectbox.g.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 

@@ -1,4 +1,4 @@
-import 'package:echo_verse/utils/constant/colors.dart';
+import 'package:echo_verse/core/constant/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 

@@ -1,4 +1,4 @@
-import 'package:echo_verse/app_view.dart';
+import 'package:echo_verse/app.dart';
 import 'package:echo_verse/core/services/objectbox/open_store.dart';
 import 'package:flutter/material.dart';
 

@@ -1,7 +1,7 @@
 import 'package:echo_verse/core/routes/route_names.dart';
-import 'package:echo_verse/utils/constant/colors.dart';
-import 'package:echo_verse/utils/constant/const_string.dart';
-import 'package:echo_verse/utils/constant/icons.dart';
+import 'package:echo_verse/core/constant/colors.dart';
+import 'package:echo_verse/core/constant/const_string.dart';
+import 'package:echo_verse/core/constant/icons.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -10,7 +10,8 @@ class LoginOrSignUpPageNavigateButton extends StatelessWidget {
   const LoginOrSignUpPageNavigateButton({
     super.key,
     required this.text,
-    required this.title, required this.type,
+    required this.title,
+    required this.type,
   });
   final String text;
   final String title;
@@ -19,39 +20,37 @@ class LoginOrSignUpPageNavigateButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-  mainAxisSize: MainAxisSize.min,
-  children: [
-    Text(
-      text,
-      style: Theme.of(context)
-          .textTheme
-          .labelMedium!
-          .copyWith(fontWeight: FontWeight.w400),
-    ),
-    InkWell(
-      splashColor: white,
-      highlightColor: white,
-      
-      borderRadius: BorderRadius.circular(16.sp),
-      onTap: (){
-         type == loginPage
-                ? context.go(RouteNames.signUp)
-                : context.go(RouteNames.login);
-      },
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 1.w,vertical: 0.1.h),
-        child: Text(
-          title,
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          text,
           style: Theme.of(context)
               .textTheme
               .labelMedium!
-              .copyWith(color: teal),
+              .copyWith(fontWeight: FontWeight.w400),
         ),
-      ),
-    ),
-  ],
-)
-;
+        InkWell(
+          splashColor: white,
+          highlightColor: white,
+          borderRadius: BorderRadius.circular(16.sp),
+          onTap: () {
+            type == loginPage
+                ? context.go(RouteNames.signUp)
+                : context.go(RouteNames.login);
+          },
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 1.w, vertical: 0.1.h),
+            child: Text(
+              title,
+              style: Theme.of(context)
+                  .textTheme
+                  .labelMedium!
+                  .copyWith(color: teal),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -254,8 +253,9 @@ class AuthTextField extends StatelessWidget {
     required this.suffixIcon,
     required this.showEyeIcon,
     this.onTap,
-    required this.prefixIcon,
+    required this.prefixIcon, required this.controller,
   });
+  final TextEditingController controller;
   final String hintText;
   final IconData? suffixIcon;
   final IconData prefixIcon;
