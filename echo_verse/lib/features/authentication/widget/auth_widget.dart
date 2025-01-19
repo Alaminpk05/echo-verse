@@ -1,9 +1,9 @@
-import 'package:echo_verse/features/authentication/login/screens/login.dart';
-import 'package:echo_verse/features/authentication/registration/screens/registration.dart';
+import 'package:echo_verse/core/routes/route_names.dart';
 import 'package:echo_verse/utils/constant/colors.dart';
 import 'package:echo_verse/utils/constant/const_string.dart';
 import 'package:echo_verse/utils/constant/icons.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class LoginOrSignUpPageNavigateButton extends StatelessWidget {
@@ -35,10 +35,8 @@ class LoginOrSignUpPageNavigateButton extends StatelessWidget {
       borderRadius: BorderRadius.circular(16.sp),
       onTap: (){
          type == loginPage
-                ? Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (c) => RegistrationPage()))
-                : Navigator.pushReplacement(
-                    context, MaterialPageRoute(builder: (c) => LoginPage()));
+                ? context.go(RouteNames.signUp)
+                : context.go(RouteNames.login);
       },
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 1.w,vertical: 0.1.h),

@@ -14,17 +14,6 @@ class RegistrationPage extends StatefulWidget {
 class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
-    return AuthenticationPageWidget();
-  }
-}
-
-class AuthenticationPageWidget extends StatelessWidget {
-  const AuthenticationPageWidget({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
         body: SingleChildScrollView(
@@ -92,4 +81,5 @@ class AuthenticationPageWidget extends StatelessWidget {
         ));
   }
 }
+
 
