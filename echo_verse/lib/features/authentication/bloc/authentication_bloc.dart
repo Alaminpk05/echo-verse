@@ -51,6 +51,7 @@ class AuthenticationBloc
       final user = await authService.login(event.email, event.password);
       if (user != null) {
         emit(AuthenticatedState(user: user));
+        debugPrint(user.displayName);
       } else {
         emit(AuthenticationErrorState(
             errorMessege: "Login failed. Invalid credentials."));

@@ -1,8 +1,10 @@
 import 'package:echo_verse/core/routes/route_names.dart';
 import 'package:echo_verse/core/utils/validation/auth_validator.dart';
+import 'package:echo_verse/features/authentication/bloc/authentication_bloc.dart';
 import 'package:echo_verse/features/authentication/widget/auth_widget.dart';
 import 'package:echo_verse/core/constant/icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -81,6 +83,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       AuthTextField(
                         hintText: 'Password',
                         suffixIcon: visibilityOn,
+                        
                         showEyeIcon: true,
                         onTap: () {},
                         prefixIcon: key,
@@ -93,6 +96,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       LoginOrSignUpButton(
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
+                            context.read<AuthenticationBloc>().add(SignUpEvent(name: nameController.text,
+                             email: emailController.text, password: passwordController.text));
                             debugPrint('Clicked');
                           }
                         },

@@ -1,8 +1,10 @@
 import 'package:echo_verse/core/routes/route_names.dart';
 import 'package:echo_verse/core/utils/validation/auth_validator.dart';
+import 'package:echo_verse/features/authentication/bloc/authentication_bloc.dart';
 import 'package:echo_verse/features/authentication/widget/auth_widget.dart';
 import 'package:echo_verse/core/constant/icons.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -53,10 +55,11 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 SizedBox(height: 2.3.h),
                 LoginOrSignUpPageNavigateButton(
-                  text: 'Don’t have an account?',
-                  title: 'Sign Up',
-                  onTap: (){context.go(RouteNames.signUp);}
-                ),
+                    text: 'Don’t have an account?',
+                    title: 'Sign Up',
+                    onTap: () {
+                      context.go(RouteNames.signUp);
+                    }),
                 SizedBox(
                   height: 4.5.h,
                 ),
@@ -72,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                         prefixIcon: email,
                         controller: emailController,
                         validator: (value) {
-                          return AuthValidator.validateEmail(value ?? "")!;
+                          return AuthValidator.validateEmail(value ?? "");
                         },
                       ),
                       SizedBox(
@@ -86,7 +89,7 @@ class _LoginPageState extends State<LoginPage> {
                         prefixIcon: key,
                         controller: passwordController,
                         validator: (value) {
-                          return AuthValidator.validatePassword(value ?? "")!;
+                          return AuthValidator.validatePassword(value ?? "");
                         },
                       ),
                       SizedBox(height: 1.5.h),
@@ -96,6 +99,8 @@ class _LoginPageState extends State<LoginPage> {
                         title: 'Login',
                         onTap: () {
                           if (_formKey.currentState!.validate()) {
+                            context.read<AuthenticationBloc>().add(LogInEvent(email: emailController.text, 
+                            password: passwordController.text));
                             debugPrint('CLICKED ON LOGIN BUTTON');
                           }
                         },
