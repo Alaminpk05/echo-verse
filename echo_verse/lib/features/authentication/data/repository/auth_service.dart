@@ -1,10 +1,10 @@
+import 'package:echo_verse/core/errors/firebase/exeption.dart';
 import 'package:echo_verse/features/authentication/data/repository/auth_contract.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class AuthService implements AuthContract {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
 
   @override
   Future<UserCredential?> signUp(
@@ -17,10 +17,13 @@ class AuthService implements AuthContract {
         await userCredential.user!.reload();
       }
       return userCredential;
+    } on FirebaseAuthException catch (e) {
+      debugPrint('Sign-up failed: ${e.message}');
+      throw FirebaseAuthExceptionHandler.handleException(e);
     } catch (e) {
-      debugPrint("User creation unsuccessful");
+      debugPrint('Unexpected error during sign-up: $e');
 
-      rethrow;
+      throw 'An unexpected error occurred during sign-up. Please try again.';
     }
   }
 
@@ -30,9 +33,11 @@ class AuthService implements AuthContract {
       final UserCredential userCredential = await _auth
           .signInWithEmailAndPassword(email: email, password: password);
       return userCredential.user;
+    } on FirebaseAuthException catch (e) {
+      throw FirebaseAuthExceptionHandler.handleException(e);
     } catch (e) {
-      debugPrint("Login failed ${e.toString()}");
-      rethrow;
+       debugPrint('Unexpected error during login: $e');
+      throw 'An unexpected error occurred during login. Please try again.';
     }
   }
 
@@ -41,7 +46,8 @@ class AuthService implements AuthContract {
     try {
       await _auth.signOut();
     } catch (e) {
-      debugPrint("Sign-out failed${e.toString()}");
+       debugPrint('Sign-out failed: $e');
+      throw 'An error occurred while signing out. Please try again.';
     }
   }
 }

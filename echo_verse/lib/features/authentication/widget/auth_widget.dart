@@ -253,7 +253,9 @@ class AuthTextField extends StatelessWidget {
     required this.suffixIcon,
     required this.showEyeIcon,
     this.onTap,
-    required this.prefixIcon, required this.controller,
+    required this.prefixIcon,
+    required this.controller, 
+    // required this.validator,
   });
   final TextEditingController controller;
   final String hintText;
@@ -261,10 +263,13 @@ class AuthTextField extends StatelessWidget {
   final IconData prefixIcon;
   final bool showEyeIcon;
   final void Function()? onTap;
+  // final String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
+      // validator: validator,
       cursorWidth: 1.5,
       cursorHeight: 2.5.h,
       decoration: InputDecoration(
