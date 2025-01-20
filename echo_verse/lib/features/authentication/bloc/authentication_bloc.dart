@@ -22,8 +22,10 @@ class AuthenticationBloc
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       emit(AuthenticatedState(user: user));
+      debugPrint('EMITTED AUTHENTICATED STATE');
     } else {
       emit(UnAuthenticatedState());
+      debugPrint('EMITTED UNAUTHENTICATED STATE');
     }
   }
 

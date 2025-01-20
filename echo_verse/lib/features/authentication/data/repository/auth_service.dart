@@ -1,4 +1,4 @@
-import 'package:echo_verse/core/errors/firebase/exeption.dart';
+import 'package:echo_verse/core/errors/firebase/exception.dart';
 import 'package:echo_verse/features/authentication/data/repository/auth_contract.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
