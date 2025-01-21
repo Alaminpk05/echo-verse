@@ -8,7 +8,8 @@ part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  final AuthContract authService;
+final AuthContract authService;
+
   AuthenticationBloc(this.authService) : super(AuthenticationInitial()) {
     on<AuthCheckStatusEvent>(_onAuthCheckStatusEvent);
     on<SignUpEvent>(_onSignUpEvent);

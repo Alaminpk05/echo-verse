@@ -1,5 +1,6 @@
 import 'package:echo_verse/core/routes/app_router.dart';
 import 'package:echo_verse/core/services/objectbox/open_store.dart';
+import 'package:echo_verse/features/authentication/data/repository/auth_contract.dart';
 import 'package:echo_verse/features/authentication/data/repository/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,8 @@ Future<void> setupServiceLocator() async {
     final objectBox = await ObjectBox.create();
     getIt.registerSingleton<ObjectBox>(objectBox);
     getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
-    getIt.registerLazySingleton(() => AuthService());
+    getIt.registerLazySingleton<AuthContract>(() => AuthService());
+
 
     getIt.registerLazySingleton(() => AppRouter.router);
   } catch (e) {
