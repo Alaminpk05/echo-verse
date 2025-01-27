@@ -69,7 +69,7 @@ class AuthenticationBloc
       }
     } on FirebaseAuthException catch (e) {
       debugPrint(e.code);
-     
+
       emit(AuthenticationErrorState(
           errorMessege: firebaseAuthExceptionHandler.handleException(e)));
     } catch (e) {
@@ -83,9 +83,13 @@ class AuthenticationBloc
     try {
       await authService.signOut();
       emit(UnAuthenticatedState());
+    } on FirebaseAuthException catch (e) {
+      emit(AuthenticationErrorState(
+          errorMessege: firebaseAuthExceptionHandler.handleException(e)));
     } catch (e) {
       emit(AuthenticationErrorState(
-          errorMessege: "Sign-out failed: ${e.toString()}"));
+          errorMessege:
+              "An error occurred while signing out. Please try again."));
     }
   }
 }

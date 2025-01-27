@@ -11,12 +11,14 @@ class FirebaseAuthExceptionHandler {
         return 'This user has been disabled. Please contact support.';
       case 'user-not-found':
         return 'No user found with this email. Please sign up first.';
+      case 'network-request-failed':
+        return 'Network error. Please check your internet connection and try again.';
+       case 'operation-not-allowed':
+        return 'This operation is not allowed. Please contact support.';
       case 'wrong-password':
         return 'The password is incorrect. Please try again.';
       case 'email-already-in-use':
         return 'This email is already in use. Please use a different email.';
-      case 'operation-not-allowed':
-        return 'Email/password accounts are not enabled. Contact support.';
       case 'weak-password':
         return 'The password provided is too weak. Please use a stronger password.';
       case 'too-many-requests':

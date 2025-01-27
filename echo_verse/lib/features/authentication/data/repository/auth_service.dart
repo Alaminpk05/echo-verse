@@ -1,6 +1,5 @@
 import 'package:echo_verse/features/authentication/data/repository/auth_contract.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 class AuthService implements AuthContract {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -30,11 +29,8 @@ class AuthService implements AuthContract {
 
   @override
   Future<void> signOut() async {
-    try {
+   
       await _auth.signOut();
-    } catch (e) {
-       debugPrint('Sign-out failed: $e');
-      throw 'An error occurred while signing out. Please try again.';
-    }
+    
   }
 }
