@@ -1,5 +1,6 @@
 import 'package:echo_verse/core/routes/route_names.dart';
 import 'package:echo_verse/core/utils/validation/auth_validator.dart';
+import 'package:echo_verse/dependencies/service_locator.dart';
 import 'package:echo_verse/features/authentication/bloc/authentication_bloc.dart';
 import 'package:echo_verse/features/authentication/widget/auth_widget.dart';
 import 'package:echo_verse/core/constant/icons.dart';
@@ -61,6 +62,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         prefixIcon: name,
                         controller: nameController,
                         validator: (String? value) {
+                         
                           return AuthValidator.validateName(value ?? "");
                         },
                       ),
@@ -83,25 +85,36 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       AuthTextField(
                         hintText: 'Password',
                         suffixIcon: visibilityOn,
-                        
                         showEyeIcon: true,
                         onTap: () {},
                         prefixIcon: key,
                         controller: passwordController,
                         validator: (String? value) {
                           return AuthValidator.validatePassword(value ?? "");
+                          
                         },
                       ),
                       SizedBox(height: 10.h),
-                      LoginOrSignUpButton(
-                        onTap: () {
-                          if (_formKey.currentState!.validate()) {
-                            context.read<AuthenticationBloc>().add(SignUpEvent(name: nameController.text,
-                             email: emailController.text, password: passwordController.text));
-                            debugPrint('Clicked');
+                      BlocListener<AuthenticationBloc, AuthenticationState>(
+                        listener: (context, state) {
+                          if (state is AuthenticationErrorState) {
+                             customSnackBar.snackBar(
+                                context, state.errorMessege);
                           }
                         },
-                        title: 'Sign Up',
+                        child: LoginOrSignUpButton(
+                          onTap: () {
+                            if (_formKey.currentState!.validate()) {
+                              context.read<AuthenticationBloc>().add(
+                                  SignUpEvent(
+                                      name: nameController.text,
+                                      email: emailController.text,
+                                      password: passwordController.text));
+                              debugPrint('Clicked');
+                            }
+                          },
+                          title: 'Sign Up',
+                        ),
                       ),
                     ],
                   ),

@@ -1,5 +1,6 @@
 import 'package:echo_verse/core/routes/route_names.dart';
 import 'package:echo_verse/core/utils/validation/auth_validator.dart';
+import 'package:echo_verse/dependencies/service_locator.dart';
 import 'package:echo_verse/features/authentication/bloc/authentication_bloc.dart';
 import 'package:echo_verse/features/authentication/widget/auth_widget.dart';
 import 'package:echo_verse/core/constant/icons.dart';
@@ -95,15 +96,24 @@ class _LoginPageState extends State<LoginPage> {
                       SizedBox(height: 1.5.h),
                       ForgetPasswordButton(),
                       SizedBox(height: 2.h),
-                      LoginOrSignUpButton(
-                        title: 'Login',
-                        onTap: () {
-                          if (_formKey.currentState!.validate()) {
-                            context.read<AuthenticationBloc>().add(LogInEvent(email: emailController.text, 
-                            password: passwordController.text));
-                            debugPrint('CLICKED ON LOGIN BUTTON');
+                      BlocListener<AuthenticationBloc, AuthenticationState>(
+                        listener: (context, state) {
+                          if (state is AuthenticationErrorState) {
+                            customSnackBar.snackBar(
+                                context, state.errorMessege);
                           }
                         },
+                        child: LoginOrSignUpButton(
+                          title: 'Login',
+                          onTap: () {
+                            if (_formKey.currentState!.validate()) {
+                              context.read<AuthenticationBloc>().add(LogInEvent(
+                                  email: emailController.text,
+                                  password: passwordController.text));
+                              debugPrint('CLICKED ON LOGIN BUTTON');
+                            }
+                          },
+                        ),
                       ),
                       SizedBox(
                         height: 3.h,

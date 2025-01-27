@@ -1,10 +1,12 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
 class FirebaseAuthExceptionHandler {
-  static String getErrorMessage(FirebaseAuthException exception) {
+  String getErrorMessage(FirebaseAuthException exception) {
     switch (exception.code) {
       case 'invalid-email':
         return 'The email address is not valid.';
+      case 'invalid-credential':
+        return 'No user found with this email. Please sign up first.';
       case 'user-disabled':
         return 'This user has been disabled. Please contact support.';
       case 'user-not-found':
@@ -24,7 +26,7 @@ class FirebaseAuthExceptionHandler {
     }
   }
 
-  static String handleException(dynamic e) {
+  String handleException(dynamic e) {
     if (e is FirebaseAuthException) {
       return getErrorMessage(e);
     }

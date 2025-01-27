@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
           providers: [
             BlocProvider(
                 create: (context) => AuthenticationBloc(authContract)
-                  ..add(AuthCheckStatusEvent()))
+                  )
           ],
           child: MaterialApp.router(
             debugShowCheckedModeBanner: false,

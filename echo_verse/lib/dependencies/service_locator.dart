@@ -1,5 +1,7 @@
+import 'package:echo_verse/core/errors/firebase/exception.dart';
 import 'package:echo_verse/core/routes/app_router.dart';
 import 'package:echo_verse/core/services/objectbox/open_store.dart';
+import 'package:echo_verse/core/utils/helpers/snackbar.dart';
 import 'package:echo_verse/features/authentication/data/repository/auth_contract.dart';
 import 'package:echo_verse/features/authentication/data/repository/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,7 +16,10 @@ Future<void> setupServiceLocator() async {
     getIt.registerSingleton<ObjectBox>(objectBox);
     getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
     getIt.registerLazySingleton<AuthContract>(() => AuthService());
+    getIt.registerLazySingleton<FirebaseAuthExceptionHandler>(
+        () => FirebaseAuthExceptionHandler());
 
+    getIt.registerLazySingleton<CustomSnackbar>(() => CustomSnackbar());
 
     getIt.registerLazySingleton(() => AppRouter.router);
   } catch (e) {
@@ -22,3 +27,13 @@ Future<void> setupServiceLocator() async {
     rethrow;
   }
 }
+
+//// GLOBAL INSTANCE FOR ACCESSING ACROSS THE APP
+ObjectBox get objectBox => getIt<ObjectBox>();
+FirebaseAuth get firebaseAut => getIt<FirebaseAuth>();
+AuthService get authServices => getIt<AuthService>();
+CustomSnackbar get customSnackBar => getIt<CustomSnackbar>();
+AppRouter get appRouter => getIt<AppRouter>();
+FirebaseAuthExceptionHandler get firebaseAuthExceptionHandler =>
+    getIt<FirebaseAuthExceptionHandler>();
+
