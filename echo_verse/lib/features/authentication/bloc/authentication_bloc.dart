@@ -1,7 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:echo_verse/core/errors/firebase/exception.dart';
 import 'package:echo_verse/dependencies/service_locator.dart';
-import 'package:echo_verse/features/authentication/data/repository/auth_contract.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -10,26 +8,12 @@ part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  final AuthContract authService;
-
-  AuthenticationBloc(this.authService) : super(AuthenticationInitial()) {
-    on<AuthCheckStatusEvent>(_onAuthCheckStatusEvent);
+  AuthenticationBloc() : super(AuthenticationInitial()) {
+    //on<AuthCheckStatusEvent>(_onAuthCheckStatusEvent);
     on<SignUpEvent>(_onSignUpEvent);
     on<LogInEvent>(_onLogInEvent);
     on<SignOutEvent>(_onSignOutEvent);
-  }
-
-  Future<void> _onAuthCheckStatusEvent(
-      AuthCheckStatusEvent event, Emitter<AuthenticationState> emit) async {
-    emit(AuthenticationLoadingState());
-    final user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      emit(AuthenticatedState(user: user));
-      debugPrint('EMITTED AUTHENTICATED STATE');
-    } else {
-      emit(UnAuthenticatedState());
-      debugPrint('EMITTED UNAUTHENTICATED STATE');
-    }
+    on<PasswordVisibilityEVent>(_onPasswordVisibilityEVent);
   }
 
   Future<void> _onSignUpEvent(
@@ -37,7 +21,7 @@ class AuthenticationBloc
     emit(AuthenticationLoadingState());
     try {
       final userCredential =
-          await authService.signUp(event.name, event.email, event.password);
+          await authServices.signUp(event.name, event.email, event.password);
       if (userCredential?.user != null) {
         emit(AuthenticatedState(user: userCredential!.user!));
       } else {
@@ -59,7 +43,7 @@ class AuthenticationBloc
   Future<void> _onLogInEvent(
       LogInEvent event, Emitter<AuthenticationState> emit) async {
     try {
-      final user = await authService.login(event.email, event.password);
+      final user = await authServices.login(event.email, event.password);
       if (user != null) {
         emit(AuthenticatedState(user: user));
         debugPrint(user.displayName);
@@ -81,7 +65,7 @@ class AuthenticationBloc
   Future<void> _onSignOutEvent(
       SignOutEvent event, Emitter<AuthenticationState> emit) async {
     try {
-      await authService.signOut();
+      await authServices.signOut();
       emit(UnAuthenticatedState());
     } on FirebaseAuthException catch (e) {
       emit(AuthenticationErrorState(
@@ -91,5 +75,20 @@ class AuthenticationBloc
           errorMessege:
               "An error occurred while signing out. Please try again."));
     }
+  }
+
+  Future<void> _onPasswordVisibilityEVent(
+      PasswordVisibilityEVent event, Emitter<AuthenticationState> emit) async {
+   
+      if (state is PasswordVisibilityState) {
+        final currentState = state as PasswordVisibilityState;
+        
+        emit(PasswordVisibilityState(isVisibility: !currentState.isVisibility));
+       
+      } else {
+        emit(PasswordVisibilityState(isVisibility: true));
+        
+      }
+   
   }
 }

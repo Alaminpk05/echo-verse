@@ -34,3 +34,12 @@ final class AuthenticationErrorState extends AuthenticationState {
   @override
   List<Object?> get props => [errorMessege];
 }
+
+final class PasswordVisibilityState extends AuthenticationState {
+  final bool isVisibility;
+
+  PasswordVisibilityState({required this.isVisibility});
+
+  @override
+  List<Object?> get props => [isVisibility];
+}

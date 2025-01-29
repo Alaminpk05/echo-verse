@@ -1,6 +1,5 @@
 import 'package:echo_verse/core/routes/route_names.dart';
 import 'package:echo_verse/features/authentication/bloc/authentication_bloc.dart';
-import 'package:echo_verse/features/authentication/data/repository/auth_service.dart';
 import 'package:echo_verse/features/authentication/login/screens/login.dart';
 import 'package:echo_verse/features/authentication/registration/screens/registration.dart';
 import 'package:echo_verse/features/home/home.dart';
@@ -33,14 +32,14 @@ class AppRouter {
       GoRoute(
         path: RouteNames.login,
         builder: (context, state) => BlocProvider(
-          create: (_) => AuthenticationBloc(AuthService()),
+          create: (_) => AuthenticationBloc(),
           child: LoginPage(),
         ),
       ),
       GoRoute(
         path: RouteNames.signUp,
         builder: (context, state) => BlocProvider(
-          create: (_) => AuthenticationBloc(AuthService()),
+          create: (_) => AuthenticationBloc(),
           child: RegistrationPage(),
         ),
       ),

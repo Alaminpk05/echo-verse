@@ -248,29 +248,35 @@ class AuthTextField extends StatelessWidget {
   const AuthTextField({
     super.key,
     required this.hintText,
-    required this.suffixIcon,
+    
     required this.showEyeIcon,
     this.onTap,
+    this.obscureText=false,
     required this.prefixIcon,
     required this.controller,
-    required this.validator,
+    required this.validator,  
   });
   final TextEditingController controller;
   final String hintText;
-  final IconData? suffixIcon;
+ 
   final IconData prefixIcon;
   final bool showEyeIcon;
   final void Function()? onTap;
   final String? Function(String?)? validator;
+  final  bool obscureText;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      obscureText: obscureText,
       controller: controller,
       validator: validator,
       cursorWidth: 1.5,
       cursorHeight: 2.5.h,
+      
       decoration: InputDecoration(
+        
+        
           border: InputBorder.none,
           enabled: true,
           prefixIcon: Icon(
@@ -278,7 +284,7 @@ class AuthTextField extends StatelessWidget {
             color: lightGrey,
           ),
           suffixIcon: showEyeIcon
-              ? IconButton(onPressed: onTap, icon: Icon(visibilityOn))
+              ? IconButton(onPressed: onTap, icon: Icon(obscureText? visibilityOff:visibilityOn))
               : null,
           suffixIconColor: teal,
           hintText: hintText,

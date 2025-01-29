@@ -3,8 +3,6 @@ part of 'authentication_bloc.dart';
 @immutable
 sealed class AuthenticationEvent {}
 
-final class AuthCheckStatusEvent  extends AuthenticationEvent {}
-
 final class SignUpEvent extends AuthenticationEvent {
   final String name;
   final String email;
@@ -20,4 +18,9 @@ final class LogInEvent extends AuthenticationEvent {
 
   LogInEvent({required this.email, required this.password});
 }
-final class SignOutEvent extends AuthenticationEvent{}
+
+final class SignOutEvent extends AuthenticationEvent {}
+
+final class PasswordVisibilityEVent extends AuthenticationEvent {
+  
+}
