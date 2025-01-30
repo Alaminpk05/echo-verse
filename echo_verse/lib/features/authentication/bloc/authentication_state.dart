@@ -14,8 +14,9 @@ final class AuthenticationLoadingState extends AuthenticationState {
 }
 
 final class AuthenticatedState extends AuthenticationState {
-  final User user;
-  AuthenticatedState({required this.user});
+  final User? user;
+ 
+  AuthenticatedState( {required this.user,});
 
   @override
   List<Object?> get props => [user];
@@ -35,11 +36,11 @@ final class AuthenticationErrorState extends AuthenticationState {
   List<Object?> get props => [errorMessege];
 }
 
-final class PasswordVisibilityState extends AuthenticationState {
-  final bool isVisibility;
+// final class PasswordVisibilityState extends AuthenticationState {
+//   final bool isVisibility;
 
-  PasswordVisibilityState({required this.isVisibility});
+//   PasswordVisibilityState({required this.isVisibility});
 
-  @override
-  List<Object?> get props => [isVisibility];
-}
+//   @override
+//   List<Object?> get props => [isVisibility];
+// }

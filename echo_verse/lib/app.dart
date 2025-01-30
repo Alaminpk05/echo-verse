@@ -1,17 +1,15 @@
 import 'package:echo_verse/core/routes/app_router.dart';
 import 'package:echo_verse/core/config/theme/theme.dart';
-
 import 'package:echo_verse/features/authentication/bloc/authentication_bloc.dart';
-import 'package:echo_verse/features/authentication/data/repository/auth_contract.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.authContract});
+  const MyApp({super.key,});
 
-  final AuthContract authContract;
+  
 
   @override
   Widget build(BuildContext context) {

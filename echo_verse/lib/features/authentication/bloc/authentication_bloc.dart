@@ -13,7 +13,7 @@ class AuthenticationBloc
     on<SignUpEvent>(_onSignUpEvent);
     on<LogInEvent>(_onLogInEvent);
     on<SignOutEvent>(_onSignOutEvent);
-    on<PasswordVisibilityEVent>(_onPasswordVisibilityEVent);
+    
   }
 
   Future<void> _onSignUpEvent(
@@ -23,7 +23,8 @@ class AuthenticationBloc
       final userCredential =
           await authServices.signUp(event.name, event.email, event.password);
       if (userCredential?.user != null) {
-        emit(AuthenticatedState(user: userCredential!.user!));
+        emit(AuthenticatedState(
+            user: userCredential!.user!, ));
       } else {
         emit(AuthenticationErrorState(errorMessege: "User creation failed."));
       }
@@ -36,16 +37,17 @@ class AuthenticationBloc
     } catch (e) {
       emit(AuthenticationErrorState(
           errorMessege: "An unknown error occurred. Please try again.}"));
-      debugPrint('EMITTED ERROR STATE IN SIGN UP BLOC');
+      debugPrint('EMITTED ERROR STATE IN SIGN UP BLOC ${e.toString()}');
     }
   }
 
   Future<void> _onLogInEvent(
       LogInEvent event, Emitter<AuthenticationState> emit) async {
+    emit(AuthenticationLoadingState());
     try {
       final user = await authServices.login(event.email, event.password);
       if (user != null) {
-        emit(AuthenticatedState(user: user));
+        emit(AuthenticatedState(user: user,));
         debugPrint(user.displayName);
       } else {
         emit(AuthenticationErrorState(
@@ -56,9 +58,11 @@ class AuthenticationBloc
 
       emit(AuthenticationErrorState(
           errorMessege: firebaseAuthExceptionHandler.handleException(e)));
+      debugPrint(e.code.toString());
     } catch (e) {
       emit(AuthenticationErrorState(
           errorMessege: "An unknown error occurred. Please try again."));
+      debugPrint("EMITTED LOGIN CATCH BLOC STATE ${e.toString()}");
     }
   }
 
@@ -77,18 +81,5 @@ class AuthenticationBloc
     }
   }
 
-  Future<void> _onPasswordVisibilityEVent(
-      PasswordVisibilityEVent event, Emitter<AuthenticationState> emit) async {
-   
-      if (state is PasswordVisibilityState) {
-        final currentState = state as PasswordVisibilityState;
-        
-        emit(PasswordVisibilityState(isVisibility: !currentState.isVisibility));
-       
-      } else {
-        emit(PasswordVisibilityState(isVisibility: true));
-        
-      }
-   
-  }
+  
 }

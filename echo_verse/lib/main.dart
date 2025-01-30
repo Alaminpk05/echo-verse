@@ -1,6 +1,5 @@
 import 'package:echo_verse/app.dart';
 import 'package:echo_verse/dependencies/service_locator.dart';
-import 'package:echo_verse/features/authentication/data/repository/auth_service.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +11,6 @@ Future<void> main() async {
   await setupServiceLocator();
 
   runApp(MyApp(
-    authContract: AuthService(),
+    
   ));
 }

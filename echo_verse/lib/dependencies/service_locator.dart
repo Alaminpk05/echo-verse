@@ -16,10 +16,12 @@ Future<void> setupServiceLocator() async {
     getIt.registerSingleton<ObjectBox>(objectBox);
     getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
     getIt.registerLazySingleton<AuthContract>(() => AuthService());
+   
     getIt.registerLazySingleton<FirebaseAuthExceptionHandler>(
         () => FirebaseAuthExceptionHandler());
 
     getIt.registerLazySingleton<CustomSnackbar>(() => CustomSnackbar());
+   
 
     getIt.registerLazySingleton(() => AppRouter.router);
   } catch (e) {
@@ -31,7 +33,7 @@ Future<void> setupServiceLocator() async {
 //// GLOBAL INSTANCE FOR ACCESSING ACROSS THE APP
 ObjectBox get objectBox => getIt<ObjectBox>();
 FirebaseAuth get firebaseAut => getIt<FirebaseAuth>();
-AuthService get authServices => getIt<AuthService>();
+AuthContract get authServices => getIt<AuthContract>();
 CustomSnackbar get customSnackBar => getIt<CustomSnackbar>();
 AppRouter get appRouter => getIt<AppRouter>();
 FirebaseAuthExceptionHandler get firebaseAuthExceptionHandler =>

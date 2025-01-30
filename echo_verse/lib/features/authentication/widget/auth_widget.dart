@@ -1,4 +1,3 @@
-
 import 'package:echo_verse/core/constant/colors.dart';
 
 import 'package:echo_verse/core/constant/icons.dart';
@@ -244,50 +243,58 @@ class AuthSignInWithButtonWidget extends StatelessWidget {
   }
 }
 
-class AuthTextField extends StatelessWidget {
+class AuthTextField extends StatefulWidget {
   const AuthTextField({
     super.key,
     required this.hintText,
-    
     required this.showEyeIcon,
-    this.onTap,
-    this.obscureText=false,
+   
     required this.prefixIcon,
     required this.controller,
-    required this.validator,  
+    required this.validator,
   });
   final TextEditingController controller;
   final String hintText;
- 
+
   final IconData prefixIcon;
   final bool showEyeIcon;
-  final void Function()? onTap;
+
   final String? Function(String?)? validator;
-  final  bool obscureText;
+
+  @override
+  State<AuthTextField> createState() => _AuthTextFieldState();
+}
+
+class _AuthTextFieldState extends State<AuthTextField> {
+  bool _obscureText = true;
+  void _toggleVisibility() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      obscureText: obscureText,
-      controller: controller,
-      validator: validator,
+      obscureText: _obscureText,
+      controller: widget.controller,
+      validator: widget.validator,
       cursorWidth: 1.5,
       cursorHeight: 2.5.h,
-      
       decoration: InputDecoration(
-        
-        
           border: InputBorder.none,
           enabled: true,
           prefixIcon: Icon(
-            prefixIcon,
+            widget.prefixIcon,
             color: lightGrey,
           ),
-          suffixIcon: showEyeIcon
-              ? IconButton(onPressed: onTap, icon: Icon(obscureText? visibilityOff:visibilityOn))
+          suffixIcon: widget.showEyeIcon
+              ? IconButton(
+                  onPressed: _toggleVisibility,
+                  icon: Icon(_obscureText ? visibilityOff : visibilityOn))
               : null,
           suffixIconColor: teal,
-          hintText: hintText,
+          hintText: widget.hintText,
           hintStyle: TextStyle(
               color: lightGrey,
               fontWeight: FontWeight.normal,

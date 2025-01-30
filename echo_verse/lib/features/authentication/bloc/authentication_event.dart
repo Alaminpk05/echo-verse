@@ -21,6 +21,4 @@ final class LogInEvent extends AuthenticationEvent {
 
 final class SignOutEvent extends AuthenticationEvent {}
 
-final class PasswordVisibilityEVent extends AuthenticationEvent {
-  
-}
+
