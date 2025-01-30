@@ -1,4 +1,5 @@
 import 'package:echo_verse/core/constant/colors.dart';
+import 'package:echo_verse/core/constant/const_string.dart';
 
 import 'package:echo_verse/core/constant/icons.dart';
 import 'package:flutter/material.dart';
@@ -248,10 +249,9 @@ class AuthTextField extends StatefulWidget {
     super.key,
     required this.hintText,
     required this.showEyeIcon,
-   
     required this.prefixIcon,
     required this.controller,
-    required this.validator,
+    required this.validator, required this.type,
   });
   final TextEditingController controller;
   final String hintText;
@@ -260,6 +260,7 @@ class AuthTextField extends StatefulWidget {
   final bool showEyeIcon;
 
   final String? Function(String?)? validator;
+  final String? type;
 
   @override
   State<AuthTextField> createState() => _AuthTextFieldState();
@@ -276,7 +277,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      obscureText: _obscureText,
+      obscureText: widget.type==password?_obscureText:false,
       controller: widget.controller,
       validator: widget.validator,
       cursorWidth: 1.5,

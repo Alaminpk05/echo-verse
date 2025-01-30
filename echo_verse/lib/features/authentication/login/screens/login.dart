@@ -1,3 +1,4 @@
+import 'package:echo_verse/core/constant/const_string.dart';
 import 'package:echo_verse/core/routes/route_names.dart';
 import 'package:echo_verse/core/utils/validation/auth_validator.dart';
 import 'package:echo_verse/dependencies/service_locator.dart';
@@ -78,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                         controller: emailController,
                         validator: (value) {
                           return AuthValidator.validateEmail(value ?? "");
-                        },
+                        }, type: '',
                       ),
                       SizedBox(
                         height: 2.h,
@@ -90,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                         controller: passwordController,
                         validator: (value) {
                           return AuthValidator.validatePassword(value ?? "");
-                        },
+                        }, type: password,
                       ),
                       SizedBox(height: 1.5.h),
                       ForgetPasswordButton(),

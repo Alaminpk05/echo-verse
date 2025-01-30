@@ -1,3 +1,4 @@
+import 'package:echo_verse/core/constant/const_string.dart';
 import 'package:echo_verse/core/routes/route_names.dart';
 import 'package:echo_verse/core/utils/validation/auth_validator.dart';
 import 'package:echo_verse/dependencies/service_locator.dart';
@@ -62,7 +63,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         controller: nameController,
                         validator: (String? value) {
                           return AuthValidator.validateName(value ?? "");
-                        },
+                        }, type: '',
                       ),
                       SizedBox(
                         height: 3.h,
@@ -74,7 +75,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         controller: emailController,
                         validator: (String? value) {
                           return AuthValidator.validateEmail(value ?? "");
-                        },
+                        }, type: '',
                       ),
                       SizedBox(
                         height: 3.h,
@@ -89,7 +90,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             validator: (String? value) {
                               return AuthValidator.validatePassword(
                                   value ?? "");
-                            },
+                            }, type: password,
                           );
                         },
                       ),
