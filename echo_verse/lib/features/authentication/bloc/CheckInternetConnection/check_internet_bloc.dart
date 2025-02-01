@@ -21,7 +21,7 @@ class InternetConnectionBloc
       debugPrint('INTERNET BLOC CONNECTION VARIABLE$isConnected');
       emit(InternetConnectedState());
     } else {
-      debugPrint('INTERNET else BLOC CONNECTION VARIABLE$isConnected');
+      debugPrint('INTERNET disconnected state BLOC CONNECTION VARIABLE$isConnected');
 
       emit(InternetDisconnectedState());
     }

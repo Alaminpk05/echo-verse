@@ -21,11 +21,19 @@ class AuthenticationBloc
     internetConnectionBloc.add(CheckInternetEvent());
     await Future.delayed(Duration.zero);
     if (internetConnectionBloc.state is InternetDisconnectedState) {
-      debugPrint('INTERNET BLOC CONNECTION ${internetConnectionBloc.state},');
+      try{
+         debugPrint('INTERNET BLOC CONNECTION ${internetConnectionBloc.state},');
       
       emit(AuthenticationErrorState(errorMessege: 'No internet connection'));
       
       return;
+
+
+      }catch(e){
+      
+        debugPrint('INTERNET sign up else BLOC CONNECTION ${internetConnectionBloc.state},');
+      }
+     
       
     }
       debugPrint('INTERNET Disconnected BLOC NOT CALLED');
