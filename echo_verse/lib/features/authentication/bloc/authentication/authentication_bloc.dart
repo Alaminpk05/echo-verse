@@ -19,25 +19,21 @@ class AuthenticationBloc
   Future<void> _onSignUpEvent(
       SignUpEvent event, Emitter<AuthenticationState> emit) async {
     internetConnectionBloc.add(CheckInternetEvent());
-    await Future.delayed(Duration.zero);
-    if (internetConnectionBloc.state is InternetDisconnectedState) {
-      try{
-         debugPrint('INTERNET BLOC CONNECTION ${internetConnectionBloc.state},');
-      
+
+    // Wait for the next state update
+    final internetState = await internetConnectionBloc.stream.firstWhere(
+      (state) =>
+          state is InternetConnectedState || state is InternetDisconnectedState,
+    );
+    if (internetState is InternetDisconnectedState) {
+      debugPrint('INTERNET BLOC CONNECTION ${internetConnectionBloc.state},');
+
       emit(AuthenticationErrorState(errorMessege: 'No internet connection'));
-      
+      debugPrint('EMITTED ERROR sTATE OF SIGNUP EVENT INTERNET CONNECTION');
+
       return;
-
-
-      }catch(e){
-      
-        debugPrint('INTERNET sign up else BLOC CONNECTION ${internetConnectionBloc.state},');
-      }
-     
-      
     }
-      debugPrint('INTERNET Disconnected BLOC NOT CALLED');
-
+    debugPrint('INTERNET Disconnected BLOC NOT CALLED');
 
     emit(AuthenticationLoadingState());
     try {
@@ -66,11 +62,18 @@ class AuthenticationBloc
   Future<void> _onLogInEvent(
       LogInEvent event, Emitter<AuthenticationState> emit) async {
     internetConnectionBloc.add(CheckInternetEvent());
-    await Future.delayed(Duration.zero);
-    if (internetConnectionBloc.state is InternetDisconnectedState) {
+     final internetState = await internetConnectionBloc.stream.firstWhere(
+      (state) =>
+          state is InternetConnectedState || state is InternetDisconnectedState,
+    );
+    if (internetState is InternetDisconnectedState) {
       emit(AuthenticationErrorState(errorMessege: 'No internet connection'));
+      debugPrint('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+      debugPrint('EMITTED ERROR sTATE OF LOGIN EVENT INTERNET CONNECTION');
+      debugPrint(internetConnectionBloc.state.toString());
       return;
     }
+    debugPrint('EMITTED LOADING STATE AND AUTHENTICATION BLOC');
 
     emit(AuthenticationLoadingState());
     try {
