@@ -1,4 +1,4 @@
-import 'package:echo_verse/features/authentication/bloc/authentication_bloc.dart';
+import 'package:echo_verse/features/authentication/bloc/authentication/authentication_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

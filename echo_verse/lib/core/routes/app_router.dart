@@ -1,5 +1,5 @@
 import 'package:echo_verse/core/routes/route_names.dart';
-import 'package:echo_verse/features/authentication/bloc/authentication_bloc.dart';
+import 'package:echo_verse/features/authentication/bloc/authentication/authentication_bloc.dart';
 import 'package:echo_verse/features/authentication/login/screens/login.dart';
 import 'package:echo_verse/features/authentication/registration/screens/registration.dart';
 import 'package:echo_verse/features/home/home.dart';
