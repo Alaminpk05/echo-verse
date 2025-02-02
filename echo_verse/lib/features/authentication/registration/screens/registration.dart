@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:echo_verse/core/constant/const_string.dart';
 import 'package:echo_verse/core/routes/route_names.dart';
 import 'package:echo_verse/core/utils/validation/auth_validator.dart';
@@ -32,7 +33,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
           listener: (context, state) {
             debugPrint('Authentication State Changed: $state');
             if (state is AuthenticationErrorState) {
-              customSnackBar.snackBar(context, state.errorMessege);
+             
+                  customSnackBar.snackBar(context, state.errorMessege,
+                      ContentType.failure, 'Error');
               debugPrint(
                   'Authentication SIGN UP BUTTON IS ERROR STATE IS EMITTED');
             }

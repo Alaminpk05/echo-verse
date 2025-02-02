@@ -33,8 +33,9 @@ class AuthenticationBloc
       final userCredential =
           await authServices.signUp(event.name, event.email, event.password);
       if (userCredential?.user != null) {
+        final updatedUser = FirebaseAuth.instance.currentUser;
         emit(AuthenticatedState(
-          user: userCredential!.user!,
+          user: updatedUser,
         ));
       } else {
         emit(AuthenticationErrorState(errorMessege: "User creation failed."));

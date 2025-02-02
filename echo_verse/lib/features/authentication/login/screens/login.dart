@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:echo_verse/core/constant/const_string.dart';
 import 'package:echo_verse/core/routes/route_names.dart';
 import 'package:echo_verse/core/utils/validation/auth_validator.dart';
@@ -48,7 +49,8 @@ class _LoginPageState extends State<LoginPage> {
         body: BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
             if (state is AuthenticationErrorState) {
-              customSnackBar.snackBar(context, state.errorMessege);
+               customSnackBar.snackBar(context, state.errorMessege,
+                      ContentType.failure, 'Error');
             }
           },
           child: SingleChildScrollView(

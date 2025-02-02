@@ -25,13 +25,20 @@ class _HomePageState extends State<HomePage> {
                   context.read<AuthenticationBloc>().add(SignOutEvent());
                 },
                 child: Text('Sign out')),
-                
           ),
-          Text(FirebaseAuth.instance.currentUser!.displayName.toString()),
+          BlocBuilder<AuthenticationBloc, AuthenticationState>(
+            builder: (context, state) {
+              if (state is AuthenticatedState) {
+                debugPrint('Home page user name');
+                debugPrint(state.user!.displayName);
+                return Text(state.user!.displayName!);
+              }
+              return SizedBox.shrink();
+            },
+          ),
           Text(FirebaseAuth.instance.currentUser!.email.toString()),
-          Text(FirebaseAuth.instance.currentUser!.uid.toString())
-          ,Text(FirebaseAuth.instance.currentUser!.emailVerified.toString())
-          
+          Text(FirebaseAuth.instance.currentUser!.uid.toString()),
+          Text(FirebaseAuth.instance.currentUser!.emailVerified.toString())
         ],
       ),
     );
