@@ -37,3 +37,10 @@ final class AuthenticationErrorState extends AuthenticationState {
 }
 
 
+final class AuthenticationIdleState extends AuthenticationState{
+  @override
+  List<Object?> get props => [];
+ 
+}
+
+

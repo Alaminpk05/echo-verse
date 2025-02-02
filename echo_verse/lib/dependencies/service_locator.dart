@@ -2,7 +2,6 @@ import 'package:echo_verse/core/errors/firebase/exception.dart';
 import 'package:echo_verse/core/routes/app_router.dart';
 import 'package:echo_verse/core/services/objectbox/open_store.dart';
 import 'package:echo_verse/core/utils/helpers/snackbar.dart';
-import 'package:echo_verse/features/authentication/bloc/CheckInternetConnection/check_internet_bloc.dart';
 import 'package:echo_verse/features/authentication/data/repository/auth_contract.dart';
 import 'package:echo_verse/features/authentication/data/repository/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,8 +15,7 @@ final getIt = GetIt.instance;
 Future<void> setupServiceLocator() async {
   try {
     final objectBox = await ObjectBox.create();
-    getIt.registerLazySingleton<InternetConnection>(()=>InternetConnection());
-    getIt.registerFactory<InternetConnectionBloc>(()=>InternetConnectionBloc());
+    getIt.registerFactory<InternetConnection>(()=> InternetConnection());
     getIt.registerSingleton<ObjectBox>(objectBox);
     getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
     getIt.registerSingleton<AuthContract>(AuthService());
@@ -37,8 +35,6 @@ Future<void> setupServiceLocator() async {
 
 //// GLOBAL INSTANCE FOR ACCESSING ACROSS THE APP
 InternetConnection get internetConnection => getIt<InternetConnection>();
-InternetConnectionBloc get internetConnectionBloc =>
-    getIt<InternetConnectionBloc>();
 ObjectBox get objectBox => getIt<ObjectBox>();
 FirebaseAuth get firebaseAut => getIt<FirebaseAuth>();
 AuthContract get authServices => getIt<AuthContract>();

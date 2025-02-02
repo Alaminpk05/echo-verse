@@ -1,17 +1,13 @@
 import 'package:bloc/bloc.dart';
 import 'package:echo_verse/dependencies/service_locator.dart';
-import 'package:echo_verse/features/authentication/bloc/CheckInternetConnection/check_internet_bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
-  final internetConnectionBloc = getIt<InternetConnectionBloc>();
-
   AuthenticationBloc() : super(AuthenticationInitial()) {
     //on<AuthCheckStatusEvent>(_onAuthCheckStatusEvent);
     on<SignUpEvent>(_onSignUpEvent);
@@ -21,12 +17,13 @@ class AuthenticationBloc
 
   Future<void> _onSignUpEvent(
       SignUpEvent event, Emitter<AuthenticationState> emit) async {
-    final connection = await InternetConnection().hasInternetAccess;
-    if (!connection) {
-      emit(AuthenticationLoadingState()); 
-      
+    final hasConnection = await internetConnection.hasInternetAccess;
+    if (!hasConnection) {
+      emit(AuthenticationIdleState());
+
       emit(AuthenticationErrorState(
-          errorMessege: 'No internet connection available'));
+          errorMessege:
+              "No internet connection. Please check your network and try again."));
       debugPrint('EMITTED NO INTERNET AUTH ERROR STATE');
       return;
     }
@@ -57,16 +54,14 @@ class AuthenticationBloc
 
   Future<void> _onLogInEvent(
       LogInEvent event, Emitter<AuthenticationState> emit) async {
-    internetConnectionBloc.add(CheckInternetEvent());
-    final internetState = await internetConnectionBloc.stream.firstWhere(
-      (state) =>
-          state is InternetConnectedState || state is InternetDisconnectedState,
-    );
-    if (internetState is InternetDisconnectedState) {
-      emit(AuthenticationErrorState(errorMessege: 'No internet connection'));
-      debugPrint('=>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>');
+    final hasConnection = await internetConnection.hasInternetAccess;
+    if (!hasConnection) {
+      emit(AuthenticationIdleState());
+      emit(AuthenticationErrorState(
+          errorMessege:
+              "No internet connection. Please check your network and try again."));
+
       debugPrint('EMITTED ERROR sTATE OF LOGIN EVENT INTERNET CONNECTION');
-      debugPrint(internetConnectionBloc.state.toString());
       return;
     }
     debugPrint('EMITTED LOADING STATE AND AUTHENTICATION BLOC');
@@ -98,12 +93,14 @@ class AuthenticationBloc
 
   Future<void> _onSignOutEvent(
       SignOutEvent event, Emitter<AuthenticationState> emit) async {
-    internetConnectionBloc.add(CheckInternetEvent());
-    await Future.delayed(Duration.zero);
-    if (internetConnectionBloc.state is InternetDisconnectedState) {
-      emit(AuthenticationErrorState(errorMessege: 'No internet connection'));
+    final hasConnection = await internetConnection.hasInternetAccess;
+    if (!hasConnection) {
+      emit(AuthenticationErrorState(
+          errorMessege:
+              "No internet connection. Please check your network and try again."));
       return;
     }
+
     try {
       await authServices.signOut();
       emit(UnAuthenticatedState());
