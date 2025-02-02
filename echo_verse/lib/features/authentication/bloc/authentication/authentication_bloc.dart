@@ -4,11 +4,14 @@ import 'package:echo_verse/features/authentication/bloc/CheckInternetConnection/
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 part 'authentication_event.dart';
 part 'authentication_state.dart';
 
 class AuthenticationBloc
     extends Bloc<AuthenticationEvent, AuthenticationState> {
+  final internetConnectionBloc = getIt<InternetConnectionBloc>();
+
   AuthenticationBloc() : super(AuthenticationInitial()) {
     //on<AuthCheckStatusEvent>(_onAuthCheckStatusEvent);
     on<SignUpEvent>(_onSignUpEvent);
@@ -18,22 +21,15 @@ class AuthenticationBloc
 
   Future<void> _onSignUpEvent(
       SignUpEvent event, Emitter<AuthenticationState> emit) async {
-    internetConnectionBloc.add(CheckInternetEvent());
-
-    // Wait for the next state update
-    final internetState = await internetConnectionBloc.stream.firstWhere(
-      (state) =>
-          state is InternetConnectedState || state is InternetDisconnectedState,
-    );
-    if (internetState is InternetDisconnectedState) {
-      debugPrint('INTERNET BLOC CONNECTION ${internetConnectionBloc.state},');
-
-      emit(AuthenticationErrorState(errorMessege: 'No internet connection'));
-      debugPrint('EMITTED ERROR sTATE OF SIGNUP EVENT INTERNET CONNECTION');
-
+    final connection = await InternetConnection().hasInternetAccess;
+    if (!connection) {
+      emit(AuthenticationLoadingState()); 
+      
+      emit(AuthenticationErrorState(
+          errorMessege: 'No internet connection available'));
+      debugPrint('EMITTED NO INTERNET AUTH ERROR STATE');
       return;
     }
-    debugPrint('INTERNET Disconnected BLOC NOT CALLED');
 
     emit(AuthenticationLoadingState());
     try {
@@ -62,7 +58,7 @@ class AuthenticationBloc
   Future<void> _onLogInEvent(
       LogInEvent event, Emitter<AuthenticationState> emit) async {
     internetConnectionBloc.add(CheckInternetEvent());
-     final internetState = await internetConnectionBloc.stream.firstWhere(
+    final internetState = await internetConnectionBloc.stream.firstWhere(
       (state) =>
           state is InternetConnectedState || state is InternetDisconnectedState,
     );

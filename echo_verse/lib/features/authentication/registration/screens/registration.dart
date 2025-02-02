@@ -28,81 +28,81 @@ class _RegistrationPageState extends State<RegistrationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: true,
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 2.h),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                LogoWidget(),
-                SizedBox(height: 3.h),
-                HeaderTextWidget(
-                  text: 'Create a new account',
-                ),
-                SizedBox(height: 2.3.h),
-                LoginOrSignUpPageNavigateButton(
-                  text: 'Already have an account?',
-                  title: 'Login',
-                  onTap: () {
-                    context.go(RouteNames.login);
-                  },
-                ),
-                SizedBox(
-                  height: 4.5.h,
-                ),
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      AuthTextField(
-                        hintText: 'Name',
-                        showEyeIcon: false,
-                        prefixIcon: name,
-                        controller: nameController,
-                        validator: (String? value) {
-                          return AuthValidator.validateName(value ?? "");
-                        }, type: '',
-                      ),
-                      SizedBox(
-                        height: 3.h,
-                      ),
-                      AuthTextField(
-                        hintText: 'Email',
-                        showEyeIcon: false,
-                        prefixIcon: email,
-                        controller: emailController,
-                        validator: (String? value) {
-                          return AuthValidator.validateEmail(value ?? "");
-                        }, type: '',
-                      ),
-                      SizedBox(
-                        height: 3.h,
-                      ),
-                      BlocBuilder<AuthenticationBloc, AuthenticationState>(
-                        builder: (context, state) {
-                          return AuthTextField(
-                            hintText: 'Password',
-                            showEyeIcon: true,
-                            prefixIcon: key,
-                            controller: passwordController,
-                            validator: (String? value) {
-                              return AuthValidator.validatePassword(
-                                  value ?? "");
-                            }, type: password,
-                          );
-                        },
-                      ),
-                      SizedBox(height: 10.h),
-                      BlocListener<AuthenticationBloc, AuthenticationState>(
-                        listener: (context, state) {
-                          if (state is AuthenticationErrorState) {
-                            customSnackBar.snackBar(
-                                context, state.errorMessege);
-                          }
-                        },
-                        child: LoginOrSignUpButton(
+        body: BlocListener<AuthenticationBloc, AuthenticationState>(
+          listener: (context, state) {
+            debugPrint('Authentication State Changed: $state');
+            if (state is AuthenticationErrorState) {
+              customSnackBar.snackBar(context, state.errorMessege);
+              debugPrint(
+                  'Authentication SIGN UP BUTTON IS ERROR STATE IS EMITTED');
+            }
+          },
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(8.w, 8.h, 8.w, 2.h),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  LogoWidget(),
+                  SizedBox(height: 3.h),
+                  HeaderTextWidget(
+                    text: 'Create a new account',
+                  ),
+                  SizedBox(height: 2.3.h),
+                  LoginOrSignUpPageNavigateButton(
+                    text: 'Already have an account?',
+                    title: 'Login',
+                    onTap: () {
+                      context.go(RouteNames.login);
+                    },
+                  ),
+                  SizedBox(
+                    height: 4.5.h,
+                  ),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        AuthTextField(
+                          hintText: 'Name',
+                          showEyeIcon: false,
+                          prefixIcon: name,
+                          controller: nameController,
+                          validator: (String? value) {
+                            return AuthValidator.validateName(value ?? "");
+                          },
+                          type: '',
+                        ),
+                        SizedBox(
+                          height: 3.h,
+                        ),
+                        AuthTextField(
+                          hintText: 'Email',
+                          showEyeIcon: false,
+                          prefixIcon: email,
+                          controller: emailController,
+                          validator: (String? value) {
+                            return AuthValidator.validateEmail(value ?? "");
+                          },
+                          type: '',
+                        ),
+                        SizedBox(
+                          height: 3.h,
+                        ),
+                        AuthTextField(
+                          hintText: 'Password',
+                          showEyeIcon: true,
+                          prefixIcon: key,
+                          controller: passwordController,
+                          validator: (String? value) {
+                            return AuthValidator.validatePassword(value ?? "");
+                          },
+                          type: password,
+                        ),
+                        SizedBox(height: 10.h),
+                        LoginOrSignUpButton(
                           onTap: () {
                             FocusScope.of(context).unfocus();
                             if (_formKey.currentState!.validate()) {
@@ -116,15 +116,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           },
                           title: 'Sign Up',
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(
-                  height: 5.h,
-                ),
-                TermsAndPrivacyButtons()
-              ],
+                  SizedBox(
+                    height: 5.h,
+                  ),
+                  TermsAndPrivacyButtons()
+                ],
+              ),
             ),
           ),
         ));

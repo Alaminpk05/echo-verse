@@ -16,11 +16,12 @@ final getIt = GetIt.instance;
 Future<void> setupServiceLocator() async {
   try {
     final objectBox = await ObjectBox.create();
-    getIt.registerLazySingleton<InternetConnection>(() => InternetConnection());
-    getIt.registerLazySingleton<InternetConnectionBloc>(()=>InternetConnectionBloc());
+    getIt.registerLazySingleton<InternetConnection>(()=>InternetConnection());
+    getIt.registerFactory<InternetConnectionBloc>(()=>InternetConnectionBloc());
     getIt.registerSingleton<ObjectBox>(objectBox);
     getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
-    getIt.registerLazySingleton<AuthContract>(()=>AuthService());
+    getIt.registerSingleton<AuthContract>(AuthService());
+    
 
     getIt.registerLazySingleton<FirebaseAuthExceptionHandler>(
         () => FirebaseAuthExceptionHandler());

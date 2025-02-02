@@ -18,12 +18,13 @@ class MyApp extends StatelessWidget {
       builder: (context, orientation, screenType) {
         return MultiBlocProvider(
           providers: [
+             BlocProvider(
+                create: (context) => AuthenticationBloc()
+                  ),
             BlocProvider(
                 create: (context) => InternetConnectionBloc()
                   ),
-            BlocProvider(
-                create: (context) => AuthenticationBloc()
-                  )
+           
           ],
           child: MaterialApp.router(
             debugShowCheckedModeBanner: false,
