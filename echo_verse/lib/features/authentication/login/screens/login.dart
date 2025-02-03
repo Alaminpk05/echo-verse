@@ -51,6 +51,12 @@ class _LoginPageState extends State<LoginPage> {
             if (state is AuthenticationErrorState) {
               customSnackBar.snackBar(
                   context, state.errorMessege, ContentType.failure, 'Error');
+            } else if (state is AuthenticatedState) {
+              customSnackBar.snackBar(
+                  context,
+                  'Successfully logged in to your Echo Verse account',
+                  ContentType.success,
+                  'Success');
             }
           },
           child: SingleChildScrollView(
@@ -107,8 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                         ForgetPasswordButton(
                           onTap: () {
                             debugPrint('CLICKED ON FORGET BUTTON');
-                          context.pushNamed(RouteName.forget);
-                            
+                            context.pushNamed(RouteName.forget);
                           },
                         ),
                         SizedBox(height: 2.h),

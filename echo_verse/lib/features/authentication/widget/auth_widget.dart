@@ -2,9 +2,10 @@ import 'package:echo_verse/core/constant/colors.dart';
 import 'package:echo_verse/core/constant/const_string.dart';
 
 import 'package:echo_verse/core/constant/icons.dart';
+import 'package:echo_verse/features/authentication/bloc/authentication/authentication_bloc.dart';
 
 import 'package:flutter/material.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -85,7 +86,8 @@ class LogoWidget extends StatelessWidget {
 
 class ForgetPasswordButton extends StatelessWidget {
   const ForgetPasswordButton({
-    super.key, this.onTap,
+    super.key,
+    this.onTap,
   });
   final void Function()? onTap;
 
@@ -118,10 +120,19 @@ class LoginOrSignUpButton extends StatelessWidget {
       height: 6.5.h,
       child: ElevatedButton(
           onPressed: onTap,
-          child: Text(
-            title,
-            style:
-                Theme.of(context).textTheme.labelLarge!.copyWith(color: white),
+          child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+            builder: (context, state) {
+              if (state is AuthenticationLoadingState) {
+                return Center(child: CircularProgressIndicator.adaptive());
+              }
+              return Text(
+                title,
+                style: Theme.of(context)
+                    .textTheme
+                    .labelLarge!
+                    .copyWith(color: white),
+              );
+            },
           )),
     );
   }

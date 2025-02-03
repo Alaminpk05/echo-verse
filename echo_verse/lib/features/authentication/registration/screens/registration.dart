@@ -33,11 +33,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
           listener: (context, state) {
             debugPrint('Authentication State Changed: $state');
             if (state is AuthenticationErrorState) {
-             
-                  customSnackBar.snackBar(context, state.errorMessege,
-                      ContentType.failure, 'Error');
+              customSnackBar.snackBar(
+                  context, state.errorMessege, ContentType.failure, 'Error');
               debugPrint(
                   'Authentication SIGN UP BUTTON IS ERROR STATE IS EMITTED');
+            } else if (state is AuthenticatedState) {
+              customSnackBar.snackBar(
+                  context,
+                  "Successfully created an Echo Verse account.",
+                  ContentType.success,
+                  'Success');
             }
           },
           child: SingleChildScrollView(

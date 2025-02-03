@@ -21,7 +21,6 @@ class AuthenticationBloc
     final hasConnection = await internetConnection.hasInternetAccess;
     if (!hasConnection) {
       emit(AuthenticationIdleState());
-
       emit(AuthenticationErrorState(
           errorMessege:
               "No internet connection. Please check your network and try again."));
@@ -35,11 +34,13 @@ class AuthenticationBloc
           await authServices.signUp(event.name, event.email, event.password);
       if (userCredential?.user != null) {
         final updatedUser = FirebaseAuth.instance.currentUser;
-        emit(AuthenticationIdleState());
+
         emit(AuthenticatedState(
           user: updatedUser,
         ));
       } else {
+        emit(AuthenticationIdleState());
+
         emit(AuthenticationErrorState(errorMessege: "User creation failed."));
       }
     } on FirebaseAuthException catch (e) {
@@ -79,16 +80,19 @@ class AuthenticationBloc
         ));
         debugPrint(user.displayName);
       } else {
+        emit(AuthenticationIdleState());
         emit(AuthenticationErrorState(
             errorMessege: "Login failed. Invalid credentials."));
       }
     } on FirebaseAuthException catch (e) {
       debugPrint(e.code);
+      emit(AuthenticationIdleState());
 
       emit(AuthenticationErrorState(
           errorMessege: firebaseAuthExceptionHandler.handleException(e)));
       debugPrint(e.code.toString());
     } catch (e) {
+      emit(AuthenticationIdleState());
       emit(AuthenticationErrorState(
           errorMessege: "An unknown error occurred. Please try again."));
       debugPrint("EMITTED LOGIN CATCH BLOC STATE ${e.toString()}");
@@ -99,19 +103,23 @@ class AuthenticationBloc
       SignOutEvent event, Emitter<AuthenticationState> emit) async {
     final hasConnection = await internetConnection.hasInternetAccess;
     if (!hasConnection) {
+      emit(AuthenticationIdleState());
       emit(AuthenticationErrorState(
           errorMessege:
               "No internet connection. Please check your network and try again."));
       return;
     }
+    emit(AuthenticationLoadingState());
 
     try {
       await authServices.signOut();
       emit(UnAuthenticatedState());
     } on FirebaseAuthException catch (e) {
+      emit(AuthenticationIdleState());
       emit(AuthenticationErrorState(
           errorMessege: firebaseAuthExceptionHandler.handleException(e)));
     } catch (e) {
+      emit(AuthenticationIdleState());
       emit(AuthenticationErrorState(
           errorMessege:
               "An error occurred while signing out. Please try again."));
@@ -134,9 +142,11 @@ Future<void> _onPasswordResetEvent(
     final updatedUser = FirebaseAuth.instance.currentUser;
     emit(AuthenticatedState(user: updatedUser));
   } on FirebaseAuthException catch (e) {
+    emit(AuthenticationIdleState());
     emit(AuthenticationErrorState(
         errorMessege: firebaseAuthExceptionHandler.getErrorMessage(e)));
   } catch (e) {
+    emit(AuthenticationIdleState());
     emit(AuthenticationErrorState(
         errorMessege:
             "An error occurred while signing out. Please try again."));
