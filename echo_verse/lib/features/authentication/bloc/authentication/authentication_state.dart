@@ -42,5 +42,9 @@ final class AuthenticationIdleState extends AuthenticationState{
   List<Object?> get props => [];
  
 }
+final class SendEmailState extends AuthenticationState{
+  @override
+  List<Object?> get props => [];
+}
 
 

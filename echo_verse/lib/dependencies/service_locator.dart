@@ -40,5 +40,6 @@ FirebaseAuth get firebaseAut => getIt<FirebaseAuth>();
 AuthContract get authServices => getIt<AuthContract>();
 CustomSnackbar get customSnackBar => getIt<CustomSnackbar>();
 AppRouter get appRouter => getIt<AppRouter>();
+
 FirebaseAuthExceptionHandler get firebaseAuthExceptionHandler =>
     getIt<FirebaseAuthExceptionHandler>();

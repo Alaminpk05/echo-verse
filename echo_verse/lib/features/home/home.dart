@@ -1,3 +1,4 @@
+import 'package:echo_verse/dependencies/service_locator.dart';
 import 'package:echo_verse/features/authentication/bloc/authentication/authentication_bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -31,12 +32,14 @@ class _HomePageState extends State<HomePage> {
               if (state is AuthenticatedState) {
                 debugPrint('Home page user name');
                 debugPrint(state.user!.displayName);
-                return Text(state.user!.displayName!);
+                state.user?.displayName==null?Text(firebaseAut.currentUser!.displayName!):state.user?.displayName!=null?Text(state.user!.displayName!):Text('null');
+                 
               }
-              return SizedBox.shrink();
+              return Text('null');
             },
           ),
           Text(FirebaseAuth.instance.currentUser!.email.toString()),
+          Text(FirebaseAuth.instance.currentUser!.displayName.toString()),
           Text(FirebaseAuth.instance.currentUser!.uid.toString()),
           Text(FirebaseAuth.instance.currentUser!.emailVerified.toString())
         ],

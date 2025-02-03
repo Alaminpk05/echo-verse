@@ -1,9 +1,12 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:echo_verse/core/constant/colors.dart';
 import 'package:echo_verse/core/constant/icons.dart';
 import 'package:echo_verse/core/utils/validation/auth_validator.dart';
+import 'package:echo_verse/dependencies/service_locator.dart';
+import 'package:echo_verse/features/authentication/bloc/authentication/authentication_bloc.dart';
 import 'package:echo_verse/features/authentication/widget/auth_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -62,9 +65,30 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
             SizedBox(
               height: 4.h,
             ),
-            LoginOrSignUpButton(
-              title: 'Send',
-              onTap: () {},
+            BlocListener<AuthenticationBloc, AuthenticationState>(
+              listener: (context, state) {
+                if (state is AuthenticationErrorState) {
+                  customSnackBar.snackBar(context, state.errorMessege,
+                      ContentType.failure, 'Error');
+                      
+                }
+                if (state is AuthenticatedState) {
+                  customSnackBar.snackBar(
+                      context,
+                      'Email sent to your email box',
+                      ContentType.success,
+                      'Success');
+                  context.pop();
+                }
+              },
+              child: LoginOrSignUpButton(
+                title: 'Send',
+                onTap: () {
+                  context
+                      .read<AuthenticationBloc>()
+                      .add(PasswordResetEvent(email: _emailController.text));
+                },
+              ),
             ),
             SizedBox(
               height: 2.h,

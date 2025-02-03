@@ -29,4 +29,10 @@ class AuthService implements AuthContract {
   Future<void> signOut() async {
     await _auth.signOut();
   }
+
+  @override
+  Future<void> resetPassword(String email) async {
+     await _auth.sendPasswordResetEmail(email: email);
+    
+  }
 }

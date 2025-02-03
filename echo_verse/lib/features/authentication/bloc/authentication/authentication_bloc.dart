@@ -13,6 +13,7 @@ class AuthenticationBloc
     on<SignUpEvent>(_onSignUpEvent);
     on<LogInEvent>(_onLogInEvent);
     on<SignOutEvent>(_onSignOutEvent);
+    on<PasswordResetEvent>(_onPasswordResetEvent);
   }
 
   Future<void> _onSignUpEvent(
@@ -34,6 +35,7 @@ class AuthenticationBloc
           await authServices.signUp(event.name, event.email, event.password);
       if (userCredential?.user != null) {
         final updatedUser = FirebaseAuth.instance.currentUser;
+        emit(AuthenticationIdleState());
         emit(AuthenticatedState(
           user: updatedUser,
         ));
@@ -43,10 +45,11 @@ class AuthenticationBloc
     } on FirebaseAuthException catch (e) {
       debugPrint('SIGN UP MESSEGE:${e.message}');
       debugPrint('SIGH UP E CODE :${e.code}');
-
+      emit(AuthenticationIdleState());
       emit(AuthenticationErrorState(
           errorMessege: firebaseAuthExceptionHandler.handleException(e)));
     } catch (e) {
+      emit(AuthenticationIdleState());
       emit(AuthenticationErrorState(
           errorMessege: "An unknown error occurred. Please try again.}"));
       debugPrint('EMITTED ERROR STATE IN SIGN UP BLOC ${e.toString()}');
@@ -113,5 +116,29 @@ class AuthenticationBloc
           errorMessege:
               "An error occurred while signing out. Please try again."));
     }
+  }
+}
+
+Future<void> _onPasswordResetEvent(
+    PasswordResetEvent event, Emitter<AuthenticationState> emit) async {
+  final hasConnection = await internetConnection.hasInternetAccess;
+  if (!hasConnection) {
+    emit(AuthenticationIdleState());
+    emit(AuthenticationErrorState(
+        errorMessege:
+            "No internet connection. Please check your network and try again."));
+    return;
+  }
+  try {
+    await authServices.resetPassword(event.email);
+    final updatedUser = FirebaseAuth.instance.currentUser;
+    emit(AuthenticatedState(user: updatedUser));
+  } on FirebaseAuthException catch (e) {
+    emit(AuthenticationErrorState(
+        errorMessege: firebaseAuthExceptionHandler.getErrorMessage(e)));
+  } catch (e) {
+    emit(AuthenticationErrorState(
+        errorMessege:
+            "An error occurred while signing out. Please try again."));
   }
 }

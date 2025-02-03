@@ -21,4 +21,8 @@ final class LogInEvent extends AuthenticationEvent {
 
 final class SignOutEvent extends AuthenticationEvent {}
 
+final class PasswordResetEvent extends AuthenticationEvent {
+   final String email;
 
+  PasswordResetEvent({required this.email});
+}
