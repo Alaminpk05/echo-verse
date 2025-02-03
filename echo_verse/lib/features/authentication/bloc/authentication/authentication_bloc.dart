@@ -85,7 +85,10 @@ class AuthenticationBloc
             errorMessege: "Login failed. Invalid credentials."));
       }
     } on FirebaseAuthException catch (e) {
+      debugPrint('CODE OF E PRINTED BELOW');
       debugPrint(e.code);
+      debugPrint('CODE OF MESSEGE PRINTED BELOW');
+      debugPrint(e.message);
       emit(AuthenticationIdleState());
 
       emit(AuthenticationErrorState(

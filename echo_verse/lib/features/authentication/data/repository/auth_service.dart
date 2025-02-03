@@ -1,3 +1,4 @@
+import 'package:echo_verse/features/authentication/data/model/user.dart';
 import 'package:echo_verse/features/authentication/data/repository/auth_contract.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -34,5 +35,11 @@ class AuthService implements AuthContract {
   Future<void> resetPassword(String email) async {
      await _auth.sendPasswordResetEmail(email: email);
     
+  }
+
+  @override
+  Future<void> saveUserSignUpInfo(UserModel userModel) {
+    // TODO: implement saveUserSignUpInfo
+    throw UnimplementedError();
   }
 }
