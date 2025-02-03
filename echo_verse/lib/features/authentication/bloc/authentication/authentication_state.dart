@@ -15,11 +15,14 @@ final class AuthenticationLoadingState extends AuthenticationState {
 
 final class AuthenticatedState extends AuthenticationState {
   final User? user;
- 
-  AuthenticatedState( {required this.user,});
+  final List<UserModel> userInfoList;
+
+  AuthenticatedState( {required this.userInfoList,
+    required this.user,
+  });
 
   @override
-  List<Object?> get props => [user];
+  List<Object?> get props => [];
 }
 
 final class UnAuthenticatedState extends AuthenticationState {
@@ -36,15 +39,12 @@ final class AuthenticationErrorState extends AuthenticationState {
   List<Object?> get props => [errorMessege];
 }
 
-
-final class AuthenticationIdleState extends AuthenticationState{
-  @override
-  List<Object?> get props => [];
- 
-}
-final class SendEmailState extends AuthenticationState{
+final class AuthenticationIdleState extends AuthenticationState {
   @override
   List<Object?> get props => [];
 }
 
-
+final class SendEmailState extends AuthenticationState {
+  @override
+  List<Object?> get props => [];
+}

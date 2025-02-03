@@ -1,6 +1,8 @@
+import 'package:echo_verse/dependencies/service_locator.dart';
 import 'package:echo_verse/features/authentication/data/model/user.dart';
 import 'package:echo_verse/features/authentication/data/repository/auth_contract.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class AuthService implements AuthContract {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -33,13 +35,23 @@ class AuthService implements AuthContract {
 
   @override
   Future<void> resetPassword(String email) async {
-     await _auth.sendPasswordResetEmail(email: email);
-    
+    await _auth.sendPasswordResetEmail(email: email);
   }
 
   @override
-  Future<void> saveUserSignUpInfo(UserModel userModel) {
-    // TODO: implement saveUserSignUpInfo
-    throw UnimplementedError();
+  Future<void> saveUserSignUpInfo(UserModel userModel) async {
+    final userObjectBox = objectBox.store.box<UserModel>();
+    await userObjectBox.putAsync(userModel);
+    final List<UserModel> userInfo = await userObjectBox.getAllAsync();
+    debugPrint('HERE IS TOTAL COUNT OF USER');
+    debugPrint(userInfo.length.toString());
+  }
+
+  @override
+  Future<List<UserModel>> fetchUserSignUpInfo() async {
+    final userObjectBox = objectBox.store.box<UserModel>();
+    final List<UserModel> userInfo = await userObjectBox.getAllAsync();
+    debugPrint(userInfo.length.toString());
+    return userInfo;
   }
 }

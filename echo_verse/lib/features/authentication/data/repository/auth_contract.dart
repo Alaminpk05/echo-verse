@@ -8,4 +8,5 @@ abstract class AuthContract {
   Future<void> resetPassword(String email);
 
   Future<void> saveUserSignUpInfo(UserModel userModel);
+  Future<List<UserModel>> fetchUserSignUpInfo();
 }
