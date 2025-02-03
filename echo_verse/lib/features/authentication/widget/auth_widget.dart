@@ -2,7 +2,9 @@ import 'package:echo_verse/core/constant/colors.dart';
 import 'package:echo_verse/core/constant/const_string.dart';
 
 import 'package:echo_verse/core/constant/icons.dart';
+
 import 'package:flutter/material.dart';
+
 
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -83,13 +85,14 @@ class LogoWidget extends StatelessWidget {
 
 class ForgetPasswordButton extends StatelessWidget {
   const ForgetPasswordButton({
-    super.key,
+    super.key, this.onTap,
   });
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return TextButton(
-      onPressed: () {},
+      onPressed: onTap,
       child: Text(
         'Forget Password?',
         textAlign: TextAlign.right,
@@ -251,7 +254,8 @@ class AuthTextField extends StatefulWidget {
     required this.showEyeIcon,
     required this.prefixIcon,
     required this.controller,
-    required this.validator, required this.type,
+    required this.validator,
+    required this.type,
   });
   final TextEditingController controller;
   final String hintText;
@@ -277,7 +281,7 @@ class _AuthTextFieldState extends State<AuthTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      obscureText: widget.type==password?_obscureText:false,
+      obscureText: widget.type == password ? _obscureText : false,
       controller: widget.controller,
       validator: widget.validator,
       cursorWidth: 1.5,

@@ -49,8 +49,8 @@ class _LoginPageState extends State<LoginPage> {
         body: BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {
             if (state is AuthenticationErrorState) {
-               customSnackBar.snackBar(context, state.errorMessege,
-                      ContentType.failure, 'Error');
+              customSnackBar.snackBar(
+                  context, state.errorMessege, ContentType.failure, 'Error');
             }
           },
           child: SingleChildScrollView(
@@ -70,7 +70,7 @@ class _LoginPageState extends State<LoginPage> {
                       text: 'Don’t have an account?',
                       title: 'Sign Up',
                       onTap: () {
-                        context.go(RouteNames.signUp);
+                        context.go(RoutePath.signUp);
                       }),
                   SizedBox(
                     height: 4.5.h,
@@ -104,7 +104,13 @@ class _LoginPageState extends State<LoginPage> {
                           type: password,
                         ),
                         SizedBox(height: 1.5.h),
-                        ForgetPasswordButton(),
+                        ForgetPasswordButton(
+                          onTap: () {
+                            debugPrint('CLICKED ON FORGET BUTTON');
+                          context.pushNamed(RouteName.forget);
+                            
+                          },
+                        ),
                         SizedBox(height: 2.h),
                         LoginOrSignUpButton(
                           title: 'Login',

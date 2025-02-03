@@ -1,6 +1,5 @@
 import 'package:echo_verse/features/authentication/data/repository/auth_contract.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 
 class AuthService implements AuthContract {
   final FirebaseAuth _auth = FirebaseAuth.instance;

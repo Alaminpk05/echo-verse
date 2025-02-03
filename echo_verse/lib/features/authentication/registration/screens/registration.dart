@@ -57,7 +57,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     text: 'Already have an account?',
                     title: 'Login',
                     onTap: () {
-                      context.go(RouteNames.login);
+                      context.go(RoutePath.login);
                     },
                   ),
                   SizedBox(
