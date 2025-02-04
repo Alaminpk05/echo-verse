@@ -54,4 +54,15 @@ class AuthService implements AuthContract {
     debugPrint(userInfo.length.toString());
     return userInfo;
   }
+
+  @override
+  Future<void> deleteAccount(String email, String password) async {
+    User? user;
+    if (user == null) throw FirebaseAuthException(code: 'no-user');
+
+    AuthCredential credential =
+        EmailAuthProvider.credential(email: user.email!, password: password);
+    await user.reauthenticateWithCredential(credential);
+    await user.delete();
+  }
 }

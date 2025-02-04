@@ -33,22 +33,27 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 child: Text('Sign out')),
           ),
-          // BlocBuilder<AuthenticationBloc, AuthenticationState>(
-          //   builder: (context, state) {
-          //     if (state is AuthenticatedState) {
-          //       final userInfo = state.userInfoList.firstWhere(
-          //           (e) => e.email == firebaseAut.currentUser!.email);
-          //       debugPrint('HERE PRINTED USE NAME');
-          //       debugPrint(userInfo.name.toString());
-          //       return Text(userInfo.name.toString());
-          //     }
-          //     return Text('nulll');
-          //   },
-          // ),
+          BlocBuilder<AuthenticationBloc, AuthenticationState>(
+            builder: (context, state) {
+              if (state is AuthenticatedState) {
+                final userInfo = state.userInfoList.firstWhere(
+                    (e) => e.email == firebaseAut.currentUser!.email);
+                debugPrint('HERE PRINTED USE NAME');
+                debugPrint(userInfo.name.toString());
+                return Text(userInfo.name.toString());
+              }
+              return Text('nulll');
+            },
+          ),
           Text(FirebaseAuth.instance.currentUser!.email.toString()),
           Text(FirebaseAuth.instance.currentUser!.uid.toString()),
           Text(FirebaseAuth.instance.currentUser!.displayName.toString()),
-          Text(FirebaseAuth.instance.currentUser!.emailVerified.toString())
+          Text(FirebaseAuth.instance.currentUser!.emailVerified.toString()),
+          TextButton(
+              onPressed: () {
+                // authServices.deleteAccount();
+              },
+              child: Text('Delete'))
         ],
       ),
     );

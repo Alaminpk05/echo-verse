@@ -28,3 +28,4 @@ final class PasswordResetEvent extends AuthenticationEvent {
 }
 
 final class ManageUserInformationEvent extends AuthenticationEvent {}
+final class DeleteAccount extends AuthenticationEvent{}

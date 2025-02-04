@@ -9,4 +9,5 @@ abstract class AuthContract {
 
   Future<void> saveUserSignUpInfo(UserModel userModel);
   Future<List<UserModel>> fetchUserSignUpInfo();
+  Future<void> deleteAccount(String email,String password);
 }

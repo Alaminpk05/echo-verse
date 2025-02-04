@@ -16,8 +16,15 @@ class AuthenticationBloc
     on<SignOutEvent>(_onSignOutEvent);
     on<PasswordResetEvent>(_onPasswordResetEvent);
     on<ManageUserInformationEvent>(_onManageUserInformation);
+    on<DeleteAccount>(_onDeleteAccount);
   }
-  Future<void> _onManageUserInformation(ManageUserInformationEvent event,Emitter<AuthenticationState>emit)async {
+  Future<void> _onDeleteAccount(
+      DeleteAccount event, Emitter<AuthenticationState> emit) async {
+    // await authServices.deleteAccount();
+  }
+
+  Future<void> _onManageUserInformation(ManageUserInformationEvent event,
+      Emitter<AuthenticationState> emit) async {
     emit(AuthenticationLoadingState());
     try {
       final List<UserModel> userInfoList =
@@ -151,41 +158,33 @@ class AuthenticationBloc
     }
   }
 
+  Future<void> _onPasswordResetEvent(
+      PasswordResetEvent event, Emitter<AuthenticationState> emit) async {
+    final hasConnection = await internetConnection.hasInternetAccess;
+    if (!hasConnection) {
+      emit(AuthenticationIdleState());
+      emit(AuthenticationErrorState(
+          errorMessege:
+              "No internet connection. Please check your network and try again."));
+      return;
+    }
+    try {
+      await authServices.resetPassword(event.email);
+      final updatedUser = FirebaseAuth.instance.currentUser;
 
-Future<void> _onPasswordResetEvent(
-    PasswordResetEvent event, Emitter<AuthenticationState> emit) async {
-  final hasConnection = await internetConnection.hasInternetAccess;
-  if (!hasConnection) {
-    emit(AuthenticationIdleState());
-    emit(AuthenticationErrorState(
-        errorMessege:
-            "No internet connection. Please check your network and try again."));
-    return;
+      final List<UserModel> userInfoList =
+          await authServices.fetchUserSignUpInfo();
+
+      emit(AuthenticatedState(user: updatedUser, userInfoList: userInfoList));
+    } on FirebaseAuthException catch (e) {
+      emit(AuthenticationIdleState());
+      emit(AuthenticationErrorState(
+          errorMessege: firebaseAuthExceptionHandler.getErrorMessage(e)));
+    } catch (e) {
+      emit(AuthenticationIdleState());
+      emit(AuthenticationErrorState(
+          errorMessege:
+              "An error occurred while signing out. Please try again."));
+    }
   }
-  try {
-    await authServices.resetPassword(event.email);
-    final updatedUser = FirebaseAuth.instance.currentUser;
-
-    final List<UserModel> userInfoList =
-        await authServices.fetchUserSignUpInfo();
-
-    emit(AuthenticatedState(user: updatedUser, userInfoList: userInfoList));
-  } on FirebaseAuthException catch (e) {
-    emit(AuthenticationIdleState());
-    emit(AuthenticationErrorState(
-        errorMessege: firebaseAuthExceptionHandler.getErrorMessage(e)));
-  } catch (e) {
-    emit(AuthenticationIdleState());
-    emit(AuthenticationErrorState(
-        errorMessege:
-            "An error occurred while signing out. Please try again."));
-  }
-  
 }
-
-
-
-
-}
-
-
