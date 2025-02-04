@@ -3,11 +3,14 @@ import 'package:echo_verse/features/authentication/bloc/authentication/authentic
 import 'package:echo_verse/features/authentication/login/screens/login.dart';
 import 'package:echo_verse/features/authentication/registration/screens/registration.dart';
 import 'package:echo_verse/features/authentication/screens/forget_password.dart';
+import 'package:echo_verse/features/bottom_nav_bar/screen/bottom_nav_bar.dart';
 import 'package:echo_verse/features/home/home.dart';
+import 'package:echo_verse/features/settings/screens/settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -25,15 +28,35 @@ class AppRouter {
 
       if (loggedIn &&
           (location == RoutePath.login || location == RoutePath.signUp)) {
-        return RoutePath.home; // Redirect to home if authenticated
+        return RoutePath.home; 
       }
 
-      return null; // No redirection needed
+      return null;
     },
     refreshListenable: GoRouterRefreshStream(
       FirebaseAuth.instance.authStateChanges(),
     ),
     routes: [
+      StatefulShellRoute.indexedStack(
+          builder: (context, state, navigationShell) {
+            return BottomNavBarScreen(navigationShell: navigationShell);
+          },
+          branches: [
+            StatefulShellBranch(routes: [
+              GoRoute(
+                  path: RoutePath.home,
+                  name: RouteName.home,
+                  builder: (context, state) => const HomeScreen())
+            ]),
+            StatefulShellBranch(
+              routes: [
+              GoRoute(
+                
+                  path: RoutePath.settings,
+                  name: RouteName.settings,
+                  builder: (context, state) => const SettingsScreen())
+            ]),
+          ]),
       GoRoute(
         name: RoutePath.login,
         path: RoutePath.login,
@@ -50,16 +73,13 @@ class AppRouter {
           child: RegistrationPage(),
         ),
       ),
-      GoRoute(
-        name: RouteName.home,
-        path: RoutePath.home,
-        builder: (context, state) => HomePage(),
-      ),
+     
       GoRoute(
         name: RouteName.forget,
         path: RoutePath.forget,
         builder: (context, state) => ForgetPasswordPage(),
       ),
+      
     ],
   );
 }

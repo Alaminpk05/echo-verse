@@ -4,14 +4,14 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     context.read<AuthenticationBloc>().add(ManageUserInformationEvent());
@@ -33,19 +33,18 @@ class _HomePageState extends State<HomePage> {
                 },
                 child: Text('Sign out')),
           ),
-//           BlocBuilder<AuthenticationBloc, AuthenticationState>(
-//             builder: (context, state) {
-//               if (state is AuthenticatedState) {
-//                 final userInfo = state.userInfoList.firstWhere(
-//                     (e) => e.email == firebaseAut.currentUser!.email);
-// debugPrint('HERE PRINTED USE NAME');
-//                 debugPrint(userInfo.name.toString());
-//                 return Text(userInfo.name.toString());
-                
-//               }
-//               return Text('nulll');
-//             },
-//           ),
+          // BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          //   builder: (context, state) {
+          //     if (state is AuthenticatedState) {
+          //       final userInfo = state.userInfoList.firstWhere(
+          //           (e) => e.email == firebaseAut.currentUser!.email);
+          //       debugPrint('HERE PRINTED USE NAME');
+          //       debugPrint(userInfo.name.toString());
+          //       return Text(userInfo.name.toString());
+          //     }
+          //     return Text('nulll');
+          //   },
+          // ),
           Text(FirebaseAuth.instance.currentUser!.email.toString()),
           Text(FirebaseAuth.instance.currentUser!.uid.toString()),
           Text(FirebaseAuth.instance.currentUser!.displayName.toString()),

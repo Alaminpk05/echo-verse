@@ -5,30 +5,25 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
-        fontFamily: 'OpenSans',
-        textTheme: _textTheme,
-        brightness: Brightness.light,
-        scaffoldBackgroundColor: white,
-        colorScheme: ColorScheme.fromSeed(seedColor: teal,
-        ),
-        elevatedButtonTheme: ElevatedButtonThemeData(
-          
-            style: ElevatedButton.styleFrom(
-              elevation: 0,
-              padding: EdgeInsets.symmetric(vertical: 1.5.h,horizontal:
-              8.w),
-             
-          shape: RoundedRectangleBorder(
-            
-              borderRadius: BorderRadius.circular(36.sp)),
-          backgroundColor: teal,
-        )),
-        
-        
-        
-        
-        
-        );
+      fontFamily: 'OpenSans',
+      textTheme: _textTheme,
+      brightness: Brightness.light,
+      scaffoldBackgroundColor: white,
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: teal,
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+        elevation: 0,
+        padding: EdgeInsets.symmetric(vertical: 1.5.h, horizontal: 8.w),
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(36.sp)),
+        backgroundColor: teal,
+      )),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      type: BottomNavigationBarType.fixed
+      )
+    );
   }
 
   static final TextTheme _textTheme = TextTheme(

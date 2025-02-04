@@ -1,31 +1,27 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
-class BottomNavBarScreen extends StatefulWidget {
-  const BottomNavBarScreen({super.key});
+class BottomNavBarScreen extends StatelessWidget {
+  const BottomNavBarScreen({
+    super.key,
+    required this.navigationShell,
+  });
+  final StatefulNavigationShell navigationShell;
 
-  @override
-  State<BottomNavBarScreen> createState() => _BottomNavBarScreenState();
-}
-
-class _BottomNavBarScreenState extends State<BottomNavBarScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Nav bar'),
-      ),
+      body: navigationShell,
       bottomNavigationBar: BottomNavigationBar(
+          currentIndex: navigationShell.currentIndex,
+          onTap: (index) => navigationShell.goBranch(index),
           items: [
-            
-            BottomNavigationBarItem(icon: Icon(CupertinoIcons.house)),
-            BottomNavigationBarItem(icon: Icon(CupertinoIcons.settings)),
-            
-            
-            
-            ])
-            
-            ,
+            BottomNavigationBarItem(
+                icon: Icon(CupertinoIcons.house), label: 'Home'),
+            BottomNavigationBarItem(
+                icon: Icon(CupertinoIcons.settings), label: 'Settings'),
+          ]),
     );
   }
 }
