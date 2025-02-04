@@ -33,19 +33,19 @@ class _HomePageState extends State<HomePage> {
                 },
                 child: Text('Sign out')),
           ),
-          BlocBuilder<AuthenticationBloc, AuthenticationState>(
-            builder: (context, state) {
-              if (state is AuthenticatedState) {
-                final userInfo = state.userInfoList.firstWhere(
-                    (e) => e.email == firebaseAut.currentUser!.email);
-debugPrint('HERE PRINTED USE NAME');
-                debugPrint(userInfo.name.toString());
-                return Text(userInfo.name.toString());
+//           BlocBuilder<AuthenticationBloc, AuthenticationState>(
+//             builder: (context, state) {
+//               if (state is AuthenticatedState) {
+//                 final userInfo = state.userInfoList.firstWhere(
+//                     (e) => e.email == firebaseAut.currentUser!.email);
+// debugPrint('HERE PRINTED USE NAME');
+//                 debugPrint(userInfo.name.toString());
+//                 return Text(userInfo.name.toString());
                 
-              }
-              return Text('nulll');
-            },
-          ),
+//               }
+//               return Text('nulll');
+//             },
+//           ),
           Text(FirebaseAuth.instance.currentUser!.email.toString()),
           Text(FirebaseAuth.instance.currentUser!.uid.toString()),
           Text(FirebaseAuth.instance.currentUser!.displayName.toString()),
