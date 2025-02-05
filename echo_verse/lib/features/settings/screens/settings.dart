@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:echo_verse/core/constant/const_string.dart';
 import 'package:echo_verse/core/routes/route_names.dart';
 import 'package:echo_verse/dependencies/service_locator.dart';
@@ -30,14 +31,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 firebaseAut.currentUser!.displayName!,
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
-               SizedBox(
+              SizedBox(
                 height: 3.h,
               ),
-              TextButton(
-                  onPressed: () {
-                    context.read<AuthenticationBloc>().add(SignOutEvent());
-                  },
-                  child: Text('Sign out')),
+              BlocListener<AuthenticationBloc, AuthenticationState>(
+                listener: (context, state) {
+                  if (state is UnAuthenticatedState) {
+                    customSnackBar.snackBar(
+                        context,
+                        "You have successfully logged out.",
+                        ContentType.success,
+                        'Success');
+                  }
+                },
+                child: TextButton(
+                    onPressed: () {
+                      context.read<AuthenticationBloc>().add(SignOutEvent());
+                    },
+                    child: Text('Sign out')),
+              ),
               SizedBox(
                 height: 3.h,
               ),

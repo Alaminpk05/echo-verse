@@ -79,14 +79,14 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                 } else if (state is AuthenticatedState) {
                   customSnackBar.snackBar(
                       context,
-                      'Email sent to your email box',
+                       "An email has been sent to your inbox.",
                       ContentType.success,
                       'Success');
                   context.pop();
-                } else if (state is UnAuthenticatedState) {
+                } else if (state is AccountDeltedState) {
                   customSnackBar.snackBar(
                       context,
-                      'Account Successfully deleted',
+                      "Your account has been successfully deleted.",
                       ContentType.success,
                       'Success');
                   context.pop();

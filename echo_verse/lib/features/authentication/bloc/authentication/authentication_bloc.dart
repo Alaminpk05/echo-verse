@@ -25,7 +25,7 @@ class AuthenticationBloc
     try {
       final email = firebaseAut.currentUser!.email!;
       await authServices.deleteAccount(email, event.password);
-      emit(UnAuthenticatedState());
+      emit(AccountDeltedState());
     } on FirebaseAuthException catch (e) {
        debugPrint('SIGN UP MESSEGE:${e.message}');
       debugPrint('SIGH UP E CODE :${e.code}');

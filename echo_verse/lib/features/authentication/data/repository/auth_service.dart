@@ -3,10 +3,11 @@ import 'package:echo_verse/features/authentication/data/model/user.dart';
 import 'package:echo_verse/features/authentication/data/repository/auth_contract.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService implements AuthContract {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
   @override
   Future<UserCredential?> signUp(
       String name, String email, String password) async {
@@ -30,6 +31,7 @@ class AuthService implements AuthContract {
 
   @override
   Future<void> signOut() async {
+  
     await _auth.signOut();
   }
 
@@ -57,9 +59,7 @@ class AuthService implements AuthContract {
 
   @override
   Future<void> deleteAccount(String email, String password) async {
-   final user = firebaseAut.currentUser;
-
-   
+    final user = firebaseAut.currentUser;
 
     // Reauthenticate the user before account deletion
     final credential = EmailAuthProvider.credential(
@@ -69,5 +69,12 @@ class AuthService implements AuthContract {
 
     await user.reauthenticateWithCredential(credential);
     await user.delete();
+  }
+
+  @override
+  Future<User?> signInWithgoogle() async {
+   
+    await _googleSignIn.signIn();
+    return null;
   }
 }

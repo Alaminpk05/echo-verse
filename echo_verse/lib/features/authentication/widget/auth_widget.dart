@@ -237,7 +237,7 @@ class AuthSignInWithButtonWidget extends StatelessWidget {
   });
   final String image;
   final String title;
-
+  
   @override
   Widget build(BuildContext context) {
     return ElevatedButton.icon(

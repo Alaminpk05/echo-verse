@@ -26,6 +26,10 @@ final class UnAuthenticatedState extends AuthenticationState {
   @override
   List<Object?> get props => [];
 }
+final class AccountDeltedState extends AuthenticationState {
+  @override
+  List<Object?> get props => [];
+}
 
 final class AuthenticationErrorState extends AuthenticationState {
   final String errorMessege;

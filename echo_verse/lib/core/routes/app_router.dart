@@ -1,8 +1,8 @@
 import 'package:echo_verse/core/constant/const_string.dart';
 import 'package:echo_verse/core/routes/route_names.dart';
 import 'package:echo_verse/features/authentication/bloc/authentication/authentication_bloc.dart';
-import 'package:echo_verse/features/authentication/login/screens/login.dart';
-import 'package:echo_verse/features/authentication/registration/screens/registration.dart';
+import 'package:echo_verse/features/authentication/screens/login.dart';
+import 'package:echo_verse/features/authentication/screens/registration.dart';
 import 'package:echo_verse/features/authentication/screens/forget_password.dart';
 import 'package:echo_verse/features/bottom_nav_bar/screen/bottom_nav_bar.dart';
 import 'package:echo_verse/features/home/home.dart';
