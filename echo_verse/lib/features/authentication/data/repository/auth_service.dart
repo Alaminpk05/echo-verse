@@ -57,11 +57,16 @@ class AuthService implements AuthContract {
 
   @override
   Future<void> deleteAccount(String email, String password) async {
-    User? user;
-    if (user == null) throw FirebaseAuthException(code: 'no-user');
+   final user = firebaseAut.currentUser;
 
-    AuthCredential credential =
-        EmailAuthProvider.credential(email: user.email!, password: password);
+   
+
+    // Reauthenticate the user before account deletion
+    final credential = EmailAuthProvider.credential(
+      email: user!.email!,
+      password: password,
+    );
+
     await user.reauthenticateWithCredential(credential);
     await user.delete();
   }

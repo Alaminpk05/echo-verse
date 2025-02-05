@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+
 import 'package:echo_verse/dependencies/service_locator.dart';
 import 'package:echo_verse/features/authentication/data/model/user.dart';
 import 'package:equatable/equatable.dart';
@@ -20,17 +21,30 @@ class AuthenticationBloc
   }
   Future<void> _onDeleteAccount(
       DeleteAccount event, Emitter<AuthenticationState> emit) async {
-    // await authServices.deleteAccount();
+    emit(AuthenticationLoadingState());
+    try {
+      final email = firebaseAut.currentUser!.email!;
+      await authServices.deleteAccount(email, event.password);
+      emit(UnAuthenticatedState());
+    } on FirebaseAuthException catch (e) {
+       debugPrint('SIGN UP MESSEGE:${e.message}');
+      debugPrint('SIGH UP E CODE :${e.code}');
+      emit(AuthenticationIdleState());
+      emit(AuthenticationErrorState(
+     errorMessege:  "Incorrect password. Please try again."));
+    } catch (e) {
+      emit(AuthenticationIdleState());
+      emit(AuthenticationErrorState(
+          errorMessege:
+              "An error occurred while signing out. Please try again."));
+    }
   }
 
   Future<void> _onManageUserInformation(ManageUserInformationEvent event,
       Emitter<AuthenticationState> emit) async {
     emit(AuthenticationLoadingState());
     try {
-      final List<UserModel> userInfoList =
-          await authServices.fetchUserSignUpInfo();
-      emit(AuthenticatedState(
-          userInfoList: userInfoList, user: firebaseAut.currentUser));
+      emit(AuthenticatedState());
     } catch (e) {
       emit(AuthenticationErrorState(
           errorMessege:
@@ -55,15 +69,12 @@ class AuthenticationBloc
       final userCredential =
           await authServices.signUp(event.name, event.email, event.password);
       if (userCredential?.user != null) {
-        final updatedUser = FirebaseAuth.instance.currentUser;
         final userInfo = UserModel.forRegistration(
             name: event.name, email: event.email, password: event.password);
 
         await authServices.saveUserSignUpInfo(userInfo);
-        final List<UserModel> userInfoList =
-            await authServices.fetchUserSignUpInfo();
 
-        emit(AuthenticatedState(user: updatedUser, userInfoList: userInfoList));
+        emit(AuthenticatedState());
       } else {
         emit(AuthenticationIdleState());
 
@@ -101,12 +112,7 @@ class AuthenticationBloc
     try {
       final user = await authServices.login(event.email, event.password);
       if (user != null) {
-        final List<UserModel> userInfoList =
-            await authServices.fetchUserSignUpInfo();
-        emit(AuthenticatedState(
-          user: user,
-          userInfoList: userInfoList,
-        ));
+        emit(AuthenticatedState());
         debugPrint(user.displayName);
       } else {
         emit(AuthenticationIdleState());
@@ -170,12 +176,8 @@ class AuthenticationBloc
     }
     try {
       await authServices.resetPassword(event.email);
-      final updatedUser = FirebaseAuth.instance.currentUser;
 
-      final List<UserModel> userInfoList =
-          await authServices.fetchUserSignUpInfo();
-
-      emit(AuthenticatedState(user: updatedUser, userInfoList: userInfoList));
+      emit(AuthenticatedState());
     } on FirebaseAuthException catch (e) {
       emit(AuthenticationIdleState());
       emit(AuthenticationErrorState(

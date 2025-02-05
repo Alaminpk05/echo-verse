@@ -1,3 +1,4 @@
+import 'package:echo_verse/core/constant/const_string.dart';
 import 'package:echo_verse/core/routes/route_names.dart';
 import 'package:echo_verse/features/authentication/bloc/authentication/authentication_bloc.dart';
 import 'package:echo_verse/features/authentication/login/screens/login.dart';
@@ -10,7 +11,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-
 
 class AppRouter {
   static final GoRouter router = GoRouter(
@@ -28,7 +28,7 @@ class AppRouter {
 
       if (loggedIn &&
           (location == RoutePath.login || location == RoutePath.signUp)) {
-        return RoutePath.home; 
+        return RoutePath.home;
       }
 
       return null;
@@ -48,10 +48,8 @@ class AppRouter {
                   name: RouteName.home,
                   builder: (context, state) => const HomeScreen())
             ]),
-            StatefulShellBranch(
-              routes: [
+            StatefulShellBranch(routes: [
               GoRoute(
-                
                   path: RoutePath.settings,
                   name: RouteName.settings,
                   builder: (context, state) => const SettingsScreen())
@@ -73,13 +71,15 @@ class AppRouter {
           child: RegistrationPage(),
         ),
       ),
-     
       GoRoute(
-        name: RouteName.forget,
-        path: RoutePath.forget,
-        builder: (context, state) => ForgetPasswordPage(),
-      ),
-      
+          name: RouteName.forget,
+          path: RoutePath.forget,
+          builder: (context, state) {
+            final String? type = state.extra as String?;
+            return ForgetPasswordPage(
+              type: type ?? forgetPge,
+            );
+          }),
     ],
   );
 }

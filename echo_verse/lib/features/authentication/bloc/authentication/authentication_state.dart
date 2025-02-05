@@ -14,12 +14,9 @@ final class AuthenticationLoadingState extends AuthenticationState {
 }
 
 final class AuthenticatedState extends AuthenticationState {
-  final User? user;
-  final List<UserModel> userInfoList;
+ 
 
-  AuthenticatedState( {required this.userInfoList,
-    required this.user,
-  });
+ 
 
   @override
   List<Object?> get props => [];

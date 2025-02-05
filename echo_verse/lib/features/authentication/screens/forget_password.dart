@@ -1,5 +1,6 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:echo_verse/core/constant/colors.dart';
+import 'package:echo_verse/core/constant/const_string.dart';
 import 'package:echo_verse/core/constant/icons.dart';
 import 'package:echo_verse/core/utils/validation/auth_validator.dart';
 import 'package:echo_verse/dependencies/service_locator.dart';
@@ -11,14 +12,15 @@ import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class ForgetPasswordPage extends StatefulWidget {
-  const ForgetPasswordPage({super.key});
+  const ForgetPasswordPage({super.key, required this.type});
+  final String type;
 
   @override
   State<ForgetPasswordPage> createState() => _ForgetPasswordPageState();
 }
 
 class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _textController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'Forgot password',
+              widget.type == forgetPge ? 'Forgot password' : 'Delete Account',
               style: Theme.of(context)
                   .textTheme
                   .headlineLarge!
@@ -42,7 +44,9 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
             FittedBox(
               fit: BoxFit.contain,
               child: Text(
-                "No worries, we'll send you reset instructions.",
+                widget.type == forgetPge
+                    ? "No worries, we'll send you reset instructions."
+                    : 'Enter your password for authentication',
                 style: Theme.of(context)
                     .textTheme
                     .labelMedium!
@@ -53,12 +57,14 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
               height: 5.h,
             ),
             AuthTextField(
-              hintText: 'Email',
+              hintText: widget.type == forgetPge ? 'Email' : 'Password',
               showEyeIcon: false,
-              prefixIcon: email,
-              controller: _emailController,
+              prefixIcon: widget.type == forgetPge ? email : key,
+              controller: _textController,
               validator: (String? value) {
-                return AuthValidator.validateEmail(value ?? "");
+                return widget.type == forgetPge
+                    ? AuthValidator.validateEmail(value ?? "")
+                    : AuthValidator.validatePassword(value ?? "");
               },
               type: '',
             ),
@@ -70,23 +76,32 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                 if (state is AuthenticationErrorState) {
                   customSnackBar.snackBar(context, state.errorMessege,
                       ContentType.failure, 'Error');
-                      
-                }
-                if (state is AuthenticatedState) {
+                } else if (state is AuthenticatedState) {
                   customSnackBar.snackBar(
                       context,
                       'Email sent to your email box',
                       ContentType.success,
                       'Success');
                   context.pop();
+                } else if (state is UnAuthenticatedState) {
+                  customSnackBar.snackBar(
+                      context,
+                      'Account Successfully deleted',
+                      ContentType.success,
+                      'Success');
+                  context.pop();
                 }
               },
               child: LoginOrSignUpButton(
-                title: 'Send',
+                title: widget.type == forgetPge ? 'Send' : 'Deleted',
                 onTap: () {
-                  context
-                      .read<AuthenticationBloc>()
-                      .add(PasswordResetEvent(email: _emailController.text));
+                  widget.type == forgetPge
+                      ? context
+                          .read<AuthenticationBloc>()
+                          .add(PasswordResetEvent(email: _textController.text))
+                      : context
+                          .read<AuthenticationBloc>()
+                          .add(DeleteAccount(password: _textController.text));
                 },
               ),
             ),
@@ -98,7 +113,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                   context.pop();
                 },
                 label: Text(
-                  'Back to log in',
+                  'Back',
                   style: Theme.of(context)
                       .textTheme
                       .labelMedium!
