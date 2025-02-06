@@ -45,17 +45,10 @@ class AppRouter {
           branches: [
             StatefulShellBranch(routes: [
               GoRoute(
-                  
-                  path: RoutePath.home,
-                  name: RouteName.home,
-                  builder: (context, state) => const HomeScreen(),
-                  routes: [
-                    GoRoute(
-                      name: RouteName.chat,
-                      path: RoutePath.chat,
-                      builder: (context, state) => ChatScreen(),
-                    ),
-                  ],)
+                path: RoutePath.home,
+                name: RouteName.home,
+                builder: (context, state) => const HomeScreen(),
+              )
             ]),
             StatefulShellBranch(routes: [
               GoRoute(
@@ -79,6 +72,11 @@ class AppRouter {
           create: (_) => AuthenticationBloc(),
           child: RegistrationPage(),
         ),
+      ),
+      GoRoute(
+        name: RouteName.chat,
+        path: RoutePath.chat,
+        builder: (context, state) => ChatScreen(),
       ),
       GoRoute(
           name: RouteName.forget,

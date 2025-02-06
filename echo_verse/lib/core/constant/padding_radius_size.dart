@@ -7,4 +7,5 @@ double left = 4.w;
 double right = 4.w;
 double top = 2.h;
 double bottom = 2.h;
-double horizontal = 7.w;
+double horizontal = 5.w;
+double vertical = 3.h;

@@ -63,7 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     data: '12 Dec',
                     avatarPath: 'lib/assets/logo/robo.png',
                     onTap: () {
-                      context.push('/home/chat');
+                      context.push(RoutePath.chat);
                     },
                   );
                 },
@@ -109,9 +109,9 @@ class MessegeCardWidget extends StatelessWidget {
                 child: Row(
                   spacing: 3.w,
                   children: [
-                    CircleAvatar(
-                      maxRadius: 32,
-                      foregroundImage: AssetImage(avatarPath),
+                    CircleAvaterWidget(
+                      avatarPath: avatarPath,
+                      radius: 32,
                     ),
                     Expanded(
                       child: Column(
@@ -149,6 +149,25 @@ class MessegeCardWidget extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class CircleAvaterWidget extends StatelessWidget {
+  const CircleAvaterWidget({
+    super.key,
+    required this.avatarPath,
+    required this.radius,
+  });
+  final double radius;
+
+  final String avatarPath;
+
+  @override
+  Widget build(BuildContext context) {
+    return CircleAvatar(
+      maxRadius: radius,
+      foregroundImage: AssetImage(avatarPath),
     );
   }
 }

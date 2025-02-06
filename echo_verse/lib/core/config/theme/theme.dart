@@ -35,7 +35,7 @@ class AppTheme {
         fontWeight: FontWeight.w600,
       ),
       titleMedium: TextStyle(
-        fontSize: 19.sp,
+        fontSize: 18.sp,
         fontWeight: FontWeight.w500,
       ),
       titleSmall: TextStyle(fontSize: 16.8.sp, fontWeight: FontWeight.normal),
