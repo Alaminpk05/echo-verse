@@ -1,5 +1,11 @@
+import 'package:echo_verse/core/constant/colors.dart';
+import 'package:echo_verse/core/constant/icons.dart';
+import 'package:echo_verse/core/constant/padding_radius_size.dart';
+import 'package:echo_verse/core/routes/route_names.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'package:go_router/go_router.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,18 +19,132 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Home'),
+        title: Text(
+          'Home',
+          style: Theme.of(context).textTheme.titleLarge,
+        ),
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: Container(
+                  margin: EdgeInsets.only(right: 2.w),
+                  alignment: Alignment.center,
+                  height: 38,
+                  width: 38,
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    border: Border.all(color: lightGrey),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(CupertinoIcons.search))),
+        ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Center(
+      body: SingleChildScrollView(
+        physics: BouncingScrollPhysics(),
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(2.5.w, top, 2.5.w, bottom),
           child: Column(
-           mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              
-              
-              Text('Welcome to the Home Screen',style: Theme.of(context).textTheme.titleLarge,),
-             
+              ListView.separated(
+                physics: ClampingScrollPhysics(),
+                separatorBuilder: (context, index) {
+                  return SizedBox(
+                    height: 1.6.h,
+                  );
+                },
+                padding: EdgeInsets.zero,
+                shrinkWrap: true,
+                itemCount: 10,
+                itemBuilder: (context, index) {
+                  return MessegeCardWidget(
+                    userName: 'Alamin Pk',
+                    messege:
+                        'Hi pk, you got offer from google as an software engineer',
+                    data: '12 Dec',
+                    avatarPath: 'lib/assets/logo/robo.png',
+                    onTap: () {
+                      context.push('/home/chat');
+                    },
+                  );
+                },
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class MessegeCardWidget extends StatelessWidget {
+  const MessegeCardWidget({
+    super.key,
+    required this.userName,
+    required this.messege,
+    required this.data,
+    required this.avatarPath,
+    required this.onTap,
+  });
+  final String userName;
+  final String messege;
+  final String data;
+  final String avatarPath;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        splashColor: lightGrey.withAlpha(30),
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 1.2.h, horizontal: 3.w),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Flexible(
+                child: Row(
+                  spacing: 3.w,
+                  children: [
+                    CircleAvatar(
+                      maxRadius: 32,
+                      foregroundImage: AssetImage(avatarPath),
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            softWrap: true,
+                            overflow: TextOverflow.ellipsis,
+                            userName,
+                            style: Theme.of(context).textTheme.titleMedium,
+                          ),
+                          Text(
+                            softWrap: true,
+                            messege,
+                            overflow: TextOverflow.ellipsis,
+                            style: Theme.of(context).textTheme.titleSmall,
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 1.2.h),
+                child: Text(
+                  data,
+                  style: Theme.of(context)
+                      .textTheme
+                      .labelMedium!
+                      .copyWith(fontSize: 17.2.sp),
+                ),
+              )
             ],
           ),
         ),

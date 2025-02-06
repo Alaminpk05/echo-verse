@@ -5,6 +5,7 @@ import 'package:echo_verse/features/authentication/screens/login.dart';
 import 'package:echo_verse/features/authentication/screens/registration.dart';
 import 'package:echo_verse/features/authentication/screens/forget_password.dart';
 import 'package:echo_verse/features/bottom_nav_bar/screen/bottom_nav_bar.dart';
+import 'package:echo_verse/features/chat/screens/chat.dart';
 import 'package:echo_verse/features/home/home.dart';
 import 'package:echo_verse/features/settings/screens/settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -44,9 +45,17 @@ class AppRouter {
           branches: [
             StatefulShellBranch(routes: [
               GoRoute(
+                  
                   path: RoutePath.home,
                   name: RouteName.home,
-                  builder: (context, state) => const HomeScreen())
+                  builder: (context, state) => const HomeScreen(),
+                  routes: [
+                    GoRoute(
+                      name: RouteName.chat,
+                      path: RoutePath.chat,
+                      builder: (context, state) => ChatScreen(),
+                    ),
+                  ],)
             ]),
             StatefulShellBranch(routes: [
               GoRoute(

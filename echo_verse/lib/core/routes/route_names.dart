@@ -5,6 +5,7 @@ class RoutePath {
   static const String settings = '/settings';
   static const String forget = '/forget';
   static const String navbar = '/navbar';
+  static const String chat = '/home/chat';
 }
 
 class RouteName {
@@ -14,4 +15,5 @@ class RouteName {
   static const String forget = 'forget';
   static const String settings = 'settings';
   static const String navbar = 'navbar';
+  static const String chat = 'chat';
 }
