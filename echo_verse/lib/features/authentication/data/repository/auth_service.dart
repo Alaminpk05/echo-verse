@@ -49,11 +49,10 @@ class AuthService implements AuthContract {
   @override
   Future<void> saveUserInfoInDatabase(UserModel userModel) async {
     await firestore.collection('users').doc(userUid).set(userModel.toMap());
-    final userInfo = await firestore.collection('users').get();
-    final users = userInfo.docs;
-    debugPrint('PRINTED USERS LENGTH OF LIST FROM FIRESTORE');
+    
+  
 
-    debugPrint(users.length.toString());
+    
   }
 
   @override

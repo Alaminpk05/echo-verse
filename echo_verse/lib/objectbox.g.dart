@@ -22,7 +22,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(1, 4451157329053194105),
       name: 'UserModel',
-      lastPropertyId: const obx_int.IdUid(9, 8201374206870278992),
+      lastPropertyId: const obx_int.IdUid(10, 4414017172261174293),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -68,6 +68,11 @@ final _entities = <obx_int.ModelEntity>[
         obx_int.ModelProperty(
             id: const obx_int.IdUid(9, 8201374206870278992),
             name: 'pushToken',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(10, 4414017172261174293),
+            name: 'imageUrl',
             type: 9,
             flags: 0)
       ],
@@ -147,7 +152,10 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final pushTokenOffset = object.pushToken == null
               ? null
               : fbb.writeString(object.pushToken!);
-          fbb.startTable(10);
+          final imageUrlOffset = object.imageUrl == null
+              ? null
+              : fbb.writeString(object.imageUrl!);
+          fbb.startTable(11);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, nameOffset);
           fbb.addOffset(2, emailOffset);
@@ -157,6 +165,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addBool(6, object.isOnline);
           fbb.addOffset(7, lastActiveOffset);
           fbb.addOffset(8, pushTokenOffset);
+          fbb.addOffset(9, imageUrlOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -181,6 +190,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
               .vTableGetNullable(buffer, rootOffset, 18);
           final pushTokenParam = const fb.StringReader(asciiOptimization: true)
               .vTableGetNullable(buffer, rootOffset, 20);
+          final imageUrlParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 22);
           final object = UserModel(
               id: idParam,
               email: emailParam,
@@ -190,7 +201,8 @@ obx_int.ModelDefinition getObjectBoxModel() {
               createdAt: createdAtParam,
               isOnline: isOnlineParam,
               lastActive: lastActiveParam,
-              pushToken: pushTokenParam);
+              pushToken: pushTokenParam,
+              imageUrl: imageUrlParam);
 
           return object;
         })
@@ -236,4 +248,8 @@ class UserModel_ {
   /// See [UserModel.pushToken].
   static final pushToken =
       obx.QueryStringProperty<UserModel>(_entities[0].properties[8]);
+
+  /// See [UserModel.imageUrl].
+  static final imageUrl =
+      obx.QueryStringProperty<UserModel>(_entities[0].properties[9]);
 }

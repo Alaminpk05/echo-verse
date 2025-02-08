@@ -79,8 +79,8 @@ class AuthenticationBloc
           lastActive: '',
           pushToken: '',
         );
+        authServices.saveUserInfoInDatabase(userInfo);
 
-        await firestore.collection('users').doc(userUid).set(userInfo.toMap());
         debugPrint('CALLED FIRESTORE ADD FUNCTION');
         emit(AuthenticatedState());
       } else {

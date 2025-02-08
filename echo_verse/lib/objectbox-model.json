@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:4451157329053194105",
-      "lastPropertyId": "9:8201374206870278992",
+      "lastPropertyId": "10:4414017172261174293",
       "name": "UserModel",
       "properties": [
         {
@@ -52,6 +52,11 @@
         {
           "id": "9:8201374206870278992",
           "name": "pushToken",
+          "type": 9
+        },
+        {
+          "id": "10:4414017172261174293",
+          "name": "imageUrl",
           "type": 9
         }
       ],

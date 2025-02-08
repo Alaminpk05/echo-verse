@@ -18,6 +18,7 @@ class UserModel extends Equatable {
   bool isOnline;
   String? lastActive;
   String? pushToken;
+  String? imageUrl;
 
   UserModel({
     this.id = 0,
@@ -26,18 +27,19 @@ class UserModel extends Equatable {
     this.name,
     this.authId,
     this.createdAt,
-    this.isOnline=false,
+    this.isOnline = false,
     this.lastActive,
     this.pushToken,
+    this.imageUrl,
   });
 
   ///LOGIN
   factory UserModel.forLogin({
     required String email,
     required String password,
-  }) => UserModel(email: email, password: password);
-  
-  
+  }) =>
+      UserModel(email: email, password: password);
+
   ///  REGISTRATION
   factory UserModel.forRegistration({
     required String name,
@@ -48,15 +50,18 @@ class UserModel extends Equatable {
     required bool isOnline,
     required String? lastActive,
     required String? pushToken,
-  }) => UserModel(
+    String? imageUrl,
+  }) =>
+      UserModel(
         name: name,
         email: email,
         password: password,
         authId: authId,
         createdAt: createdAt,
-        isOnline: isOnline=false,
+        isOnline: isOnline = false,
         lastActive: lastActive,
         pushToken: pushToken,
+        imageUrl:imageUrl,
       );
 
   factory UserModel.fromMap(Map<String, dynamic> map) => UserModel(
@@ -69,6 +74,8 @@ class UserModel extends Equatable {
         isOnline: map['isOnline'],
         lastActive: map['lastActive'],
         pushToken: map['pushToken'],
+        imageUrl: map['imageUrl']
+
       );
 
   Map<String, dynamic> toMap() => {
@@ -81,6 +88,7 @@ class UserModel extends Equatable {
         'isOnline': isOnline,
         'lastActive': lastActive,
         'pushToken': pushToken,
+        'imageUrl':imageUrl
       };
 
   String toJson() => json.encode(toMap());
@@ -89,5 +97,16 @@ class UserModel extends Equatable {
       UserModel.fromMap(json.decode(source));
 
   @override
-  List<Object?> get props => [id, name, email, password, authId, createdAt, isOnline, lastActive, pushToken];
+  List<Object?> get props => [
+        id,
+        name,
+        email,
+        password,
+        authId,
+        createdAt,
+        isOnline,
+        lastActive,
+        pushToken,
+        imageUrl,
+      ];
 }
