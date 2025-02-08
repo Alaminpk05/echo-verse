@@ -7,7 +7,7 @@ import 'package:echo_verse/features/authentication/screens/registration.dart';
 import 'package:echo_verse/features/authentication/screens/forget_password.dart';
 import 'package:echo_verse/features/bottom_nav_bar/screen/bottom_nav_bar.dart';
 import 'package:echo_verse/features/chat/screens/chat.dart';
-import 'package:echo_verse/features/home/home.dart';
+import 'package:echo_verse/features/home/screens/home.dart';
 import 'package:echo_verse/features/settings/screens/settings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';

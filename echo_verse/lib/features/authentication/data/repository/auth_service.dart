@@ -44,14 +44,7 @@ class AuthService implements AuthContract {
     await firestore.collection('users').doc(userUid).set(userModel.toMap());
   }
 
-  @override
-  Future<List<UserModel>> fetchUsersInfo() async {
-    final querySnapshot = await firestore.collection('users').get();
-    final userList = querySnapshot.docs.map((doc) => UserModel.fromMap(doc.data())).toList();
-
-
-    return userList;
-  }
+ 
  
 
   @override

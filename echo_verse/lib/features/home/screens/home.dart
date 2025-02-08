@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             children: [
               FutureBuilder<List<UserModel>>(
-                future: authServices.fetchUsersInfo(),
+                future: homeServices.fetchUsersInfo(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator());
@@ -69,6 +69,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     return Center(child: Text('No data available'));
                   }
                   final users = snapshot.data;
+                  // Filter out the current user
+    final filteredUsers = users!.where((e) => e.authId != userUid).toList();
 
                   return ListView.separated(
                     physics: ClampingScrollPhysics(),
@@ -79,11 +81,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     padding: EdgeInsets.zero,
                     shrinkWrap: true,
-                    itemCount: users!.length,
+                    itemCount: filteredUsers.length,
                     itemBuilder: (context, index) {
-                      UserModel user = users[index];
+                      UserModel user = filteredUsers[index];
                       return MessegeCardWidget(
-                        userName:user.name!,
+                        userName: user.name!,
                         messege:
                             'Hi pk, you got offer from google as an software engineer',
                         data: '12 Dec',
