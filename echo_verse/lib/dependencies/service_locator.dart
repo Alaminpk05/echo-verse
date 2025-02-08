@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:echo_verse/core/errors/firebase/exception.dart';
 import 'package:echo_verse/core/routes/app_router.dart';
 import 'package:echo_verse/core/services/objectbox/open_store.dart';
@@ -16,7 +17,8 @@ Future<void> setupServiceLocator() async {
     final objectBox = await ObjectBox.create();
     getIt.registerFactory<InternetConnection>(() => InternetConnection());
     getIt.registerSingleton<ObjectBox>(objectBox);
-    getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
+    getIt.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
+    getIt.registerSingleton<FirebaseFirestore>(FirebaseFirestore.instance);
     getIt.registerSingleton<AuthContract>(AuthService());
 
     getIt.registerLazySingleton<FirebaseAuthExceptionHandler>(
@@ -31,14 +33,15 @@ Future<void> setupServiceLocator() async {
   }
 }
 
-//// GLOBAL INSTANCE FOR ACCESSING ACROSS THE APP
+/// GLOBAL INSTANCE FOR ACCESSING ACROSS THE APP
 InternetConnection get internetConnection => getIt<InternetConnection>();
 ObjectBox get objectBox => getIt<ObjectBox>();
 FirebaseAuth get firebaseAut => getIt<FirebaseAuth>();
-User get user => firebaseAut.currentUser!;
-String get userUid => user.uid;
-String get userEmail => user.email!;
-String? get userName => user.displayName;
+FirebaseFirestore get firestore => getIt<FirebaseFirestore>();
+User? get user => firebaseAut.currentUser!;
+String? get userUid => user?.uid;
+String? get userEmail => user?.email;
+String? get userName => user?.displayName;
 AuthContract get authServices => getIt<AuthContract>();
 CustomSnackbar get customSnackBar => getIt<CustomSnackbar>();
 AppRouter get appRouter => getIt<AppRouter>();

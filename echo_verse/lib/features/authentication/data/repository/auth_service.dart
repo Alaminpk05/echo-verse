@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 
 class AuthService implements AuthContract {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  
+
   @override
   Future<UserCredential?> signUp(
       String name, String email, String password) async {
@@ -30,7 +30,6 @@ class AuthService implements AuthContract {
 
   @override
   Future<void> signOut() async {
-  
     await _auth.signOut();
   }
 
@@ -39,13 +38,22 @@ class AuthService implements AuthContract {
     await _auth.sendPasswordResetEmail(email: email);
   }
 
+  // @override
+  // Future<void> saveUserInfoInDatabase(UserModel userModel) async {
+  //   final userObjectBox = objectBox.store.box<UserModel>();
+  //   await userObjectBox.putAsync(userModel);
+  //   final List<UserModel> userInfo = await userObjectBox.getAllAsync();
+  //   debugPrint('HERE IS TOTAL COUNT OF USER');
+  //   debugPrint(userInfo.length.toString());
+  // }
   @override
-  Future<void> saveUserSignUpInfo(UserModel userModel) async {
-    final userObjectBox = objectBox.store.box<UserModel>();
-    await userObjectBox.putAsync(userModel);
-    final List<UserModel> userInfo = await userObjectBox.getAllAsync();
-    debugPrint('HERE IS TOTAL COUNT OF USER');
-    debugPrint(userInfo.length.toString());
+  Future<void> saveUserInfoInDatabase(UserModel userModel) async {
+    await firestore.collection('users').doc(userUid).set(userModel.toMap());
+    final userInfo = await firestore.collection('users').get();
+    final users = userInfo.docs;
+    debugPrint('PRINTED USERS LENGTH OF LIST FROM FIRESTORE');
+
+    debugPrint(users.length.toString());
   }
 
   @override
@@ -69,6 +77,4 @@ class AuthService implements AuthContract {
     await user.reauthenticateWithCredential(credential);
     await user.delete();
   }
-
-
 }

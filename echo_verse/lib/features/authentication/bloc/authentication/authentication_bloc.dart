@@ -70,11 +70,18 @@ class AuthenticationBloc
           await authServices.signUp(event.name, event.email, event.password);
       if (userCredential?.user != null) {
         final userInfo = UserModel.forRegistration(
-            name: event.name, email: event.email, password: event.password, authId: userUid, createdAt:DateTime.now().toString(), 
-            isOnline: false, lastActive: '', pushToken: '',);
+          name: event.name,
+          email: event.email,
+          password: event.password,
+          authId: userUid,
+          createdAt: DateTime.now().toIso8601String(),
+          isOnline: false,
+          lastActive: '',
+          pushToken: '',
+        );
 
-        await authServices.saveUserSignUpInfo(userInfo);
-
+        await firestore.collection('users').doc(userUid).set(userInfo.toMap());
+        debugPrint('CALLED FIRESTORE ADD FUNCTION');
         emit(AuthenticatedState());
       } else {
         emit(AuthenticationIdleState());
