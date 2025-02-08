@@ -89,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         messege:
                             'Hi pk, you got offer from google as an software engineer',
                         data: '12 Dec',
-                        avatarPath: 'lib/assets/logo/robo.png',
+                        avatarPath: user.imageUrl==null?'lib/assets/logo/robo.png':user.imageUrl.toString(),
                         onTap: () {
                           context.push(extra: user, RoutePath.chat);
                         },
