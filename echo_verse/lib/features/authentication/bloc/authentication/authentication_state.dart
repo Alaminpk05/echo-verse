@@ -14,10 +14,6 @@ final class AuthenticationLoadingState extends AuthenticationState {
 }
 
 final class AuthenticatedState extends AuthenticationState {
- 
-
- 
-
   @override
   List<Object?> get props => [];
 }
@@ -26,7 +22,8 @@ final class UnAuthenticatedState extends AuthenticationState {
   @override
   List<Object?> get props => [];
 }
-final class AccountDeltedState extends AuthenticationState {
+
+final class AccountDeletedState extends AuthenticationState {
   @override
   List<Object?> get props => [];
 }

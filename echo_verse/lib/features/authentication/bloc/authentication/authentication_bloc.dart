@@ -25,13 +25,13 @@ class AuthenticationBloc
     try {
       final email = firebaseAut.currentUser!.email!;
       await authServices.deleteAccount(email, event.password);
-      emit(AccountDeltedState());
+      emit(AccountDeletedState());
     } on FirebaseAuthException catch (e) {
-       debugPrint('SIGN UP MESSEGE:${e.message}');
+      debugPrint('SIGN UP MESSEGE:${e.message}');
       debugPrint('SIGH UP E CODE :${e.code}');
       emit(AuthenticationIdleState());
       emit(AuthenticationErrorState(
-     errorMessege:  "Incorrect password. Please try again."));
+          errorMessege: "Incorrect password. Please try again."));
     } catch (e) {
       emit(AuthenticationIdleState());
       emit(AuthenticationErrorState(
@@ -70,7 +70,8 @@ class AuthenticationBloc
           await authServices.signUp(event.name, event.email, event.password);
       if (userCredential?.user != null) {
         final userInfo = UserModel.forRegistration(
-            name: event.name, email: event.email, password: event.password);
+            name: event.name, email: event.email, password: event.password, authId: userUid, createdAt:DateTime.now().toString(), 
+            isOnline: false, lastActive: '', pushToken: '',);
 
         await authServices.saveUserSignUpInfo(userInfo);
 

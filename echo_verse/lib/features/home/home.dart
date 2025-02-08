@@ -1,5 +1,4 @@
 import 'package:echo_verse/core/constant/colors.dart';
-import 'package:echo_verse/core/constant/icons.dart';
 import 'package:echo_verse/core/constant/padding_radius_size.dart';
 import 'package:echo_verse/core/routes/route_names.dart';
 import 'package:flutter/cupertino.dart';
@@ -109,7 +108,7 @@ class MessegeCardWidget extends StatelessWidget {
                 child: Row(
                   spacing: 3.w,
                   children: [
-                    CircleAvaterWidget(
+                    CircleAvatarWidget(
                       avatarPath: avatarPath,
                       radius: 32,
                     ),
@@ -153,8 +152,8 @@ class MessegeCardWidget extends StatelessWidget {
   }
 }
 
-class CircleAvaterWidget extends StatelessWidget {
-  const CircleAvaterWidget({
+class CircleAvatarWidget extends StatelessWidget {
+  const CircleAvatarWidget({
     super.key,
     required this.avatarPath,
     required this.radius,

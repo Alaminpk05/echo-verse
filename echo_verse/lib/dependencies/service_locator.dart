@@ -11,15 +11,13 @@ import 'package:internet_connection_checker_plus/internet_connection_checker_plu
 
 final getIt = GetIt.instance;
 
-
 Future<void> setupServiceLocator() async {
   try {
     final objectBox = await ObjectBox.create();
-    getIt.registerFactory<InternetConnection>(()=> InternetConnection());
+    getIt.registerFactory<InternetConnection>(() => InternetConnection());
     getIt.registerSingleton<ObjectBox>(objectBox);
     getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
     getIt.registerSingleton<AuthContract>(AuthService());
-    
 
     getIt.registerLazySingleton<FirebaseAuthExceptionHandler>(
         () => FirebaseAuthExceptionHandler());
@@ -37,6 +35,10 @@ Future<void> setupServiceLocator() async {
 InternetConnection get internetConnection => getIt<InternetConnection>();
 ObjectBox get objectBox => getIt<ObjectBox>();
 FirebaseAuth get firebaseAut => getIt<FirebaseAuth>();
+User get user => firebaseAut.currentUser!;
+String get userUid => user.uid;
+String get userEmail => user.email!;
+String? get userName => user.displayName;
 AuthContract get authServices => getIt<AuthContract>();
 CustomSnackbar get customSnackBar => getIt<CustomSnackbar>();
 AppRouter get appRouter => getIt<AppRouter>();
