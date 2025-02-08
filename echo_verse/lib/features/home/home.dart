@@ -1,6 +1,11 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:echo_verse/core/constant/colors.dart';
 import 'package:echo_verse/core/constant/padding_radius_size.dart';
 import 'package:echo_verse/core/routes/route_names.dart';
+import 'package:echo_verse/core/services/objectbox/objectbox.g.dart';
+import 'package:echo_verse/dependencies/service_locator.dart';
+import 'package:echo_verse/features/authentication/data/model/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -44,25 +49,49 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: EdgeInsets.fromLTRB(2.5.w, top, 2.5.w, bottom),
           child: Column(
             children: [
-              ListView.separated(
-                physics: ClampingScrollPhysics(),
-                separatorBuilder: (context, index) {
-                  return SizedBox(
-                    height: 1.6.h,
-                  );
-                },
-                padding: EdgeInsets.zero,
-                shrinkWrap: true,
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return MessegeCardWidget(
-                    userName: 'Alamin Pk',
-                    messege:
-                        'Hi pk, you got offer from google as an software engineer',
-                    data: '12 Dec',
-                    avatarPath: 'lib/assets/logo/robo.png',
-                    onTap: () {
-                      context.push(RoutePath.chat);
+              FutureBuilder<List<UserModel>>(
+                future: authServices.fetchUsersInfo(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(child: CircularProgressIndicator());
+                  }
+
+                  if (snapshot.hasError) {
+                    return Center(
+                        child: customSnackBar.snackBar(
+                            context,
+                            'an unexpected error occurred.',
+                            ContentType.failure,
+                            'Error'));
+                  }
+
+                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    return Center(child: Text('No data available'));
+                  }
+                  final users = snapshot.data;
+
+                  return ListView.separated(
+                    physics: ClampingScrollPhysics(),
+                    separatorBuilder: (context, index) {
+                      return SizedBox(
+                        height: 1.6.h,
+                      );
+                    },
+                    padding: EdgeInsets.zero,
+                    shrinkWrap: true,
+                    itemCount: users!.length,
+                    itemBuilder: (context, index) {
+                      UserModel user = users[index];
+                      return MessegeCardWidget(
+                        userName:user.name!,
+                        messege:
+                            'Hi pk, you got offer from google as an software engineer',
+                        data: '12 Dec',
+                        avatarPath: 'lib/assets/logo/robo.png',
+                        onTap: () {
+                          context.push(extra: user, RoutePath.chat);
+                        },
+                      );
                     },
                   );
                 },

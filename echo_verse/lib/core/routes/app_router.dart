@@ -1,6 +1,7 @@
 import 'package:echo_verse/core/constant/const_string.dart';
 import 'package:echo_verse/core/routes/route_names.dart';
 import 'package:echo_verse/features/authentication/bloc/authentication/authentication_bloc.dart';
+import 'package:echo_verse/features/authentication/data/model/user.dart';
 import 'package:echo_verse/features/authentication/screens/login.dart';
 import 'package:echo_verse/features/authentication/screens/registration.dart';
 import 'package:echo_verse/features/authentication/screens/forget_password.dart';
@@ -76,7 +77,12 @@ class AppRouter {
       GoRoute(
         name: RouteName.chat,
         path: RoutePath.chat,
-        builder: (context, state) => ChatScreen(),
+        builder: (context, state) {
+          final UserModel user = state.extra as UserModel;
+          return ChatScreen(
+            user: user,
+          );
+        },
       ),
       GoRoute(
           name: RouteName.forget,

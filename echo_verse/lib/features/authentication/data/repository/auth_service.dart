@@ -49,19 +49,23 @@ class AuthService implements AuthContract {
   @override
   Future<void> saveUserInfoInDatabase(UserModel userModel) async {
     await firestore.collection('users').doc(userUid).set(userModel.toMap());
-    
-  
-
-    
   }
 
   @override
-  Future<List<UserModel>> fetchUserSignUpInfo() async {
-    final userObjectBox = objectBox.store.box<UserModel>();
-    final List<UserModel> userInfo = await userObjectBox.getAllAsync();
-    debugPrint(userInfo.length.toString());
-    return userInfo;
+  Future<List<UserModel>> fetchUsersInfo() async {
+    final querySnapshot = await firestore.collection('users').get();
+    final userList = querySnapshot.docs.map((doc) => UserModel.fromMap(doc.data())).toList();
+
+    print(userList.length);
+    return userList;
   }
+  // @override
+  // Future<List<UserModel>> fetchUserSignUpInfo() async {
+  //   final userObjectBox = objectBox.store.box<UserModel>();
+  //   final List<UserModel> userInfo = await userObjectBox.getAllAsync();
+  //   debugPrint(userInfo.length.toString());
+  //   return userInfo;
+  // }
 
   @override
   Future<void> deleteAccount(String email, String password) async {

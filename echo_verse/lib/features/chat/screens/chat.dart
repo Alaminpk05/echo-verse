@@ -1,11 +1,13 @@
 import 'package:echo_verse/core/constant/colors.dart';
 import 'package:echo_verse/core/constant/padding_radius_size.dart';
+import 'package:echo_verse/features/authentication/data/model/user.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  const ChatScreen({super.key, required this.user});
+  final UserModel user;
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -40,7 +42,7 @@ class _ChatScreenState extends State<ChatScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Alamin pk',
+                  widget.user.name!,
                   style: Theme.of(context)
                       .textTheme
                       .titleMedium!
@@ -72,7 +74,9 @@ class _ChatScreenState extends State<ChatScreen> {
                 child: Column(
               children: [],
             )),
-            SizedBox(height: 3.h,),
+            SizedBox(
+              height: 3.h,
+            ),
             Form(
               key: _formKey,
               child: Row(
