@@ -5,6 +5,8 @@ import 'package:echo_verse/core/services/objectbox/open_store.dart';
 import 'package:echo_verse/core/utils/helpers/snackbar.dart';
 import 'package:echo_verse/features/authentication/data/repository/auth_contract.dart';
 import 'package:echo_verse/features/authentication/data/repository/auth_service.dart';
+import 'package:echo_verse/features/chat/data/repository/messege_contract_repo.dart';
+import 'package:echo_verse/features/chat/data/repository/messege_repo.dart';
 import 'package:echo_verse/features/home/repository/home_contract_repo.dart';
 import 'package:echo_verse/features/home/repository/home_repo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,6 +24,7 @@ Future<void> setupServiceLocator() async {
     getIt.registerSingleton<FirebaseAuth>(FirebaseAuth.instance);
     getIt.registerSingleton<FirebaseFirestore>(FirebaseFirestore.instance);
     getIt.registerSingleton<AuthContract>(AuthService());
+    getIt.registerSingleton<MessegeContractRepo>(MessegeRepo());
     getIt.registerSingleton<HomeContractRepo>(HomeRepo());
 
     getIt.registerLazySingleton<FirebaseAuthExceptionHandler>(
@@ -46,6 +49,7 @@ String? get userUid => user?.uid;
 String? get userEmail => user?.email;
 String? get userName => user?.displayName;
 AuthContract get authServices => getIt<AuthContract>();
+MessegeContractRepo get messageServices => getIt<MessegeContractRepo>();
 HomeContractRepo get homeServices => getIt<HomeContractRepo>();
 CustomSnackbar get customSnackBar => getIt<CustomSnackbar>();
 AppRouter get appRouter => getIt<AppRouter>();

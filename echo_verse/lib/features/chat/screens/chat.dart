@@ -1,6 +1,8 @@
 import 'package:echo_verse/core/constant/colors.dart';
 import 'package:echo_verse/core/constant/padding_radius_size.dart';
+import 'package:echo_verse/dependencies/service_locator.dart';
 import 'package:echo_verse/features/authentication/data/model/user.dart';
+import 'package:echo_verse/features/chat/data/model/messege.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -72,7 +74,57 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Expanded(
                 child: Column(
-              children: [],
+              children: [
+                StreamBuilder(
+                  stream: messageServices.receiveMessage(
+                      userUid!, widget.user.authId!),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+
+                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+                      return Center(child: Text("No messages yet."));
+                    }
+
+                    return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        var doc = snapshot.data!.docs[index];
+
+                        ChatMessageModel data = ChatMessageModel.fromJson(
+                            doc.data() as Map<String, dynamic>);
+                        final bool isSender = data.senderId != userUid;
+                        return Align(
+                          alignment: isSender? Alignment
+                              .centerLeft:Alignment.centerRight, // Change to centerRight for sender
+                          child: Container(
+                            margin: EdgeInsets.symmetric(
+                                vertical: 5, horizontal: 10),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 14),
+                            decoration: BoxDecoration(
+                              color: Colors
+                                  .teal, // Use Colors.teal instead of teal if undefined
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            constraints: BoxConstraints(
+                              maxWidth: 70
+                                  .w, // Limits max width but allows it to grow
+                            ),
+                            child: Text(
+                              data.content,
+                              style:
+                                  TextStyle(fontSize: 16, color: Colors.white),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ],
             )),
             SizedBox(
               height: 3.h,
@@ -127,7 +179,16 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   IconButton(
                       onPressed: () {}, icon: Icon(CupertinoIcons.camera)),
-                  IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.mic)),
+                  IconButton(
+                      onPressed: () {
+                        if (_messageController.text.isNotEmpty) {
+                          messageServices.sendMessage(
+                              widget.user.authId.toString(),
+                              _messageController.text);
+                        }
+                        _messageController.clear();
+                      },
+                      icon: Icon(Icons.send)),
                 ],
               ),
             )
