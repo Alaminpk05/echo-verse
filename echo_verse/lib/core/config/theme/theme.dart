@@ -20,6 +20,11 @@ class AppTheme {
               borderRadius: BorderRadius.circular(36.sp)),
           backgroundColor: teal,
         )),
+        textButtonTheme: TextButtonThemeData(
+            style: TextButton.styleFrom(
+              
+                alignment: Alignment.topLeft,
+                padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.5.h))),
         bottomNavigationBarTheme:
             BottomNavigationBarThemeData(type: BottomNavigationBarType.fixed));
   }

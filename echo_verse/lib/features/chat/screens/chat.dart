@@ -18,6 +18,8 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _messageController = TextEditingController();
+  final FocusNode textFieldFocusNode=FocusNode();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,26 +99,33 @@ class _ChatScreenState extends State<ChatScreen> {
                             doc.data() as Map<String, dynamic>);
                         final bool isSender = data.senderId != userUid;
                         return Align(
-                          alignment: isSender? Alignment
-                              .centerLeft:Alignment.centerRight, // Change to centerRight for sender
-                          child: Container(
-                            margin: EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 10),
-                            padding: EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 14),
-                            decoration: BoxDecoration(
-                              color: Colors
-                                  .teal, // Use Colors.teal instead of teal if undefined
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            constraints: BoxConstraints(
-                              maxWidth: 70
-                                  .w, // Limits max width but allows it to grow
-                            ),
-                            child: Text(
-                              data.content,
-                              style:
-                                  TextStyle(fontSize: 16, color: Colors.white),
+                          alignment: isSender
+                              ? Alignment.centerLeft
+                              : Alignment
+                                  .centerRight, // Change to centerRight for sender
+                          child: GestureDetector(
+                            onLongPress: () {
+                              ChatModalSheetWidget(context);
+                            },
+                            child: Container(
+                              margin: EdgeInsets.symmetric(
+                                  vertical: 5, horizontal: 10),
+                              padding: EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 14),
+                              decoration: BoxDecoration(
+                                color: Colors
+                                    .teal, // Use Colors.teal instead of teal if undefined
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              constraints: BoxConstraints(
+                                maxWidth: 70
+                                    .w, // Limits max width but allows it to grow
+                              ),
+                              child: Text(
+                                data.content,
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.white),
+                              ),
                             ),
                           ),
                         );
@@ -196,5 +205,43 @@ class _ChatScreenState extends State<ChatScreen> {
         ),
       ),
     );
+  }
+
+  Future<dynamic> ChatModalSheetWidget(BuildContext context) {
+    return showModalBottomSheet(  
+                                elevation: 1,
+                                constraints: BoxConstraints(
+                                    maxHeight: 20.h,
+                                    maxWidth: double.infinity),
+                                context: context,
+                                builder: (context) {
+                                  return Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 2.h, horizontal: 5.w),
+                                    width: double.infinity,
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: TextButton.icon(
+                                            style: Theme.of(context).textButtonTheme.style,
+                                            
+                                            
+                                            icon: Icon(Icons.copy),
+                                              onPressed: () {},
+                                              label: Text('Copy',style: Theme.of(context).textTheme.labelLarge,)),
+                                        ),
+                                        TextButton.icon(
+                                          icon:Icon(Icons.undo_outlined),
+                                            onPressed: () {},
+                                            label: Text('Unsend',style: Theme.of(context).textTheme.labelLarge,)),
+                                      ],
+                                    ),
+                                  );
+                                });
   }
 }
