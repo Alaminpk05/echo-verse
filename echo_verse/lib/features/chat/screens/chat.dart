@@ -1,3 +1,4 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:echo_verse/core/constant/colors.dart';
 import 'package:echo_verse/core/constant/padding_radius_size.dart';
 import 'package:echo_verse/dependencies/service_locator.dart';
@@ -5,6 +6,8 @@ import 'package:echo_verse/features/authentication/data/model/user.dart';
 import 'package:echo_verse/features/chat/data/model/messege.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class ChatScreen extends StatefulWidget {
@@ -18,7 +21,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _messageController = TextEditingController();
-  final FocusNode textFieldFocusNode=FocusNode();
+  final FocusNode textFieldFocusNode = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +97,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
                         var doc = snapshot.data!.docs[index];
+                        final messageId = doc.id;
 
                         ChatMessageModel data = ChatMessageModel.fromJson(
                             doc.data() as Map<String, dynamic>);
@@ -105,7 +109,12 @@ class _ChatScreenState extends State<ChatScreen> {
                                   .centerRight, // Change to centerRight for sender
                           child: GestureDetector(
                             onLongPress: () {
-                              ChatModalSheetWidget(context);
+                              chatModalSheetWidget(
+                                  message: data.content,
+                                  context: context,
+                                  receiverId: widget.user.authId!,
+                                  senderId: userUid!,
+                                  messageId: messageId);
                             },
                             child: Container(
                               margin: EdgeInsets.symmetric(
@@ -138,68 +147,17 @@ class _ChatScreenState extends State<ChatScreen> {
             SizedBox(
               height: 3.h,
             ),
-            Form(
-              key: _formKey,
-              child: Row(
-                children: [
-                  IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.link)),
-                  SizedBox(
-                    width: 2.w,
-                  ),
-                  Expanded(
-                    child: TextFormField(
-                      controller: _messageController,
-                      minLines: 1,
-                      maxLines: 3,
-                      cursorWidth: 1.5,
-                      cursorHeight: 2.5.h,
-                      decoration: InputDecoration(
-                          fillColor: extraLightGrey,
-                          filled: true,
-                          contentPadding: EdgeInsets.symmetric(
-                              vertical: 0.sp, horizontal: 12.sp),
-                          hintText: 'write a messege',
-                          border: InputBorder.none,
-                          enabled: true,
-                          suffixIconColor: teal,
-                          hintStyle: TextStyle(
-                              color: lightGrey,
-                              fontWeight: FontWeight.normal,
-                              fontFamily: 'OpenSans'),
-                          focusedErrorBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: authTextFieldBorderColor,
-                              ),
-                              borderRadius: BorderRadius.circular(17.sp)),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: authTextFieldBorderColor,
-                              ),
-                              borderRadius: BorderRadius.circular(17.sp)),
-                          focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: authTextFieldBorderColor,
-                              ),
-                              borderRadius: BorderRadius.circular(17.sp))),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 2.w,
-                  ),
-                  IconButton(
-                      onPressed: () {}, icon: Icon(CupertinoIcons.camera)),
-                  IconButton(
-                      onPressed: () {
-                        if (_messageController.text.isNotEmpty) {
-                          messageServices.sendMessage(
-                              widget.user.authId.toString(),
-                              _messageController.text);
-                        }
-                        _messageController.clear();
-                      },
-                      icon: Icon(Icons.send)),
-                ],
-              ),
+            ChatBottomWidget(
+              formKey: _formKey,
+              messageController: _messageController,
+              onTapcamera: () {},
+              onTapSend: () {
+                if (_messageController.text.isNotEmpty) {
+                  messageServices.sendMessage(
+                      widget.user.authId.toString(), _messageController.text);
+                }
+                _messageController.clear();
+              },
             )
           ],
         ),
@@ -207,41 +165,145 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  Future<dynamic> ChatModalSheetWidget(BuildContext context) {
-    return showModalBottomSheet(  
-                                elevation: 1,
-                                constraints: BoxConstraints(
-                                    maxHeight: 20.h,
-                                    maxWidth: double.infinity),
-                                context: context,
-                                builder: (context) {
-                                  return Container(
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 2.h, horizontal: 5.w),
-                                    width: double.infinity,
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          width: double.infinity,
-                                          child: TextButton.icon(
-                                            style: Theme.of(context).textButtonTheme.style,
-                                            
-                                            
-                                            icon: Icon(Icons.copy),
-                                              onPressed: () {},
-                                              label: Text('Copy',style: Theme.of(context).textTheme.labelLarge,)),
-                                        ),
-                                        TextButton.icon(
-                                          icon:Icon(Icons.undo_outlined),
-                                            onPressed: () {},
-                                            label: Text('Unsend',style: Theme.of(context).textTheme.labelLarge,)),
-                                      ],
-                                    ),
-                                  );
-                                });
+  Future<dynamic> chatModalSheetWidget(
+      {required BuildContext context,
+      required String messageId,
+      required String receiverId,
+      required String senderId,
+      required String message}) {
+    return showModalBottomSheet(
+        elevation: 1,
+        constraints: BoxConstraints(maxHeight: 20.h, maxWidth: double.infinity),
+        context: context,
+        builder: (context) {
+          return Container(
+            padding: EdgeInsets.symmetric(vertical: 2.h, horizontal: 5.w),
+            width: double.infinity,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                ChatBottomSheetButtonWidget(
+                  icon: Icons.copy,
+                  title: 'Copy',
+                  onTap: () {
+                    messageServices.copyText(
+                        context: context, message: message);
+                         context.pop();
+                  },
+                ),
+                ChatBottomSheetButtonWidget(
+                  icon: Icons.undo_outlined,
+                  title: 'Unsend',
+                  onTap: () {
+                    messageServices.deleteMessage(
+                        senderId, receiverId, messageId);
+                    context.pop();
+                  },
+                ),
+              ],
+            ),
+          );
+        });
+  }
+}
+
+class ChatBottomSheetButtonWidget extends StatelessWidget {
+  const ChatBottomSheetButtonWidget({
+    super.key,
+    required this.icon,
+    required this.title,
+    required this.onTap,
+  });
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: double.infinity,
+      child: TextButton.icon(
+          style: Theme.of(context).textButtonTheme.style,
+          icon: Icon(icon),
+          onPressed: onTap,
+          label: Text(
+            title,
+            style: Theme.of(context).textTheme.labelLarge,
+          )),
+    );
+  }
+}
+
+class ChatBottomWidget extends StatelessWidget {
+  const ChatBottomWidget({
+    super.key,
+    required GlobalKey<FormState> formKey,
+    required TextEditingController messageController,
+    required this.onTapcamera,
+    required this.onTapSend,
+  })  : _formKey = formKey,
+        _messageController = messageController;
+
+  final GlobalKey<FormState> _formKey;
+  final TextEditingController _messageController;
+  final VoidCallback onTapcamera;
+  final VoidCallback onTapSend;
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: Row(
+        children: [
+          IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.link)),
+          SizedBox(
+            width: 2.w,
+          ),
+          Expanded(
+            child: TextFormField(
+              controller: _messageController,
+              minLines: 1,
+              maxLines: 3,
+              cursorWidth: 1.5,
+              cursorHeight: 2.5.h,
+              decoration: InputDecoration(
+                  fillColor: extraLightGrey,
+                  filled: true,
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 0.sp, horizontal: 12.sp),
+                  hintText: 'write a messege',
+                  border: InputBorder.none,
+                  enabled: true,
+                  suffixIconColor: teal,
+                  hintStyle: TextStyle(
+                      color: lightGrey,
+                      fontWeight: FontWeight.normal,
+                      fontFamily: 'OpenSans'),
+                  focusedErrorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: authTextFieldBorderColor,
+                      ),
+                      borderRadius: BorderRadius.circular(17.sp)),
+                  enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: authTextFieldBorderColor,
+                      ),
+                      borderRadius: BorderRadius.circular(17.sp)),
+                  focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: authTextFieldBorderColor,
+                      ),
+                      borderRadius: BorderRadius.circular(17.sp))),
+            ),
+          ),
+          SizedBox(
+            width: 2.w,
+          ),
+          IconButton(onPressed: onTapcamera, icon: Icon(CupertinoIcons.camera)),
+          IconButton(onPressed: onTapSend, icon: Icon(Icons.send)),
+        ],
+      ),
+    );
   }
 }

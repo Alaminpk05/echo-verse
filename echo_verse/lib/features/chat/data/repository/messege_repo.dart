@@ -1,8 +1,9 @@
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:echo_verse/dependencies/service_locator.dart';
 import 'package:echo_verse/features/chat/data/model/messege.dart';
 import 'package:echo_verse/features/chat/data/repository/messege_contract_repo.dart';
-
+import 'package:flutter/services.dart';
 
 class MessegeRepo implements MessegeContractRepo {
   @override
@@ -26,15 +27,37 @@ class MessegeRepo implements MessegeContractRepo {
   }
 
   @override
- Stream<QuerySnapshot> receiveMessage(
-      String senderId, String receiverId)  {
+  Stream<QuerySnapshot> receiveMessage(String senderId, String receiverId) {
     List<String> ids = [senderId, receiverId];
     ids.sort();
     String chatRoomId = ids.join('_');
     return firestore
         .collection('chat_room')
         .doc(chatRoomId)
-        .collection('message').orderBy('timestamp',descending: false)
+        .collection('message')
+        .orderBy('timestamp', descending: false)
         .snapshots();
+  }
+
+  @override
+  Future<void> deleteMessage(String senderId, String receiverId, String docId) {
+    List<String> ids = [senderId, receiverId];
+    ids.sort();
+    String chatRoomId = ids.join('_');
+    return firestore
+        .collection('chat_room')
+        .doc(chatRoomId)
+        .collection('message')
+        .doc(docId)
+        .delete();
+  }
+
+  @override
+  void copyText({required context, required String message}) {
+    Clipboard.setData(ClipboardData(text: message)).then((_) {
+      customSnackBar.snackBar(
+          context, 'Copied to clipboard', ContentType.success, 'Copied');
+    });
+   
   }
 }

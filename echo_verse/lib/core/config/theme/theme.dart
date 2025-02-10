@@ -22,7 +22,7 @@ class AppTheme {
         )),
         textButtonTheme: TextButtonThemeData(
             style: TextButton.styleFrom(
-              
+             
                 alignment: Alignment.topLeft,
                 padding: EdgeInsets.symmetric(horizontal: 5.w, vertical: 1.5.h))),
         bottomNavigationBarTheme:
