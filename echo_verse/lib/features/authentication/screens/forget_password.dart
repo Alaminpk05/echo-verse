@@ -93,7 +93,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                 }
               },
               child: LoginOrSignUpButton(
-                title: widget.type == forgetPge ? 'Send' : 'Deleted',
+                title: widget.type == forgetPge ? 'Send' : 'Delete',
                 onTap: () {
                   widget.type == forgetPge
                       ? context
