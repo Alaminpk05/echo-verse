@@ -20,6 +20,7 @@ class AppTheme {
               borderRadius: BorderRadius.circular(36.sp)),
           backgroundColor: teal,
         )),
+        
         textButtonTheme: TextButtonThemeData(
             style: TextButton.styleFrom(
              

@@ -11,3 +11,4 @@ const Color inactiveAuthenticationButtonColor = Color(0xFFC6DCD9);
 const Color authTextFieldBorderColor = Color(0x776F6947);
 const Color userActiveColor = Color.fromRGBO(0, 255, 41, 1);
 const Color extraLightGrey = Color.fromRGBO(243, 246, 246, 1);
+
