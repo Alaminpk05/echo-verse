@@ -6,7 +6,6 @@ import 'package:echo_verse/core/routes/route_names.dart';
 import 'package:echo_verse/dependencies/service_locator.dart';
 import 'package:echo_verse/features/authentication/bloc/authentication/authentication_bloc.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -16,6 +15,7 @@ final double settingButtonMaxRadius = 12.sp;
 final double settingsMinRadius = 0.sp;
 
 final List<Map<String, dynamic>> settingsOptions = [
+  {'title': 'Name', 'icon': CupertinoIcons.person},
   {'title': 'Email', 'icon': CupertinoIcons.mail},
   {'title': 'Password', 'icon': CupertinoIcons.lock},
   {'title': 'Theme', 'icon': CupertinoIcons.moon_stars},
@@ -100,7 +100,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       final icon = settingsOptions[index]['icon'];
                       return ElevatedButton.icon(
                           onPressed: () {
-                            if (index == 4) {
+                            if (index == 0) {
+                              context.push(RoutePath.forget, extra: changeName);
+                            } else if (index == 1) {
+                              context.push(RoutePath.forget,
+                                  extra: changeEmail);
+                            } else if (index == 2) {
+                              context.push(RoutePath.forget,
+                                  extra: changePassword);
+                            } else if (index == 5) {
                               context
                                   .read<AuthenticationBloc>()
                                   .add(SignOutEvent());

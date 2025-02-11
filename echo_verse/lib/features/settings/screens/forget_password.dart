@@ -4,8 +4,8 @@ import 'package:echo_verse/core/constant/const_string.dart';
 import 'package:echo_verse/core/constant/icons.dart';
 import 'package:echo_verse/core/utils/validation/auth_validator.dart';
 import 'package:echo_verse/dependencies/service_locator.dart';
-import 'package:echo_verse/features/authentication/bloc/authentication/authentication_bloc.dart';
 import 'package:echo_verse/features/authentication/widget/auth_widget.dart';
+import 'package:echo_verse/features/settings/bloc/settings_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -32,7 +32,15 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              widget.type == forgetPge ? 'Forgot password' : 'Delete Account',
+              widget.type == resetPassword
+                  ? 'Forgot password'
+                  : widget.type == changeName
+                      ? changeName
+                      : widget.type == changeEmail
+                          ? changeEmail
+                          : widget.type == changePassword
+                              ? changePassword
+                              : 'Delete Account',
               style: Theme.of(context)
                   .textTheme
                   .headlineLarge!
@@ -44,9 +52,15 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
             FittedBox(
               fit: BoxFit.contain,
               child: Text(
-                widget.type == forgetPge
+                widget.type == resetPassword
                     ? "No worries, we'll send you reset instructions."
-                    : 'Enter your password for authentication',
+                    : widget.type == changeName
+                        ? 'Enter your new name'
+                        : widget.type == changeEmail
+                            ? 'Enter your new email'
+                            : widget.type == changePassword
+                                ? 'Enter your new password'
+                                : 'Enter your password for authentication',
                 style: Theme.of(context)
                     .textTheme
                     .labelMedium!
@@ -57,33 +71,48 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
               height: 5.h,
             ),
             AuthTextField(
-              hintText: widget.type == forgetPge ? 'Email' : 'Password',
+              hintText:
+                  widget.type == resetPassword || widget.type == changeEmail
+                      ? 'Email'
+                      : widget.type == changeName
+                          ? 'Name'
+                          : 'Password',
               showEyeIcon: false,
-              prefixIcon: widget.type == forgetPge ? email : key,
+              prefixIcon: widget.type == resetPassword ? email : key,
               controller: _textController,
               validator: (String? value) {
-                return widget.type == forgetPge
+                return widget.type == resetPassword ||
+                        widget.type == changeEmail
                     ? AuthValidator.validateEmail(value ?? "")
-                    : AuthValidator.validatePassword(value ?? "");
+                    : widget.type == changeName
+                        ? AuthValidator.validateName(value ?? '')
+                        : AuthValidator.validatePassword(value ?? "");
               },
               type: '',
             ),
             SizedBox(
               height: 4.h,
             ),
-            BlocListener<AuthenticationBloc, AuthenticationState>(
+            BlocListener<SettingsBloc, SettingsState>(
               listener: (context, state) {
-                if (state is AuthenticationErrorState) {
+                if (state is SettingsSuccessState) {
+                  customSnackBar.snackBar(
+                      context,
+                      'Successfully changed your property',
+                      ContentType.success,
+                      'Siccess');
+                  context.pop();
+                } else if (state is SettingsErrorState) {
                   customSnackBar.snackBar(context, state.errorMessege,
                       ContentType.failure, 'Error');
-                } else if (state is AuthenticatedState) {
+                } else if (state is SendEmailState) {
                   customSnackBar.snackBar(
                       context,
                       "An email has been sent to your inbox.",
                       ContentType.success,
                       'Success');
                   context.pop();
-                } else if (state is AccountDeletedState) {
+                } else if (state is AccountDeleteState) {
                   customSnackBar.snackBar(
                       context,
                       "Your account has been successfully deleted.",
@@ -93,15 +122,30 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                 }
               },
               child: LoginOrSignUpButton(
-                title: widget.type == forgetPge ? 'Send' : 'Delete',
+                title: widget.type == resetPassword
+                    ? 'Send'
+                    : widget.type == accountDelete
+                        ? 'Delete'
+                        : 'Change',
                 onTap: () {
-                  widget.type == forgetPge
+                  widget.type == changeName
                       ? context
-                          .read<AuthenticationBloc>()
-                          .add(PasswordResetEvent(email: _textController.text))
-                      : context
-                          .read<AuthenticationBloc>()
-                          .add(DeleteAccount(password: _textController.text));
+                          .read<SettingsBloc>()
+                          .add(ChangeNameEvent(name: _textController.text))
+                      : widget.type == changeEmail
+                          ? context.read<SettingsBloc>().add(
+                              ChangeEmailEvent(email: _textController.text, password: '',))
+                          : widget.type == changePassword
+                              ? context.read<SettingsBloc>().add(
+                                  ChangePasswordEvent(
+                                      password: _textController.text, currentPassword: ''))
+                              : widget.type == resetPassword
+                                  ? context.read<SettingsBloc>().add(
+                                      PasswordResetEvent(
+                                          email: _textController.text))
+                                  : context.read<SettingsBloc>().add(
+                                      DeleteAccountEvent(
+                                          password: _textController.text));
                 },
               ),
             ),

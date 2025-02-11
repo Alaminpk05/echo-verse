@@ -3,6 +3,7 @@ import 'package:echo_verse/core/constant/const_string.dart';
 
 import 'package:echo_verse/core/constant/icons.dart';
 import 'package:echo_verse/features/authentication/bloc/authentication/authentication_bloc.dart';
+import 'package:echo_verse/features/settings/bloc/settings_bloc.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -120,9 +121,9 @@ class LoginOrSignUpButton extends StatelessWidget {
       height: 6.5.h,
       child: ElevatedButton(
           onPressed: onTap,
-          child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+          child: BlocBuilder<SettingsBloc, SettingsState>(
             builder: (context, state) {
-              if (state is AuthenticationLoadingState) {
+              if (state is SettingsLoadingState) {
                 return Center(child: CircularProgressIndicator.adaptive());
               }
               return Text(

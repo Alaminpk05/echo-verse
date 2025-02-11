@@ -15,30 +15,11 @@ class AuthenticationBloc
     on<SignUpEvent>(_onSignUpEvent);
     on<LogInEvent>(_onLogInEvent);
     on<SignOutEvent>(_onSignOutEvent);
-    on<PasswordResetEvent>(_onPasswordResetEvent);
+   
     on<ManageUserInformationEvent>(_onManageUserInformation);
-    on<DeleteAccount>(_onDeleteAccount);
+   
   }
-  Future<void> _onDeleteAccount(
-      DeleteAccount event, Emitter<AuthenticationState> emit) async {
-    emit(AuthenticationLoadingState());
-    try {
-      final email = firebaseAut.currentUser!.email!;
-      await authServices.deleteAccount(email, event.password);
-      emit(AccountDeletedState());
-    } on FirebaseAuthException catch (e) {
-      debugPrint('SIGN UP MESSEGE:${e.message}');
-      debugPrint('SIGH UP E CODE :${e.code}');
-      emit(AuthenticationIdleState());
-      emit(AuthenticationErrorState(
-          errorMessege: "Incorrect password. Please try again."));
-    } catch (e) {
-      emit(AuthenticationIdleState());
-      emit(AuthenticationErrorState(
-          errorMessege:
-              "An error occurred while signing out. Please try again."));
-    }
-  }
+ 
 
   Future<void> _onManageUserInformation(ManageUserInformationEvent event,
       Emitter<AuthenticationState> emit) async {
@@ -172,29 +153,5 @@ class AuthenticationBloc
     }
   }
 
-  Future<void> _onPasswordResetEvent(
-      PasswordResetEvent event, Emitter<AuthenticationState> emit) async {
-    final hasConnection = await internetConnection.hasInternetAccess;
-    if (!hasConnection) {
-      emit(AuthenticationIdleState());
-      emit(AuthenticationErrorState(
-          errorMessege:
-              "No internet connection. Please check your network and try again."));
-      return;
-    }
-    try {
-      await authServices.resetPassword(event.email);
-
-      emit(AuthenticatedState());
-    } on FirebaseAuthException catch (e) {
-      emit(AuthenticationIdleState());
-      emit(AuthenticationErrorState(
-          errorMessege: firebaseAuthExceptionHandler.getErrorMessage(e)));
-    } catch (e) {
-      emit(AuthenticationIdleState());
-      emit(AuthenticationErrorState(
-          errorMessege:
-              "An error occurred while signing out. Please try again."));
-    }
-  }
+ 
 }

@@ -4,7 +4,7 @@ import 'package:echo_verse/features/authentication/bloc/authentication/authentic
 import 'package:echo_verse/features/authentication/data/model/user.dart';
 import 'package:echo_verse/features/authentication/screens/login.dart';
 import 'package:echo_verse/features/authentication/screens/registration.dart';
-import 'package:echo_verse/features/authentication/screens/forget_password.dart';
+import 'package:echo_verse/features/settings/screens/forget_password.dart';
 import 'package:echo_verse/features/bottom_nav_bar/screen/bottom_nav_bar.dart';
 import 'package:echo_verse/features/chat/screens/chat.dart';
 import 'package:echo_verse/features/home/screens/home.dart';
@@ -90,7 +90,7 @@ class AppRouter {
           builder: (context, state) {
             final String? type = state.extra as String?;
             return ForgetPasswordPage(
-              type: type ?? forgetPge,
+              type: type ?? resetPassword,
             );
           }),
     ],

@@ -9,6 +9,8 @@ import 'package:echo_verse/features/chat/data/repository/messege_contract_repo.d
 import 'package:echo_verse/features/chat/data/repository/messege_repo.dart';
 import 'package:echo_verse/features/home/repository/home_contract_repo.dart';
 import 'package:echo_verse/features/home/repository/home_repo.dart';
+import 'package:echo_verse/features/settings/data/repository/setting_contract_repo.dart';
+import 'package:echo_verse/features/settings/data/repository/settings_repo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
@@ -25,6 +27,7 @@ Future<void> setupServiceLocator() async {
     getIt.registerSingleton<FirebaseFirestore>(FirebaseFirestore.instance);
     getIt.registerSingleton<AuthContract>(AuthService());
     getIt.registerSingleton<MessegeContractRepo>(MessegeRepo());
+    getIt.registerSingleton<SettingContractServices>(SettingService());
     getIt.registerSingleton<HomeContractRepo>(HomeRepo());
 
     getIt.registerLazySingleton<FirebaseAuthExceptionHandler>(
@@ -50,6 +53,7 @@ String? get userEmail => user?.email;
 String? get userName => user?.displayName;
 AuthContract get authServices => getIt<AuthContract>();
 MessegeContractRepo get messageServices => getIt<MessegeContractRepo>();
+SettingContractServices get settingsServices => getIt<SettingContractServices>();
 HomeContractRepo get homeServices => getIt<HomeContractRepo>();
 CustomSnackbar get customSnackBar => getIt<CustomSnackbar>();
 AppRouter get appRouter => getIt<AppRouter>();
