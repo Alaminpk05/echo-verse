@@ -5,6 +5,7 @@ import 'package:echo_verse/core/constant/padding_radius_size.dart';
 import 'package:echo_verse/core/routes/route_names.dart';
 import 'package:echo_verse/dependencies/service_locator.dart';
 import 'package:echo_verse/features/authentication/bloc/authentication/authentication_bloc.dart';
+import 'package:echo_verse/features/settings/bloc/settings_bloc.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -65,9 +66,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SizedBox(
                 height: 1.2.h,
               ),
-              Text(
-                firebaseAut.currentUser!.displayName!,
-                style: Theme.of(context).textTheme.titleLarge,
+              BlocBuilder<SettingsBloc, SettingsState>(
+                builder: (context, state) {
+                  String? displayName = user!.displayName;
+                  if (state is ChangeNameState && state.user != null) {
+                    return Text(
+                      displayName ?? 'User',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    );
+                  } else if (state is SettingsErrorState) {
+                    customSnackBar.snackBar(context, state.toString(),
+                        ContentType.failure, 'Error');
+                  }
+                  return SizedBox.shrink();
+                },
               ),
               Text(
                 firebaseAut.currentUser!.email!,

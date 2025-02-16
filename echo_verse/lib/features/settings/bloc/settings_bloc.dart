@@ -29,9 +29,11 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     emit(SettingsLoadingState());
     try {
       debugPrint('Email change event called');
-      await settingsServices.changeName(event.name);
+      User? updateUser = await settingsServices.changeName(event.name);
+      debugPrint(updateUser.toString());
 
-      emit(SettingsSuccessState());
+
+      emit(ChangeNameState(user: updateUser));
     } on FirebaseAuthException catch (e) {
       emit(SettingsIdleState());
       emit(SettingsErrorState(

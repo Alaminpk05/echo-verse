@@ -117,13 +117,26 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       ContentType.success,
                       'Success');
                   context.pop();
-                } else if (state is EmailChangeState) {
+                } 
+                
+                
+                else if (state is ChangeNameState) {
+                  customSnackBar.snackBar(
+                      context,
+                      'Name updated successfully.',
+                      ContentType.success,
+                      'Success');
+                      context.pop();
+                }
+                else if (state is EmailChangeState) {
                   customSnackBar.snackBar(
                       context,
                       'Email updated successfully! Verify your new email.',
                       ContentType.failure,
                       'Success');
-                } else if (state is SettingsErrorState) {
+                      
+                }
+                 else if (state is SettingsErrorState) {
                   customSnackBar.snackBar(context, state.errorMessege,
                       ContentType.failure, 'Error');
                 } else if (state is SendEmailState) {

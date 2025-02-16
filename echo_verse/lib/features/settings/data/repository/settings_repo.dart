@@ -5,9 +5,11 @@ import 'package:flutter/material.dart';
 
 class SettingService implements SettingContractServices {
   @override
-  Future<void> changeName(String newName) async {
+  Future<User?> changeName(String newName) async {
     await firebaseAut.currentUser!.updateDisplayName(newName);
+    await firebaseAut.currentUser!.reload();
     await firestore.collection('users').doc(userUid).update({'name': newName});
+    return user;
   }
 
   @override

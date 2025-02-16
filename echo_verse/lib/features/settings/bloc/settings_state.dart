@@ -20,8 +20,19 @@ final class SettingsErrorState extends SettingsState {
 }
 
 final class SettingsIdleState extends SettingsState {}
+
 final class SendNameState extends SettingsState {}
+
 final class SendEmailState extends SettingsState {}
+
 final class SendPasswordState extends SettingsState {}
+
 final class AccountDeleteState extends SettingsState {}
+
 final class EmailChangeState extends SettingsState {}
+
+final class ChangeNameState extends SettingsState {
+  final User? user;
+
+  const ChangeNameState({required this.user});
+}
