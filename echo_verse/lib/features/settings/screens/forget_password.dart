@@ -100,7 +100,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       context,
                       'Successfully changed your property',
                       ContentType.success,
-                      'Siccess');
+                      'Success');
                   context.pop();
                 } else if (state is SettingsErrorState) {
                   customSnackBar.snackBar(context, state.errorMessege,

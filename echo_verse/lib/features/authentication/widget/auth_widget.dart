@@ -2,7 +2,7 @@ import 'package:echo_verse/core/constant/colors.dart';
 import 'package:echo_verse/core/constant/const_string.dart';
 
 import 'package:echo_verse/core/constant/icons.dart';
-import 'package:echo_verse/features/authentication/bloc/authentication/authentication_bloc.dart';
+
 import 'package:echo_verse/features/settings/bloc/settings_bloc.dart';
 
 import 'package:flutter/material.dart';

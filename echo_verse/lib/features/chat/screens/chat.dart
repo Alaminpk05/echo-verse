@@ -1,4 +1,4 @@
-import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+
 import 'package:echo_verse/core/constant/colors.dart';
 import 'package:echo_verse/core/constant/padding_radius_size.dart';
 import 'package:echo_verse/dependencies/service_locator.dart';
@@ -7,7 +7,7 @@ import 'package:echo_verse/features/chat/data/model/messege.dart';
 import 'package:echo_verse/features/home/screens/home.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -164,7 +164,7 @@ class _ChatScreenState extends State<ChatScreen> {
             ChatBottomWidget(
               formKey: _formKey,
               messageController: _messageController,
-              onTapcamera: () {},
+              onTapCamera: () {},
               onTapSend: () {
                 if (_messageController.text.isNotEmpty) {
                   messageServices.sendMessage(widget.user.authId.toString(),
@@ -254,14 +254,14 @@ class ChatBottomWidget extends StatelessWidget {
     super.key,
     required GlobalKey<FormState> formKey,
     required TextEditingController messageController,
-    required this.onTapcamera,
+    required this.onTapCamera,
     required this.onTapSend,
   })  : _formKey = formKey,
         _messageController = messageController;
 
   final GlobalKey<FormState> _formKey;
   final TextEditingController _messageController;
-  final VoidCallback onTapcamera;
+  final VoidCallback onTapCamera;
   final VoidCallback onTapSend;
 
   @override
@@ -314,7 +314,7 @@ class ChatBottomWidget extends StatelessWidget {
           SizedBox(
             width: 2.w,
           ),
-          IconButton(onPressed: onTapcamera, icon: Icon(CupertinoIcons.camera)),
+          IconButton(onPressed: onTapCamera, icon: Icon(CupertinoIcons.camera)),
           IconButton(onPressed: onTapSend, icon: Icon(Icons.send)),
         ],
       ),
