@@ -24,4 +24,4 @@ final class SendNameState extends SettingsState {}
 final class SendEmailState extends SettingsState {}
 final class SendPasswordState extends SettingsState {}
 final class AccountDeleteState extends SettingsState {}
-
+final class EmailChangeState extends SettingsState {}

@@ -4,7 +4,6 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-
 part 'settings_event.dart';
 part 'settings_state.dart';
 
@@ -29,8 +28,9 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     }
     emit(SettingsLoadingState());
     try {
+      debugPrint('Email change event called');
       await settingsServices.changeName(event.name);
-      
+
       emit(SettingsSuccessState());
     } on FirebaseAuthException catch (e) {
       emit(SettingsIdleState());
@@ -57,8 +57,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     emit(SettingsLoadingState());
 
     try {
-      await settingsServices.changeEmail(event.email,event.password);
-      emit(SettingsSuccessState());
+      await settingsServices.changeEmail(event.email, event.password);
+      emit(EmailChangeState());
     } on FirebaseAuthException catch (e) {
       emit(SettingsIdleState());
       emit(SettingsErrorState(
@@ -83,7 +83,8 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     }
     emit(SettingsLoadingState());
     try {
-      await settingsServices.changePassword(event.password,event.currentPassword);
+      await settingsServices.changePassword(
+          event.password, event.currentPassword);
       emit(SettingsSuccessState());
     } on FirebaseAuthException catch (e) {
       emit(SettingsIdleState());

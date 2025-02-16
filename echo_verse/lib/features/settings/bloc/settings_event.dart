@@ -23,7 +23,7 @@ final class ChangeEmailEvent extends SettingsEvent {
   final String email;
   final String password;
 
-  const ChangeEmailEvent({ required this.password,  required this.email});
+  const ChangeEmailEvent({required this.password,required this.email});
 }
 
 final class ChangePasswordEvent extends SettingsEvent {

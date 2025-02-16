@@ -21,7 +21,7 @@ class ForgetPasswordPage extends StatefulWidget {
 
 class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
   final TextEditingController _textController = TextEditingController();
-
+  final _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,9 +71,10 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
               height: 5.h,
             ),
             AuthTextField(
-              hintText:
-                  widget.type == resetPassword || widget.type == changeEmail
-                      ? 'Email'
+              hintText: widget.type == resetPassword
+                  ? 'Email'
+                  : widget.type == changeEmail
+                      ? 'New Email'
                       : widget.type == changeName
                           ? 'Name'
                           : 'Password',
@@ -90,6 +91,20 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
               },
               type: '',
             ),
+            if (widget.type == changeEmail)
+              Padding(
+                padding: EdgeInsets.only(top: 2.h),
+                child: AuthTextField(
+                  hintText: 'Current Password',
+                  showEyeIcon: false,
+                  prefixIcon: key,
+                  controller: _passwordController,
+                  validator: (String? value) {
+                    return AuthValidator.validatePassword(value ?? "");
+                  },
+                  type: '',
+                ),
+              ),
             SizedBox(
               height: 4.h,
             ),
@@ -102,6 +117,12 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       ContentType.success,
                       'Success');
                   context.pop();
+                } else if (state is EmailChangeState) {
+                  customSnackBar.snackBar(
+                      context,
+                      'Email updated successfully! Verify your new email.',
+                      ContentType.failure,
+                      'Success');
                 } else if (state is SettingsErrorState) {
                   customSnackBar.snackBar(context, state.errorMessege,
                       ContentType.failure, 'Error');
@@ -127,18 +148,21 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                     : widget.type == accountDelete
                         ? 'Delete'
                         : 'Change',
-                onTap: () {
+                onTap: () async {
                   widget.type == changeName
                       ? context
                           .read<SettingsBloc>()
                           .add(ChangeNameEvent(name: _textController.text))
                       : widget.type == changeEmail
-                          ? context.read<SettingsBloc>().add(
-                              ChangeEmailEvent(email: _textController.text, password: '',))
+                          ? context.read<SettingsBloc>().add(ChangeEmailEvent(
+                                email: _textController.text,
+                                password: _passwordController.text,
+                              ))
                           : widget.type == changePassword
                               ? context.read<SettingsBloc>().add(
                                   ChangePasswordEvent(
-                                      password: _textController.text, currentPassword: ''))
+                                      password: _textController.text,
+                                      currentPassword: ''))
                               : widget.type == resetPassword
                                   ? context.read<SettingsBloc>().add(
                                       PasswordResetEvent(

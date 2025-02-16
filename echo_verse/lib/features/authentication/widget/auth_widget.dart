@@ -1,13 +1,9 @@
 import 'package:echo_verse/core/constant/colors.dart';
 import 'package:echo_verse/core/constant/const_string.dart';
-
 import 'package:echo_verse/core/constant/icons.dart';
-
 import 'package:echo_verse/features/settings/bloc/settings_bloc.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class LoginOrSignUpPageNavigateButton extends StatelessWidget {
