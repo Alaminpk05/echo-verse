@@ -109,10 +109,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             //   context.push(RoutePath.forget,
                             //       extra: changeEmail);
                             // } 
-                            else if (index == 2) {
+                            else if (index == 1) {
                               context.push(RoutePath.forget,
                                   extra: resetPassword);
-                            } else if (index == 5) {
+                            } else if (index == 3) {
                               context
                                   .read<AuthenticationBloc>()
                                   .add(SignOutEvent());
