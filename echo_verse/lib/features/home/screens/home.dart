@@ -70,7 +70,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
                   final users = snapshot.data;
                   // Filter out the current user
-    final filteredUsers = users!.where((e) => e.authId != userUid).toList();
+                  final filteredUsers =
+                      users!.where((e) => e.authId != userUid).toList();
+                  if (users.length == 1) {
+                    return Center(child: Text('No messeges available'));
+                  }
 
                   return ListView.separated(
                     physics: ClampingScrollPhysics(),
@@ -89,7 +93,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         messege:
                             'Hi pk, you got offer from google as an software engineer',
                         data: '12 Dec',
-                        avatarPath: user.imageUrl==null?'lib/assets/logo/robo.png':user.imageUrl.toString(),
+                        avatarPath: user.imageUrl == null
+                            ? 'lib/assets/logo/robo.png'
+                            : user.imageUrl.toString(),
                         onTap: () {
                           context.push(extra: user, RoutePath.chat);
                         },

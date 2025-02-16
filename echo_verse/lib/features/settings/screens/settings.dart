@@ -1,6 +1,7 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:echo_verse/core/constant/colors.dart';
 import 'package:echo_verse/core/constant/const_string.dart';
+import 'package:echo_verse/core/constant/icon_and_text_list.dart';
 import 'package:echo_verse/core/constant/padding_radius_size.dart';
 import 'package:echo_verse/core/routes/route_names.dart';
 import 'package:echo_verse/dependencies/service_locator.dart';
@@ -12,18 +13,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-final double settingButtonMaxRadius = 12.sp;
-final double settingsMinRadius = 0.sp;
 
-final List<Map<String, dynamic>> settingsOptions = [
-  {'title': 'Name', 'icon': CupertinoIcons.person},
-  {'title': 'Email', 'icon': CupertinoIcons.mail},
-  {'title': 'Password', 'icon': CupertinoIcons.lock},
-  {'title': 'Theme', 'icon': CupertinoIcons.moon_stars},
-  {'title': 'Privacy Policy', 'icon': CupertinoIcons.doc_text},
-  {'title': 'Sign out', 'icon': CupertinoIcons.square_arrow_right},
-  {'title': 'Delete Account', 'icon': CupertinoIcons.delete},
-];
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -114,10 +104,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           onPressed: () {
                             if (index == 0) {
                               context.push(RoutePath.forget, extra: changeName);
-                            } else if (index == 1) {
-                              context.push(RoutePath.forget,
-                                  extra: changeEmail);
-                            } else if (index == 2) {
+                            }
+                            //  else if (index == 1) {
+                            //   context.push(RoutePath.forget,
+                            //       extra: changeEmail);
+                            // } 
+                            else if (index == 2) {
                               context.push(RoutePath.forget,
                                   extra: resetPassword);
                             } else if (index == 5) {

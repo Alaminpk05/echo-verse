@@ -9,3 +9,6 @@ double top = 2.h;
 double bottom = 2.h;
 double horizontal = 5.w;
 double vertical = 3.h;
+final double settingButtonMaxRadius = 12.sp;
+final double settingsMinRadius = 0.sp;
+
