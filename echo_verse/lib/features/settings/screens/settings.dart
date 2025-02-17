@@ -13,8 +13,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-
-
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
@@ -23,6 +21,12 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
+  @override
+  void initState() {
+    context.read<SettingsBloc>().add(ChangeNameEvent(name: userName!));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +72,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     customSnackBar.snackBar(context, state.toString(),
                         ContentType.failure, 'Error');
                   }
-                  return SizedBox.shrink();
+                  return Text(
+                      displayName ?? 'User',
+                      style: Theme.of(context).textTheme.titleLarge,
+                    );
                 },
               ),
               Text(
@@ -108,7 +115,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             //  else if (index == 1) {
                             //   context.push(RoutePath.forget,
                             //       extra: changeEmail);
-                            // } 
+                            // }
                             else if (index == 1) {
                               context.push(RoutePath.forget,
                                   extra: resetPassword);

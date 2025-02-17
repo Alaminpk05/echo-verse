@@ -1,4 +1,3 @@
-
 import 'package:echo_verse/core/constant/colors.dart';
 import 'package:echo_verse/core/constant/padding_radius_size.dart';
 import 'package:echo_verse/dependencies/service_locator.dart';
@@ -75,7 +74,8 @@ class _ChatScreenState extends State<ChatScreen> {
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.only(left:2.w,right: 2.w,bottom: vertical),
+        padding:
+            EdgeInsets.only(left: 2.w, right: 2.w, bottom: vertical, top: 2.h),
         child: Column(
           children: [
             Expanded(
@@ -124,7 +124,6 @@ class _ChatScreenState extends State<ChatScreen> {
                                             'lib/assets/logo/robo.png',
                                         radius: 19.sp),
                                 Container(
-                                
                                   margin: EdgeInsets.symmetric(
                                       vertical: 5, horizontal: 10),
                                   padding: EdgeInsets.symmetric(
@@ -139,9 +138,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                         bottomRight: Radius.circular(11.sp)),
                                   ),
                                   constraints: BoxConstraints(
-                                      maxWidth: 50.w,
-                                      
-                                      ),
+                                    maxWidth: 50.w,
+                                  ),
                                   child: Text(
                                     data.content,
                                     style: TextStyle(
