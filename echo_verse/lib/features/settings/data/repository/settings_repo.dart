@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:echo_verse/dependencies/service_locator.dart';
 import 'package:echo_verse/features/settings/data/repository/setting_contract_repo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class SettingService implements SettingContractServices {
   @override
@@ -19,7 +23,7 @@ class SettingService implements SettingContractServices {
       password: password,
     );
     await user!.reauthenticateWithCredential(credential);
-    debugPrint('===============================>>>>>>>>>>>');
+
     debugPrint(user!.email.toString());
     debugPrint(credential.toString());
 
@@ -38,5 +42,24 @@ class SettingService implements SettingContractServices {
         .collection('users')
         .doc(userUid)
         .update({'email': newPassword});
+  }
+
+  @override
+  Future<void> changeProfile() async {
+    ImagePicker imagePicker = ImagePicker();
+
+    XFile? file = await imagePicker.pickImage(source: ImageSource.gallery);
+    if (file != null) {
+      File imageFile = File(file.path);
+      Reference storageRef =
+          firebaseStorage.ref().child('profileImages').child("$userUid.jpg");
+      UploadTask uploadTask = storageRef.putFile(imageFile);
+      TaskSnapshot snapshot = await uploadTask;
+      String downloadUrl = await snapshot.ref.getDownloadURL();
+      await firebaseAut.currentUser!.updatePhotoURL(downloadUrl);
+      await firestore.collection('users').doc(userUid).update({
+        'imageUrl':downloadUrl
+      });
+    }
   }
 }

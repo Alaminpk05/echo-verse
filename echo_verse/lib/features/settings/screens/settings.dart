@@ -38,24 +38,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Center(
           child: Column(
             children: [
-              CircleAvatar(
-                radius: 33.sp,
-                backgroundImage: AssetImage('lib/assets/logo/robo.png'),
-                child: Stack(children: [
-                  Positioned(
-                    bottom: 10,
-                    right: 10,
-                    child: CircleAvatar(
-                      radius: 17.sp,
-                      backgroundColor: Colors.transparent,
-                      child: Icon(
-                        CupertinoIcons.camera_circle_fill,
-                        color: white,
-                        size: 30,
+              GestureDetector(
+                onTap: (){
+                  
+                },
+                child: CircleAvatar(
+                  radius: 33.sp,
+                  backgroundImage: user!.photoURL==null? AssetImage('lib/assets/logo/robo.png'):NetworkImage(user!.photoURL.toString()),
+                  child: Stack(children: [
+                    Positioned(
+                      bottom: 10,
+                      right: 10,
+                      child: CircleAvatar(
+                        radius: 17.sp,
+                        backgroundColor: Colors.transparent,
+                        child: Icon(
+                          CupertinoIcons.camera_circle_fill,
+                          color: white,
+                          size: 30,
+                        ),
                       ),
                     ),
-                  ),
-                ]),
+                  ]),
+                ),
               ),
               SizedBox(
                 height: 1.2.h,
