@@ -52,8 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: EdgeInsets.fromLTRB(2.5.w, top, 2.5.w, bottom),
           child: Column(
             children: [
-              FutureBuilder<List<UserModel>>(
-                future: homeServices.fetchUsersInfo(),
+              StreamBuilder<List<UserModel>>(
+                stream: homeServices.fetchUsersInfo(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator.adaptive());
