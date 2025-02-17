@@ -39,12 +39,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
           child: Column(
             children: [
               GestureDetector(
-                onTap: (){
-                  
-                },
+                onTap: settingsServices.changeProfile,
                 child: CircleAvatar(
                   radius: 33.sp,
-                  backgroundImage: user!.photoURL==null? AssetImage('lib/assets/logo/robo.png'):NetworkImage(user!.photoURL.toString()),
+                  backgroundImage: user!.photoURL == null
+                      ? AssetImage('lib/assets/logo/robo.png')
+                      : NetworkImage(user!.photoURL.toString()),
                   child: Stack(children: [
                     Positioned(
                       bottom: 10,
@@ -78,9 +78,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ContentType.failure, 'Error');
                   }
                   return Text(
-                      displayName ?? 'User',
-                      style: Theme.of(context).textTheme.titleLarge,
-                    );
+                    displayName ?? 'User',
+                    style: Theme.of(context).textTheme.titleLarge,
+                  );
                 },
               ),
               Text(
