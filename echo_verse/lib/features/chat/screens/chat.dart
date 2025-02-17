@@ -25,6 +25,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
+  
     return Scaffold(
       appBar: AppBar(
         title: Row(
@@ -35,13 +36,15 @@ class _ChatScreenState extends State<ChatScreen> {
               radius: 19.sp,
               child: Stack(
                 children: [
-                  Positioned(
-                      right: 0,
-                      bottom: 4,
-                      child: CircleAvatar(
-                        radius: 4,
-                        backgroundColor: userActiveColor,
-                      ))
+                  widget.user.isOnline
+                      ? Positioned(
+                          right: 0,
+                          bottom: 4,
+                          child: CircleAvatar(
+                            radius: 4,
+                            backgroundColor: userActiveColor,
+                          ))
+                      : SizedBox.shrink(),
                 ],
               ),
             ),
@@ -56,7 +59,9 @@ class _ChatScreenState extends State<ChatScreen> {
                       .copyWith(fontWeight: FontWeight.w600),
                 ),
                 Text(
-                  'Active now',
+                  widget.user.isOnline
+                      ? 'Active now'
+                      :'Offline',
                   style: Theme.of(context).textTheme.labelSmall,
                 ),
               ],

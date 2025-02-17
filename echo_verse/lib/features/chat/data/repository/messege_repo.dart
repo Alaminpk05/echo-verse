@@ -58,6 +58,13 @@ class MessegeRepo implements MessegeContractRepo {
       customSnackBar.snackBar(
           context, 'Copied to clipboard', ContentType.success, 'Copied');
     });
-   
+  }
+
+  @override
+  Future<void> updateActiveStatus(bool isOnline) async {
+    firestore.collection('users').doc(userUid).update({
+      'isOnline': isOnline,
+      'lastActive': DateTime.now().millisecondsSinceEpoch.toString()
+    });
   }
 }

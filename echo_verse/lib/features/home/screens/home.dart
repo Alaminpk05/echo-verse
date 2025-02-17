@@ -1,15 +1,14 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:echo_verse/core/constant/colors.dart';
 import 'package:echo_verse/core/constant/padding_radius_size.dart';
 import 'package:echo_verse/core/routes/route_names.dart';
-
 import 'package:echo_verse/dependencies/service_locator.dart';
 import 'package:echo_verse/features/authentication/data/model/user.dart';
 import 'package:echo_verse/features/chat/data/model/messege.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
@@ -22,6 +21,22 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+     messageServices.updateActiveStatus(false);
+     super.initState();
+    SystemChannels.lifecycle.setMessageHandler((message) {
+      debugPrint(message);
+      if (message.toString().contains('resume')) {
+        messageServices.updateActiveStatus(true);
+      } else if (message.toString().contains('pause')) {
+        messageServices.updateActiveStatus(false);
+      }
+      return Future.value(message);
+    });
+    
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,24 +72,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator.adaptive());
-                  }
-
-                  else if (snapshot.hasError) {
+                  } else if (snapshot.hasError) {
                     return Center(
                         child: customSnackBar.snackBar(
                             context,
                             'an unexpected error occurred.',
                             ContentType.failure,
                             'Error'));
-                  }
-
-                  else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return Center(child: Text('No data available'));
                   }
                   final users = snapshot.data;
-
-                 
-
                   return ListView.separated(
                     physics: ClampingScrollPhysics(),
                     separatorBuilder: (context, index) {
@@ -114,7 +122,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 formattedTime = "$weeks w";
                               }
                             }
-
                             return MessegeCardWidget(
                               userName: user.name!,
                               messege: message ?? '',

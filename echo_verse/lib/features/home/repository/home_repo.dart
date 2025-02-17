@@ -6,8 +6,12 @@ import 'package:echo_verse/features/home/repository/home_contract_repo.dart';
 class HomeRepo implements HomeContractRepo {
   @override
   Stream<List<UserModel>> fetchUsersInfo() {
-    return firestore.collection('users').where('authId',isNotEqualTo: userUid).snapshots().map((snapshot) =>
-        snapshot.docs.map((doc) => UserModel.fromMap(doc.data())).toList());
+    return firestore
+        .collection('users')
+        .where('authId', isNotEqualTo: userUid)
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => UserModel.fromMap(doc.data())).toList());
   }
 
   @override
@@ -26,6 +30,20 @@ class HomeRepo implements HomeContractRepo {
         .map((snapshot) {
       if (snapshot.docs.isNotEmpty) {
         return ChatMessageModel.fromJson(snapshot.docs.first.data());
+      }
+      return null;
+    });
+  }
+
+  @override
+  Stream<UserModel?> getUserInfo() {
+    return firestore
+        .collection('users')
+        .where('id', isEqualTo: userUid)
+        .snapshots()
+        .map((e) {
+      if (e.docs.isNotEmpty) {
+        return UserModel.fromMap(e.docs.first.data());
       }
       return null;
     });
