@@ -1,5 +1,6 @@
 import 'package:echo_verse/core/constant/colors.dart';
 import 'package:echo_verse/core/constant/padding_radius_size.dart';
+import 'package:echo_verse/core/utils/helpers/date_time_foramtor.dart';
 import 'package:echo_verse/dependencies/service_locator.dart';
 import 'package:echo_verse/features/authentication/data/model/user.dart';
 import 'package:echo_verse/features/chat/data/model/messege.dart';
@@ -61,7 +62,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 Text(
                   widget.user.isOnline
                       ? 'Active now'
-                      :'Offline',
+                      :formateLastActive(widget.user.lastActive!),
                   style: Theme.of(context).textTheme.labelSmall,
                 ),
               ],
