@@ -73,11 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   }
                   final users = snapshot.data;
 
-                  final filteredUsers =
-                      users!.where((e) => e.authId != userUid).toList();
-                   if (users.length == 1) {
-                    return Center(child: Text('No messages available'));
-                  }
+                 
 
                   return ListView.separated(
                     physics: ClampingScrollPhysics(),
@@ -88,9 +84,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                     padding: EdgeInsets.zero,
                     shrinkWrap: true,
-                    itemCount: filteredUsers.length,
+                    itemCount: users!.length,
                     itemBuilder: (context, index) {
-                      UserModel user = filteredUsers[index];
+                      UserModel user = users[index];
                       return StreamBuilder<ChatMessageModel?>(
                           stream: homeServices.getLastMessage(user),
                           builder: (context, snapshot) {

@@ -6,7 +6,7 @@ import 'package:echo_verse/features/home/repository/home_contract_repo.dart';
 class HomeRepo implements HomeContractRepo {
   @override
   Stream<List<UserModel>> fetchUsersInfo() {
-    return firestore.collection('users').snapshots().map((snapshot) =>
+    return firestore.collection('users').where('authId',isNotEqualTo: userUid).snapshots().map((snapshot) =>
         snapshot.docs.map((doc) => UserModel.fromMap(doc.data())).toList());
   }
 
