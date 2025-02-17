@@ -11,6 +11,7 @@ import 'package:echo_verse/features/chat/data/model/messege.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -55,10 +56,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 future: homeServices.fetchUsersInfo(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(child: CircularProgressIndicator());
+                    return Center(child: CircularProgressIndicator.adaptive());
                   }
 
-                  if (snapshot.hasError) {
+                  else if (snapshot.hasError) {
                     return Center(
                         child: customSnackBar.snackBar(
                             context,
@@ -67,14 +68,14 @@ class _HomeScreenState extends State<HomeScreen> {
                             'Error'));
                   }
 
-                  if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                  else if (!snapshot.hasData || snapshot.data!.isEmpty) {
                     return Center(child: Text('No data available'));
                   }
                   final users = snapshot.data;
-                  // Filter out the current user
+
                   final filteredUsers =
                       users!.where((e) => e.authId != userUid).toList();
-                  if (users.length == 1) {
+                   if (users.length == 1) {
                     return Center(child: Text('No messages available'));
                   }
 
@@ -98,12 +99,30 @@ class _HomeScreenState extends State<HomeScreen> {
                               return const CircularProgressIndicator();
                             }
                             String? message = snapshot.data?.content;
-                           
+                            Timestamp? dt = snapshot.data?.timestamp;
+
+                            String formattedTime = '';
+                            if (dt != null) {
+                              DateTime dateTime = dt.toDate();
+                              Duration diff =
+                                  DateTime.now().difference(dateTime);
+
+                              if (diff.inHours < 24) {
+                                formattedTime =
+                                    DateFormat('hh:mm a').format(dateTime);
+                              } else if (diff.inDays < 7) {
+                                int days = diff.inDays;
+                                formattedTime = "$days d";
+                              } else {
+                                int weeks = diff.inDays ~/ 7;
+                                formattedTime = "$weeks w";
+                              }
+                            }
 
                             return MessegeCardWidget(
                               userName: user.name!,
                               messege: message ?? '',
-                              data: '',
+                              data: formattedTime,
                               avatarPath: user.imageUrl == null
                                   ? 'lib/assets/logo/robo.png'
                                   : user.imageUrl.toString(),
