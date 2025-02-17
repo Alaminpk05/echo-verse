@@ -1,4 +1,5 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:echo_verse/core/constant/colors.dart';
 import 'package:echo_verse/core/constant/padding_radius_size.dart';
@@ -6,6 +7,7 @@ import 'package:echo_verse/core/routes/route_names.dart';
 
 import 'package:echo_verse/dependencies/service_locator.dart';
 import 'package:echo_verse/features/authentication/data/model/user.dart';
+import 'package:echo_verse/features/chat/data/model/messege.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -73,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   final filteredUsers =
                       users!.where((e) => e.authId != userUid).toList();
                   if (users.length == 1) {
-                    return Center(child: Text('No messeges available'));
+                    return Center(child: Text('No messages available'));
                   }
 
                   return ListView.separated(
@@ -88,18 +90,28 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemCount: filteredUsers.length,
                     itemBuilder: (context, index) {
                       UserModel user = filteredUsers[index];
-                      return MessegeCardWidget(
-                        userName: user.name!,
-                        messege:
-                            'Hi pk, you got offer from google as an software engineer',
-                        data: '12 Dec',
-                        avatarPath: user.imageUrl == null
-                            ? 'lib/assets/logo/robo.png'
-                            : user.imageUrl.toString(),
-                        onTap: () {
-                          context.push(extra: user, RoutePath.chat);
-                        },
-                      );
+                      return StreamBuilder<ChatMessageModel?>(
+                          stream: homeServices.getLastMessage(user),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const CircularProgressIndicator();
+                            }
+                            String? message = snapshot.data?.content;
+                           
+
+                            return MessegeCardWidget(
+                              userName: user.name!,
+                              messege: message ?? '',
+                              data: '',
+                              avatarPath: user.imageUrl == null
+                                  ? 'lib/assets/logo/robo.png'
+                                  : user.imageUrl.toString(),
+                              onTap: () {
+                                context.push(extra: user, RoutePath.chat);
+                              },
+                            );
+                          });
                     },
                   );
                 },
@@ -157,13 +169,16 @@ class MessegeCardWidget extends StatelessWidget {
                             softWrap: true,
                             overflow: TextOverflow.ellipsis,
                             userName,
-                            style: Theme.of(context).textTheme.titleMedium,
+                            style: Theme.of(context).textTheme.titleLarge,
+                          ),
+                          SizedBox(
+                            height: 0.1.h,
                           ),
                           Text(
                             softWrap: true,
                             messege,
                             overflow: TextOverflow.ellipsis,
-                            style: Theme.of(context).textTheme.titleSmall,
+                            style: Theme.of(context).textTheme.bodyLarge,
                           ),
                         ],
                       ),
