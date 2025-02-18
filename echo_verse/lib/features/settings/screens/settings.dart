@@ -48,67 +48,50 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   }
                 },
                 builder: (context, state) {
-                 
-                   if (state is ChangeProfileImageState) {
-                    return GestureDetector(
-                      onTap: () {
-                        context
-                            .read<SettingsBloc>()
-                            .add(ChangeProfileImage(isChange: true));
-                      },
-                      child: CircleAvatar(
-                        
-                        radius: 33.sp,
-                        backgroundImage: state.image != null
+                  if (state is ChangeProfileImageState) {
+                    return ProfileAvatar(
+                    backgroundImage: state.image != null
                             ? NetworkImage(state.image.toString())
                             : state.image == null
                                 ? NetworkImage(user!.photoURL.toString())
                                 : AssetImage('lib/assets/logo/robo.png'),
-                        child: Stack(children: [
-                          Positioned(
-                            bottom: 10,
-                            right: 3,
-                            child: CircleAvatar(
-                              radius: 17.sp,
-                              backgroundColor: Colors.white,
-                              child: Icon(
-                                CupertinoIcons.camera,
-                                color: Colors.black,
-                                size: 18,
-                              ),
-                            ),
-                          ),
-                        ]),
-                      ),
-                    );
+                  );
+                    //  GestureDetector(
+                    //   onTap: () {
+                    //     context
+                    //         .read<SettingsBloc>()
+                    //         .add(ChangeProfileImage(isChange: true));
+                    //   },
+                    //   child: CircleAvatar(
+                    //     radius: 33.sp,
+                    //     backgroundImage: state.image != null
+                    //         ? NetworkImage(state.image.toString())
+                    //         : state.image == null
+                    //             ? NetworkImage(user!.photoURL.toString())
+                    //             : AssetImage('lib/assets/logo/robo.png'),
+                    //     child: Stack(
+                    //       children: [
+                    //       Positioned(
+                    //         bottom: 10,
+                    //         right: 3,
+                    //         child: CircleAvatar(
+                    //           radius: 17.sp,
+                    //           backgroundColor: Colors.white,
+                    //           child: Icon(
+                    //             CupertinoIcons.camera,
+                    //             color: Colors.black,
+                    //             size: 18,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //     ]),
+                    //   ),
+                    // );
                   }
-                  return GestureDetector(
-                    onTap: () {
-                      context
-                          .read<SettingsBloc>()
-                          .add(ChangeProfileImage(isChange: true));
-                    },
-                    child: CircleAvatar(
-                      radius: 33.sp,
-                      backgroundImage:  user!.photoURL != null
-                          ? NetworkImage(user!.photoURL.toString())
-                          : AssetImage('lib/assets/logo/robo.png'),
-                      child: Stack(children: [
-                        Positioned(
-                          bottom: 10,
-                          right: 10,
-                          child: CircleAvatar(
-                            radius: 17.sp,
-                            backgroundColor: Colors.transparent,
-                            child: Icon(
-                              CupertinoIcons.camera_circle_fill,
-                              color: white,
-                              size: 30,
-                            ),
-                          ),
-                        ),
-                      ]),
-                    ),
+                  return ProfileAvatar(
+                    backgroundImage: user!.photoURL != null
+                        ? NetworkImage(user!.photoURL.toString())
+                        : AssetImage('lib/assets/logo/robo.png'),
                   );
                 },
               ),
@@ -224,6 +207,42 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class ProfileAvatar extends StatelessWidget {
+  const ProfileAvatar({
+    super.key,
+    required this.backgroundImage,
+  });
+  final ImageProvider backgroundImage;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        context.read<SettingsBloc>().add(ChangeProfileImage(isChange: true));
+      },
+      child: CircleAvatar(
+        radius: 33.sp,
+        backgroundImage: backgroundImage,
+        child: Stack(children: [
+          Positioned(
+            bottom: 10,
+            right: 10,
+            child: CircleAvatar(
+              radius: 17.sp,
+              backgroundColor: Colors.white,
+              child: Icon(
+                CupertinoIcons.camera,
+                color: Colors.black,
+                size: 18,
+              ),
+            ),
+          ),
+        ]),
       ),
     );
   }
