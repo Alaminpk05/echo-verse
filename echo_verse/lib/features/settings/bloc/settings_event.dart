@@ -37,4 +37,11 @@ final class DeleteAccountEvent extends SettingsEvent {
   final String password;
 
   const DeleteAccountEvent({required this.password});
+} 
+final class ChangeProfileImage extends SettingsEvent{
+  final bool isChange;
+
+  const ChangeProfileImage({required this.isChange});
+
+
 }

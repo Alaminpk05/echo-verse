@@ -1,9 +1,9 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 
 import 'dart:convert';
-
 import 'package:equatable/equatable.dart';
 import 'package:objectbox/objectbox.dart';
+
 
 @Entity()
 // ignore: must_be_immutable

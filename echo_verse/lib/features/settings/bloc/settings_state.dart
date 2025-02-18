@@ -36,3 +36,9 @@ final class ChangeNameState extends SettingsState {
 
   const ChangeNameState({required this.user});
 }
+
+final class ChangeProfileImageState extends SettingsState {
+  final String? image;
+
+  const ChangeProfileImageState({required this.image});
+}

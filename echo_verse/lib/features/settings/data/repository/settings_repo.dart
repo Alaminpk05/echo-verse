@@ -45,21 +45,24 @@ class SettingService implements SettingContractServices {
   }
 
   @override
-  Future<void> changeProfile() async {
+  Future<String> changeProfile() async {
     ImagePicker imagePicker = ImagePicker();
 
     XFile? file = await imagePicker.pickImage(source: ImageSource.gallery);
+    String? downloadUrl;
     if (file != null) {
       File imageFile = File(file.path);
       Reference storageRef =
           firebaseStorage.ref().child('profileImages').child("$userUid.jpg");
       UploadTask uploadTask = storageRef.putFile(imageFile);
       TaskSnapshot snapshot = await uploadTask;
-      String downloadUrl = await snapshot.ref.getDownloadURL();
+      downloadUrl = await snapshot.ref.getDownloadURL();
       await firebaseAut.currentUser!.updatePhotoURL(downloadUrl);
-      await firestore.collection('users').doc(userUid).update({
-        'imageUrl':downloadUrl
-      });
+      await firestore
+          .collection('users')
+          .doc(userUid)
+          .update({'imageUrl': downloadUrl});
     }
+    return downloadUrl!;
   }
 }

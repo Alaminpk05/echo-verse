@@ -14,6 +14,30 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     on<ChangeNameEvent>(_onChangeNameEvent);
     on<ChangeEmailEvent>(_onChangeEmailEvent);
     on<ChangePasswordEvent>(_onChangePasswordEvent);
+    on<ChangeProfileImage>(_onChangeProfileImageEvent);
+  }
+
+  Future<void> _onChangeProfileImageEvent(
+      ChangeProfileImage event, Emitter<SettingsState> emit) async {
+    final hasConnection = await internetConnection.hasInternetAccess;
+    if (!hasConnection) {
+      emit(SettingsIdleState());
+      emit(SettingsErrorState(
+          errorMessege:
+              "No internet connection. Please check your network and try again."));
+      return;
+    }
+    emit(SettingsLoadingState());
+    try {
+      String? imageUrl;
+      if (event.isChange) {
+        imageUrl = await settingsServices.changeProfile();
+      }
+
+      emit(ChangeProfileImageState(image: imageUrl ?? user!.photoURL));
+    } catch (e) {
+      emit(SettingsErrorState(errorMessege: 'Profile picture change failed'));
+    }
   }
 
   Future<void> _onChangeNameEvent(
@@ -31,7 +55,6 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
       debugPrint('Email change event called');
       User? updateUser = await settingsServices.changeName(event.name);
       debugPrint(updateUser.toString());
-
 
       emit(ChangeNameState(user: updateUser));
     } on FirebaseAuthException catch (e) {

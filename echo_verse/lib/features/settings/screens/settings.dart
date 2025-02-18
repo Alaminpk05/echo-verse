@@ -24,6 +24,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   void initState() {
     context.read<SettingsBloc>().add(ChangeNameEvent(name: userName!));
+    context.read<SettingsBloc>().add(ChangeProfileImage(isChange: false));
+
     super.initState();
   }
 
@@ -38,29 +40,77 @@ class _SettingsScreenState extends State<SettingsScreen> {
         child: Center(
           child: Column(
             children: [
-              GestureDetector(
-                onTap: settingsServices.changeProfile,
-                child: CircleAvatar(
-                  radius: 33.sp,
-                  backgroundImage: user!.photoURL == null
-                      ? AssetImage('lib/assets/logo/robo.png')
-                      : NetworkImage(user!.photoURL.toString()),
-                  child: Stack(children: [
-                    Positioned(
-                      bottom: 10,
-                      right: 10,
+              BlocConsumer<SettingsBloc, SettingsState>(
+                listener: (context, state) {
+                  if (state is SettingsErrorState) {
+                    customSnackBar.snackBar(context, state.errorMessege,
+                        ContentType.failure, 'Error');
+                  }
+                },
+                builder: (context, state) {
+                 
+                   if (state is ChangeProfileImageState) {
+                    return GestureDetector(
+                      onTap: () {
+                        context
+                            .read<SettingsBloc>()
+                            .add(ChangeProfileImage(isChange: true));
+                      },
                       child: CircleAvatar(
-                        radius: 17.sp,
-                        backgroundColor: Colors.transparent,
-                        child: Icon(
-                          CupertinoIcons.camera_circle_fill,
-                          color: white,
-                          size: 30,
-                        ),
+                        
+                        radius: 33.sp,
+                        backgroundImage: state.image != null
+                            ? NetworkImage(state.image.toString())
+                            : state.image == null
+                                ? NetworkImage(user!.photoURL.toString())
+                                : AssetImage('lib/assets/logo/robo.png'),
+                        child: Stack(children: [
+                          Positioned(
+                            bottom: 10,
+                            right: 3,
+                            child: CircleAvatar(
+                              radius: 17.sp,
+                              backgroundColor: Colors.white,
+                              child: Icon(
+                                CupertinoIcons.camera,
+                                color: Colors.black,
+                                size: 18,
+                              ),
+                            ),
+                          ),
+                        ]),
                       ),
+                    );
+                  }
+                  return GestureDetector(
+                    onTap: () {
+                      context
+                          .read<SettingsBloc>()
+                          .add(ChangeProfileImage(isChange: true));
+                    },
+                    child: CircleAvatar(
+                      radius: 33.sp,
+                      backgroundImage:  user!.photoURL != null
+                          ? NetworkImage(user!.photoURL.toString())
+                          : AssetImage('lib/assets/logo/robo.png'),
+                      child: Stack(children: [
+                        Positioned(
+                          bottom: 10,
+                          right: 10,
+                          child: CircleAvatar(
+                            radius: 17.sp,
+                            backgroundColor: Colors.transparent,
+                            child: Icon(
+                              CupertinoIcons.camera_circle_fill,
+                              color: white,
+                              size: 30,
+                            ),
+                          ),
+                        ),
+                      ]),
                     ),
-                  ]),
-                ),
+                  );
+                },
               ),
               SizedBox(
                 height: 1.2.h,
