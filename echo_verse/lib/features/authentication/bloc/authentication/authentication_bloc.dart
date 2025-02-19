@@ -54,16 +54,20 @@ class AuthenticationBloc
           name: event.name,
           email: event.email,
           password: event.password,
-          authId: userUid,
+          authId:  userCredential!.user!.uid,
+          imageUrl: '',
           createdAt: DateTime.now().toIso8601String(),
           isOnline: false,
           lastActive: '',
           pushToken: '',
+
+          
         );
-        authServices.saveUserInfoInDatabase(userInfo);
+        await authServices.saveUserInfoInDatabase(userInfo);
 
         debugPrint('CALLED FIRESTORE ADD FUNCTION');
         emit(AuthenticatedState());
+        
       } else {
         emit(AuthenticationIdleState());
 

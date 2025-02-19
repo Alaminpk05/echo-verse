@@ -2,6 +2,7 @@ import 'package:echo_verse/dependencies/service_locator.dart';
 import 'package:echo_verse/features/authentication/data/model/user.dart';
 import 'package:echo_verse/features/authentication/data/repository/auth_contract.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
 class AuthService implements AuthContract {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -39,6 +40,11 @@ class AuthService implements AuthContract {
 
   @override
   Future<void> saveUserInfoInDatabase(UserModel userModel) async {
+    debugPrint('=========================================================>>>>');
+    debugPrint(userModel.name);
+    debugPrint(userModel.email);
+    debugPrint(userModel.imageUrl);
+    debugPrint(userModel.createdAt);
     await firestore.collection('users').doc(userUid).set(userModel.toMap());
   }
 
@@ -53,8 +59,7 @@ class AuthService implements AuthContract {
     );
 
     await user.reauthenticateWithCredential(credential);
-     await firestore.collection('users').doc(userUid).delete();
+    await firestore.collection('users').doc(userUid).delete();
     await user.delete();
-   
   }
 }

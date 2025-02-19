@@ -1,5 +1,4 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
-import 'package:echo_verse/core/constant/colors.dart';
 import 'package:echo_verse/core/constant/const_string.dart';
 import 'package:echo_verse/core/constant/icon_and_text_list.dart';
 import 'package:echo_verse/core/constant/padding_radius_size.dart';
