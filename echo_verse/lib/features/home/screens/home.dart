@@ -23,8 +23,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
-     messageServices.updateActiveStatus(false);
-     super.initState();
+    messageServices.updateActiveStatus(false);
+    super.initState();
     SystemChannels.lifecycle.setMessageHandler((message) {
       debugPrint(message);
       if (message.toString().contains('resume')) {
@@ -34,7 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
       }
       return Future.value(message);
     });
-    
   }
 
   @override
@@ -126,12 +125,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               userName: user.name!,
                               messege: message ?? '',
                               data: formattedTime,
-                              avatarPath: user.imageUrl == null
-                                  ? 'lib/assets/logo/robo.png'
-                                  : user.imageUrl.toString(),
+                              // avatarPath: user.imageUrl == null
+                              //     ? 'lib/assets/logo/robo.png'
+                              //     : user.imageUrl.toString(),
                               onTap: () {
                                 context.push(extra: user, RoutePath.chat);
-                              },
+                              }, user: user,
                             );
                           });
                     },
@@ -152,13 +151,15 @@ class MessegeCardWidget extends StatelessWidget {
     required this.userName,
     required this.messege,
     required this.data,
-    required this.avatarPath,
+    // required this.avatarPath,
     required this.onTap,
+    required this.user,
   });
   final String userName;
   final String messege;
   final String data;
-  final String avatarPath;
+  final UserModel user;
+  // final String avatarPath;
   final VoidCallback onTap;
 
   @override
@@ -180,8 +181,7 @@ class MessegeCardWidget extends StatelessWidget {
                   spacing: 3.w,
                   children: [
                     CircleAvatarWidget(
-                      avatarPath: avatarPath,
-                      radius: 32,
+                      radius: 32, chatUser: user,
                     ),
                     Expanded(
                       child: Column(
@@ -229,18 +229,18 @@ class MessegeCardWidget extends StatelessWidget {
 class CircleAvatarWidget extends StatelessWidget {
   const CircleAvatarWidget({
     super.key,
-    required this.avatarPath,
-    required this.radius,
+    required this.radius, required this.chatUser,
   });
   final double radius;
-
-  final String avatarPath;
+  final UserModel chatUser;
 
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
       maxRadius: radius,
-      foregroundImage: AssetImage(avatarPath),
+      foregroundImage: chatUser.imageUrl != null && chatUser.imageUrl!.isNotEmpty
+          ? NetworkImage(chatUser.imageUrl!)
+          : AssetImage('lib/assets/logo/robo.png'),
     );
   }
 }

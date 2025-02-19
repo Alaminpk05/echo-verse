@@ -32,7 +32,9 @@ class _ChatScreenState extends State<ChatScreen> {
           spacing: 3.w,
           children: [
             CircleAvatar(
-              backgroundImage: AssetImage('lib/assets/logo/robo.png'),
+              backgroundImage:  widget.user.imageUrl != null && widget.user.imageUrl!.isNotEmpty
+          ? NetworkImage(widget.user.imageUrl!)
+          : AssetImage('lib/assets/logo/robo.png'),
               radius: 19.sp,
               child: Stack(
                 children: [
@@ -125,9 +127,8 @@ class _ChatScreenState extends State<ChatScreen> {
                                 isSender
                                     ? SizedBox.shrink()
                                     : CircleAvatarWidget(
-                                        avatarPath: widget.user.imageUrl ??
-                                            'lib/assets/logo/robo.png',
-                                        radius: 19.sp),
+                                       
+                                        radius: 19.sp, chatUser:widget.user ,),
                                 Container(
                                   margin: EdgeInsets.symmetric(
                                       vertical: 5, horizontal: 10),
