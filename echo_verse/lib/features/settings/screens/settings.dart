@@ -88,7 +88,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     // );
                   }
                   return ProfileAvatar(
-                    backgroundImage: user!.photoURL != null
+                    backgroundImage: user?.photoURL != null
                         ? NetworkImage(user!.photoURL.toString())
                         : AssetImage('lib/assets/logo/robo.png'),
                   );
@@ -97,18 +97,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
               SizedBox(
                 height: 1.2.h,
               ),
-              BlocBuilder<SettingsBloc, SettingsState>(
+              BlocConsumer<SettingsBloc, SettingsState>(
+                listener:(context,state){
+                  if (state is SettingsErrorState) {
+                    customSnackBar.snackBar(context, state.toString(),
+                        ContentType.failure, 'Error');
+                  }
+                },
                 builder: (context, state) {
-                  String? displayName = user!.displayName;
+                  String? displayName = user?.displayName;
                   if (state is ChangeNameState && state.user != null) {
                     return Text(
                       displayName ?? 'User',
                       style: Theme.of(context).textTheme.titleLarge,
                     );
-                  } else if (state is SettingsErrorState) {
-                    customSnackBar.snackBar(context, state.toString(),
-                        ContentType.failure, 'Error');
-                  }
+                  }  
                   return Text(
                     displayName ?? 'User',
                     style: Theme.of(context).textTheme.titleLarge,

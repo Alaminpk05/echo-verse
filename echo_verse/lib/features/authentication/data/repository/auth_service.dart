@@ -8,17 +8,40 @@ class AuthService implements AuthContract {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
-  Future<UserCredential?> signUp(
-      String name, String email, String password) async {
+  Future<void> signUp(String name, String email, String password) async {
     final userCredential = await _auth.createUserWithEmailAndPassword(
         email: email, password: password);
+    
+    final UserModel userInfo;
+    userInfo = UserModel.forRegistration(
+      name: name,
+      email: email,
+      password: password,
+      authId: userCredential.user!.uid,
+      imageUrl: '',
+      createdAt: DateTime.now().toIso8601String(),
+      isOnline: false,
+      lastActive: '',
+      pushToken: '',
+    );
     if (userCredential.user != null) {
-      await userCredential.user!.updateDisplayName(name);
-      await userCredential.user!.reload();
-
-      return userCredential;
+      await firestore
+          .collection('users')
+          .doc(userCredential.user!.uid)
+          .set(userInfo.toMap());
+          await userCredential.user!.updateDisplayName(name);
+    await userCredential.user!.reload();
     }
-    return null;
+    // await firestore
+    //       .collection('users')
+    //       .doc(userCredential.user!.uid)
+    //       .set(userInfo.toMap());
+    debugPrint('CALLED FIRESTORE ADD FUNCTION');
+    debugPrint(userInfo.name);
+    debugPrint(userInfo.authId);
+    debugPrint(userUid);
+    debugPrint(userCredential.user!.uid);
+    debugPrint(userInfo.email);
   }
 
   @override
@@ -61,5 +84,6 @@ class AuthService implements AuthContract {
     await user.reauthenticateWithCredential(credential);
     await firestore.collection('users').doc(userUid).delete();
     await user.delete();
+    await firebaseAut.signOut();
   }
 }

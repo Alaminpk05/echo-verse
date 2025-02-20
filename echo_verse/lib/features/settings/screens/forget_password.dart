@@ -2,6 +2,7 @@ import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:echo_verse/core/constant/colors.dart';
 import 'package:echo_verse/core/constant/const_string.dart';
 import 'package:echo_verse/core/constant/icons.dart';
+import 'package:echo_verse/core/routes/route_names.dart';
 import 'package:echo_verse/core/utils/validation/auth_validator.dart';
 import 'package:echo_verse/dependencies/service_locator.dart';
 import 'package:echo_verse/features/authentication/widget/auth_widget.dart';
@@ -117,26 +118,17 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       ContentType.success,
                       'Success');
                   context.pop();
-                } 
-                
-                
-                else if (state is ChangeNameState) {
-                  customSnackBar.snackBar(
-                      context,
-                      'Name updated successfully.',
-                      ContentType.success,
-                      'Success');
-                      context.pop();
-                }
-                else if (state is EmailChangeState) {
+                } else if (state is ChangeNameState) {
+                  customSnackBar.snackBar(context, 'Name updated successfully.',
+                      ContentType.success, 'Success');
+                  context.pop();
+                } else if (state is EmailChangeState) {
                   customSnackBar.snackBar(
                       context,
                       'Email updated successfully! Verify your new email.',
                       ContentType.failure,
                       'Success');
-                      
-                }
-                 else if (state is SettingsErrorState) {
+                } else if (state is SettingsErrorState) {
                   customSnackBar.snackBar(context, state.errorMessege,
                       ContentType.failure, 'Error');
                 } else if (state is SendEmailState) {
@@ -152,7 +144,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                       "Your account has been successfully deleted.",
                       ContentType.success,
                       'Success');
-                  context.pop();
+                  context.go(RoutePath.login);
                 }
               },
               child: LoginOrSignUpButton(

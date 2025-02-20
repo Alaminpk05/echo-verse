@@ -66,8 +66,8 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: EdgeInsets.fromLTRB(2.5.w, top, 2.5.w, bottom),
           child: Column(
             children: [
-              StreamBuilder<List<UserModel>>(
-                stream: homeServices.fetchUsersInfo(),
+              FutureBuilder<List<UserModel>>(
+                future: homeServices.fetchUsersInfo(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator.adaptive());
@@ -97,10 +97,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       return StreamBuilder<ChatMessageModel?>(
                           stream: homeServices.getLastMessage(user),
                           builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const CircularProgressIndicator();
-                            }
+                            // if (snapshot.connectionState ==
+                            //     ConnectionState.waiting) {
+                            //   return const CircularProgressIndicator();
+                            // }
                             String? message = snapshot.data?.content;
                             Timestamp? dt = snapshot.data?.timestamp;
 

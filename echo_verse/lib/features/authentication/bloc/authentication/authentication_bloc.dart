@@ -1,7 +1,5 @@
 import 'package:bloc/bloc.dart';
-
 import 'package:echo_verse/dependencies/service_locator.dart';
-import 'package:echo_verse/features/authentication/data/model/user.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,11 +13,9 @@ class AuthenticationBloc
     on<SignUpEvent>(_onSignUpEvent);
     on<LogInEvent>(_onLogInEvent);
     on<SignOutEvent>(_onSignOutEvent);
-   
+
     on<ManageUserInformationEvent>(_onManageUserInformation);
-   
   }
- 
 
   Future<void> _onManageUserInformation(ManageUserInformationEvent event,
       Emitter<AuthenticationState> emit) async {
@@ -47,32 +43,8 @@ class AuthenticationBloc
 
     emit(AuthenticationLoadingState());
     try {
-      final userCredential =
-          await authServices.signUp(event.name, event.email, event.password);
-      if (userCredential?.user != null) {
-        final userInfo = UserModel.forRegistration(
-          name: event.name,
-          email: event.email,
-          password: event.password,
-          authId:  userCredential!.user!.uid,
-          imageUrl: '',
-          createdAt: DateTime.now().toIso8601String(),
-          isOnline: false,
-          lastActive: '',
-          pushToken: '',
-
-          
-        );
-        await authServices.saveUserInfoInDatabase(userInfo);
-
-        debugPrint('CALLED FIRESTORE ADD FUNCTION');
-        emit(AuthenticatedState());
-        
-      } else {
-        emit(AuthenticationIdleState());
-
-        emit(AuthenticationErrorState(errorMessege: "User creation failed."));
-      }
+      await authServices.signUp(event.name, event.email, event.password);
+      emit(AuthenticatedState());
     } on FirebaseAuthException catch (e) {
       debugPrint('SIGN UP MESSEGE:${e.message}');
       debugPrint('SIGH UP E CODE :${e.code}');
@@ -156,6 +128,4 @@ class AuthenticationBloc
               "An error occurred while signing out. Please try again."));
     }
   }
-
- 
 }
