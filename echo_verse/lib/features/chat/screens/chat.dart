@@ -32,9 +32,10 @@ class _ChatScreenState extends State<ChatScreen> {
           spacing: 3.w,
           children: [
             CircleAvatar(
-              backgroundImage:  widget.user.imageUrl != null && widget.user.imageUrl!.isNotEmpty
-          ? NetworkImage(widget.user.imageUrl!)
-          : AssetImage('lib/assets/logo/robo.png'),
+              backgroundImage: widget.user.imageUrl != null &&
+                      widget.user.imageUrl!.isNotEmpty
+                  ? NetworkImage(widget.user.imageUrl!)
+                  : AssetImage('lib/assets/logo/robo.png'),
               radius: 19.sp,
               child: Stack(
                 children: [
@@ -53,17 +54,22 @@ class _ChatScreenState extends State<ChatScreen> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  widget.user.name!,
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .copyWith(fontWeight: FontWeight.w600),
+                SizedBox(
+                  width: 30.w,
+                  child: Text(
+                    softWrap: true,
+                    overflow: TextOverflow.ellipsis,
+                    widget.user.name!,
+                    style: Theme.of(context)
+                        .textTheme
+                        .titleMedium!
+                        .copyWith(fontWeight: FontWeight.w600),
+                  ),
                 ),
                 Text(
                   widget.user.isOnline
                       ? 'Active now'
-                      :formateLastActive(widget.user.lastActive!),
+                      : formateLastActive(widget.user.lastActive!),
                   style: Theme.of(context).textTheme.labelSmall,
                 ),
               ],
@@ -127,8 +133,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                 isSender
                                     ? SizedBox.shrink()
                                     : CircleAvatarWidget(
-                                       
-                                        radius: 19.sp, chatUser:widget.user ,),
+                                        radius: 19.sp,
+                                        chatUser: widget.user,
+                                      ),
                                 Container(
                                   margin: EdgeInsets.symmetric(
                                       vertical: 5, horizontal: 10),

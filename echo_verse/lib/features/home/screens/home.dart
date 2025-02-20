@@ -187,11 +187,14 @@ class MessegeCardWidget extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            softWrap: true,
-                            overflow: TextOverflow.ellipsis,
-                            userName,
-                            style: Theme.of(context).textTheme.titleLarge,
+                          SizedBox(
+                            width: 40.w,
+                            child: Text(
+                              softWrap: true,
+                              overflow: TextOverflow.ellipsis,
+                              userName,
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
                           ),
                           SizedBox(
                             height: 0.1.h,
