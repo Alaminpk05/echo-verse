@@ -66,8 +66,8 @@ class _HomeScreenState extends State<HomeScreen> {
           padding: EdgeInsets.fromLTRB(2.5.w, top, 2.5.w, bottom),
           child: Column(
             children: [
-              FutureBuilder<List<UserModel>>(
-                future: homeServices.fetchUsersInfo(),
+              StreamBuilder<List<UserModel>>(
+                stream: homeServices.fetchUsersInfo(),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(child: CircularProgressIndicator.adaptive());
@@ -130,7 +130,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               //     : user.imageUrl.toString(),
                               onTap: () {
                                 context.push(extra: user, RoutePath.chat);
-                              }, user: user,
+                              },
+                              user: user,
                             );
                           });
                     },
@@ -181,7 +182,8 @@ class MessegeCardWidget extends StatelessWidget {
                   spacing: 3.w,
                   children: [
                     CircleAvatarWidget(
-                      radius: 32, chatUser: user,
+                      radius: 32,
+                      chatUser: user, isChatPage: false,
                     ),
                     Expanded(
                       child: Column(
@@ -232,18 +234,34 @@ class MessegeCardWidget extends StatelessWidget {
 class CircleAvatarWidget extends StatelessWidget {
   const CircleAvatarWidget({
     super.key,
-    required this.radius, required this.chatUser,
+    required this.radius,
+    required this.chatUser, required this.isChatPage,
   });
   final double radius;
   final UserModel chatUser;
+  final bool isChatPage;
 
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
-      maxRadius: radius,
-      foregroundImage: chatUser.imageUrl != null && chatUser.imageUrl!.isNotEmpty
-          ? NetworkImage(chatUser.imageUrl!)
-          : AssetImage('lib/assets/logo/robo.png'),
+      backgroundImage:
+          chatUser.imageUrl != null && chatUser.imageUrl!.isNotEmpty
+              ? NetworkImage(chatUser.imageUrl!)
+              : AssetImage('lib/assets/logo/robo.png'),
+      radius: 19.sp,
+      child: isChatPage?SizedBox.shrink(): Stack(
+        children: [
+          chatUser.isOnline
+              ? Positioned(
+                  right: 0,
+                  bottom: 4,
+                  child: CircleAvatar(
+                    radius: 4,
+                    backgroundColor: userActiveColor,
+                  ))
+              : SizedBox.shrink(),
+        ],
+      ),
     );
   }
 }

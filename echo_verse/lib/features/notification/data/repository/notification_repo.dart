@@ -11,6 +11,7 @@ import 'package:googleapis_auth/auth_io.dart';
 class NotificationServices implements NotificationContractRepo {
   final FlutterLocalNotificationsPlugin notificationsPlugin =
       FlutterLocalNotificationsPlugin();
+
   @override
   Future<void> requestPermission() async {
     await firebaseMessaging.requestPermission();
@@ -116,7 +117,8 @@ class NotificationServices implements NotificationContractRepo {
           }
         }
       };
-
+      debugPrint(token);
+      
       // Send the HTTP POST request to Firebase
       final response = await client.post(
         Uri.parse(fcmUrl),
@@ -134,17 +136,18 @@ class NotificationServices implements NotificationContractRepo {
     }
   }
 
-Future<void> updateFcmToken() async {
-   //Get Fcm token
+  Future<void> updateFcmToken() async {
+    //Get Fcm token
     final String? token = await firebaseMessaging.getToken();
     if (token != null && userUid != null) {
-      await firestore.collection('users').doc(userUid).update({'pushToken':token});
+      await firestore
+          .collection('users')
+          .doc(userUid)
+          .update({'pushToken': token});
     }
-
     debugPrint('FCM Token:$token');
     debugPrint('User Uid:$userUid');
-}
-
+  }
 }
 
 @pragma('vm:entry-point')

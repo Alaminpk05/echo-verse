@@ -134,7 +134,7 @@ class _ChatScreenState extends State<ChatScreen> {
                                     ? SizedBox.shrink()
                                     : CircleAvatarWidget(
                                         radius: 19.sp,
-                                        chatUser: widget.user,
+                                        chatUser: widget.user, isChatPage: true,
                                       ),
                                 Container(
                                   margin: EdgeInsets.symmetric(

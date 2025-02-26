@@ -4,23 +4,24 @@ import 'package:echo_verse/features/chat/data/model/messege.dart';
 import 'package:echo_verse/features/home/repository/home_contract_repo.dart';
 
 class HomeRepo implements HomeContractRepo {
-  // @override
-  // Stream<List<UserModel>> fetchUsersInfo() {
-  //   return firestore
-  //       .collection('users')
-  //       .where('authId', isNotEqualTo: userUid)
-  //       .snapshots()
-  //       .map((snapshot) =>
-  //           snapshot.docs.map((doc) => UserModel.fromMap(doc.data())).toList());
-  // }
   @override
-  Future<List<UserModel>> fetchUsersInfo() async {
-    final querySnapshot = await firestore.collection('users').where('authId',isNotEqualTo: userUid).get();
-    final userList = querySnapshot.docs.map((doc) => UserModel.fromMap(doc.data())).toList();
-
-
-    return userList;
+  Stream<List<UserModel>> fetchUsersInfo() {
+    return firestore
+        .collection('users')
+        .where('authId', isNotEqualTo: userUid)
+        .snapshots()
+        .map((snapshot) =>
+            snapshot.docs.map((doc) => UserModel.fromMap(doc.data())).toList());
+            
   }
+  // @override
+  // Future<List<UserModel>> fetchUsersInfo() async {
+  //   final querySnapshot = await firestore.collection('users').where('authId',isNotEqualTo: userUid).get();
+  //   final userList = querySnapshot.docs.map((doc) => UserModel.fromMap(doc.data())).toList();
+
+
+  //   return userList;
+  // }
 
   @override
   Stream<ChatMessageModel?> getLastMessage(UserModel user) {
