@@ -3,11 +3,21 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:echo_verse/dependencies/service_locator.dart';
 import 'package:echo_verse/features/chat/data/model/messege.dart';
 import 'package:echo_verse/features/chat/data/repository/messege_contract_repo.dart';
+import 'package:echo_verse/features/notification/data/repository/notification_repo.dart';
 import 'package:flutter/services.dart';
 
 class MessegeRepo implements MessegeContractRepo {
   @override
   Future<void> sendMessage(String receiverId, String messege) async {
+    final sender =
+        await FirebaseFirestore.instance.collection('users').doc(userUid).get();
+    final receiver = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(receiverId)
+        .get();
+
+    if (!receiver.exists || !sender.exists) return;
+    String? receiverToken = receiver['pushToken'];
     ChatMessageModel newMessage = ChatMessageModel(
         senderId: userUid!,
         receiverId: receiverId,
@@ -24,6 +34,14 @@ class MessegeRepo implements MessegeContractRepo {
         .doc(chatRoomId)
         .collection('message')
         .add(newMessage.toJson());
+    // final pushToken=await firestore.collection('users').doc(userUid).get();
+    // debugPrint(pushToken);
+
+    await NotificationServices().updateFcmToken();
+    if (receiverToken != null && receiverToken.isNotEmpty) {
+      NotificationServices()
+          .sendPushNotification(receiverToken, sender['name'], messege);
+    }
   }
 
   @override

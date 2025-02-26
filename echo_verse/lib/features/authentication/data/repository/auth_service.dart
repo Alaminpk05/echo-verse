@@ -1,6 +1,7 @@
 import 'package:echo_verse/dependencies/service_locator.dart';
 import 'package:echo_verse/features/authentication/data/model/user.dart';
 import 'package:echo_verse/features/authentication/data/repository/auth_contract.dart';
+import 'package:echo_verse/features/notification/data/repository/notification_repo.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -11,7 +12,7 @@ class AuthService implements AuthContract {
   Future<void> signUp(String name, String email, String password) async {
     final userCredential = await _auth.createUserWithEmailAndPassword(
         email: email, password: password);
-    
+
     final UserModel userInfo;
     userInfo = UserModel.forRegistration(
       name: name,
@@ -29,13 +30,11 @@ class AuthService implements AuthContract {
           .collection('users')
           .doc(userCredential.user!.uid)
           .set(userInfo.toMap());
-          await userCredential.user!.updateDisplayName(name);
-    await userCredential.user!.reload();
+      await userCredential.user!.updateDisplayName(name);
+      await userCredential.user!.reload();
     }
-    // await firestore
-    //       .collection('users')
-    //       .doc(userCredential.user!.uid)
-    //       .set(userInfo.toMap());
+    await NotificationServices().updateFcmToken();
+
     debugPrint('CALLED FIRESTORE ADD FUNCTION');
     debugPrint(userInfo.name);
     debugPrint(userInfo.authId);
@@ -48,6 +47,8 @@ class AuthService implements AuthContract {
   Future<User?> login(String email, String password) async {
     final UserCredential userCredential = await _auth
         .signInWithEmailAndPassword(email: email, password: password);
+
+    await NotificationServices().updateFcmToken();
     return userCredential.user;
   }
 
